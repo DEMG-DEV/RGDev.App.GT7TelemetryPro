@@ -30,6 +30,27 @@ El pipeline `.github/workflows/release.yml` se engancha al evento `release`, ini
 
 ---
 
+## Chore: Remove GitHub Actions workflow
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-12 15:58:00 |
+| **Autor** | David Mendez (demg@outlook.com) |
+| **Branch** | master |
+| **Tipo** | Configuration |
+
+### Archivos Modificados
+
+| Archivo | Estado | Descripción del Cambio |
+|---------|--------|----------------------|
+| `.github/workflows/release.yml` | Eliminado | Se eliminó el flujo de CI/CD para evitar problemas de permisos de OAuth al hacer git push. |
+
+### Detalle Técnico
+
+Se retiró por completo la integración con GitHub Actions debido a conflictos de permisos de alcance (`workflow` scope) que impedían realizar push al repositorio a través del cliente de git con OAuth.
+
+---
+
 ## Feature: Base de Datos Maestra y Seguimiento de Sesiones
 
 | Campo | Detalle |

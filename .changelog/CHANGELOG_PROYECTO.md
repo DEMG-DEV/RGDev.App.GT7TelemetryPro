@@ -26,6 +26,27 @@ Los usuarios finalmente podrán entrar a la sección de "Releases" (Lanzamientos
 
 ---
 
+## ✅ Eliminación de Compilación en la Nube
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-12 15:58:00 |
+| **Responsable** | David Mendez |
+
+### ¿Qué se realizó?
+
+Se retiraron las rutinas automáticas de la nube de GitHub que generaban los instaladores. 
+
+### ¿Qué significa para el proyecto?
+
+- Se resuelven de manera definitiva los errores de seguridad (OAuth) que te impedían enviar las últimas actualizaciones del código a tu servidor en internet.
+
+### ¿Qué va a notar el usuario/cliente?
+
+Este cambio es interno y mejora la infraestructura del repositorio para que puedas seguir trabajando sin fricciones. A partir de ahora, la generación de ejecutables (.exe, .app) deberá realizarse manualmente de forma local en tu computadora.
+
+---
+
 ## ✅ Historial de Sesiones en Archivo Único y Menú de Replay Inteligente
 
 | Campo | Detalle |
