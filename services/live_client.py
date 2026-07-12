@@ -71,17 +71,19 @@ class GT7LiveClient(TelemetryProvider):
             return
             
         self.running = True
+        self.is_connected = False
+        self.last_packet_time = time.time()
         try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             try:
-                sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+                self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
             except AttributeError:
                 pass
-            sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-            sock.bind(('0.0.0.0', self.listen_port))
+            self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+            self.sock.bind(('0.0.0.0', self.listen_port))
             
-            self.net_thread = threading.Thread(target=self._network_capture_loop, args=(sock,), daemon=True)
+            self.net_thread = threading.Thread(target=self._network_capture_loop, daemon=True)
             self.parse_thread = threading.Thread(target=self._parser_loop, daemon=True)
             self.heartbeat_thread = threading.Thread(target=self._heartbeat_loop, daemon=True)
             
@@ -95,7 +97,15 @@ class GT7LiveClient(TelemetryProvider):
 
     def stop(self):
         self.running = False
+        self.is_connected = False
+        self.last_packet_time = 0
         self.stop_recording()
+        
+        try:
+            if hasattr(self, 'sock') and self.sock:
+                self.sock.close()
+        except Exception:
+            pass
         
         try:
             self.raw_queue.put_nowait(None)
@@ -109,38 +119,43 @@ class GT7LiveClient(TelemetryProvider):
         if self.heartbeat_thread and self.heartbeat_thread.is_alive():
             self.heartbeat_thread.join(timeout=1.0)
 
-    def _network_capture_loop(self, sock: socket.socket):
+    def _network_capture_loop(self):
         try:
-            sock.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 4 * 1024 * 1024)
+            self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 4 * 1024 * 1024)
         except Exception:
             pass 
             
-        sock.settimeout(1.0)
+        self.sock.settimeout(1.0)
         
         while self.running:
             try:
-                data, addr = sock.recvfrom(4096)
+                data, addr = self.sock.recvfrom(4096)
                 
-                if not self.console_ip:
+                if not self.is_connected:
+                    self.is_connected = True
                     self.console_ip = addr[0]
                     self.connection_established.emit(self.console_ip)
-                
-                if addr[0] == self.console_ip:
-                    self.last_packet_time = time.time()
-                    try:
-                        self.raw_queue.put_nowait(data)
-                    except queue.Full:
-                        pass
+                    
+                self.last_packet_time = time.time()
+                try:
+                    self.raw_queue.put_nowait(data)
+                except queue.Full:
+                    pass
             except socket.timeout:
-                if self.console_ip and (time.time() - self.last_packet_time > 3.0):
+                if self.is_connected and (time.time() - self.last_packet_time > 3.0):
+                    self.is_connected = False
                     self.connection_lost.emit()
                     self.console_ip = None 
                 continue
             except Exception as e:
-                if self.running:
+                # Only log error if we are still supposed to be running (ignore closing errors)
+                if self.running and not isinstance(e, OSError):
                     self.error_occurred.emit(f"Network error: {e}")
                     
-        sock.close()
+        try:
+            self.sock.close()
+        except Exception:
+            pass
 
     def _parser_loop(self):
         while self.running:
@@ -168,17 +183,17 @@ class GT7LiveClient(TelemetryProvider):
                 logging.exception(f"Exception in parser loop: {e}")
 
     def _heartbeat_loop(self):
-        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-        
         payload = self.packet_type.encode('ascii')
         
         while self.running:
-            target_ip = self.console_ip if self.console_ip else '255.255.255.255'
             try:
-                sock.sendto(payload, (target_ip, self.console_port))
+                # Always send a broadcast heartbeat (this is what GT7 typically expects)
+                self.sock.sendto(payload, ('255.255.255.255', self.console_port))
+                
+                # If a specific IP is provided, also send a unicast heartbeat to it
+                if self.console_ip and self.console_ip != '255.255.255.255':
+                    self.sock.sendto(payload, (self.console_ip, self.console_port))
             except Exception:
                 pass
             time.sleep(1.5)
-            
-        sock.close()
+

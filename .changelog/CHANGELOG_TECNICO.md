@@ -5,6 +5,30 @@
 
 ---
 
+## Fix: Rediseño de red UDP y correcciones de estados visuales UI
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-12 13:06:00 |
+| **Autor** | David Mendez (demg@outlook.com) |
+| **Branch** | master |
+| **Tipo** | Bug Fix / Documentation |
+
+### Archivos Modificados
+
+| Archivo | Estado | Descripción del Cambio |
+|---------|--------|----------------------|
+| `services/live_client.py` | Modificado | Implementación de doble heartbeat simultáneo (Broadcast y Unicast) utilizando el mismo socket receptor para aplicar UDP hole-punching natural en el firewall. |
+| `ui/main_window.py` | Modificado | Corrección de falsos positivos en el estado de conexión para que indique "Esperando telemetría" hasta recibir la primera trama de datos comprobable, en lugar de simular conexión instantánea. |
+| `.ai/architecture.md` | Modificado | Refleja la arquitectura moderna con el patrón de directorios separados (`core/`, `services/`, `ui/`) para futura asimilación de IA. |
+| `README.md` | Modificado | Reescritura completa del documento. Estilo moderno, medallas visuales (badges) e instrucciones explícitas de conexión. |
+
+### Detalle Técnico
+
+Se resolvió una ambigüedad engañosa en la interfaz antigua que forzaba visualmente un estado "Connected" tan pronto se presionaba el botón, independientemente de si el tráfico UDP era exitoso. 
+En el lado de red, se detectó que GT7 es altamente sensible a la procedencia del *heartbeat*. Se refactorizó `_heartbeat_loop` para deshacerse de sockets dedicados e inyectar el *payload* usando el propio `self.sock` de captura, disparándolo bidireccionalmente: hacia la IP local (si se especificó) y hacia la IP broadcast global (`255.255.255.255`). Esto no solo incrementa radicalmente el éxito de enlace con la consola, sino que entrena a *firewalls* estrictos (macOS) a esperar tráfico entrante en el puerto local 33740 como respuesta legítima de una conexión saliente.
+
+
 ## Refactor: Arquitectura modular, MVC y extracción de componentes UI
 
 | Campo | Detalle |

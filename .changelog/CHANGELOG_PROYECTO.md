@@ -5,6 +5,28 @@
 
 ---
 
+## ✅ Mejoras en la Estabilidad de Conexión y Honestidad de Interfaz
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-12 13:06:00 |
+| **Responsable** | David Mendez |
+
+### ¿Qué se realizó?
+
+Revisamos a fondo cómo el programa le habla a la consola PlayStation para pedirle la telemetría. Ahora, el programa grita su "Hola" por dos canales distintos simultáneamente (uno directo y otro general a toda la red) y por la misma puerta por la que espera la respuesta. Además, arreglamos un engaño visual: antes la interfaz decía "Conectado" apenas apretabas el botón (incluso si la consola estaba apagada). Ahora, el sistema es honesto y dirá "Esperando telemetría..." hasta que realmente reciba los datos del coche en pista. También dejamos toda la documentación (README) hermosa y reluciente para que otros puedan instalar esto fácilmente.
+
+### ¿Qué significa para el proyecto?
+
+Significa que el programa ya no miente sobre su estado. Si hay un problema de red, lo sabremos inmediatamente. La nueva técnica de conexión a la consola hace que sortee bloqueos de red (firewalls) mucho más fácil, volviendo la conexión súper confiable, sin importar qué tan raro sea el router del usuario.
+
+### ¿Qué va a notar el usuario/cliente?
+
+Primero, la página principal del proyecto está de lujo, súper fácil de leer y muy profesional.
+Segundo, al conectar el programa a la PS4, verán el estado "Esperando telemetría...". Sabrán que no está roto, sino que el programa está pacientemente esperando a que entren a una pista en el juego (ya que los menús de Gran Turismo no transmiten datos). En cuanto aceleren su coche, la conexión cobrará vida.
+
+
+
 ## ✅ Modernización y Reestructuración del Motor Principal
 
 | Campo | Detalle |

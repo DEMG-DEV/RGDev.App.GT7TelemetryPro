@@ -28,6 +28,7 @@ class TelemetryMainWindow(QMainWindow):
         self.client.packet_signal.connect(self._cache_packet)
         self.client.connection_established.connect(self.on_connected)
         self.client.connection_lost.connect(self.on_disconnected)
+        self.client.error_occurred.connect(self.on_client_error)
         
         self.player = GT7SessionPlayer()
         self.player.packet_signal.connect(self._cache_packet)
@@ -245,7 +246,10 @@ class TelemetryMainWindow(QMainWindow):
             ip = self.ip_input.text().strip()
             self.client.console_ip = ip if ip else None
             self.client.start()
-            self.lbl_status.setText("Status: Searching...")
+            if ip:
+                self.lbl_status.setText(f"Status: Esperando telemetría de {ip} (Entra a pista)...")
+            else:
+                self.lbl_status.setText("Status: Buscando consola (Entra a pista)...")
             self.lbl_status.setStyleSheet("color: #f2a900; font-weight: bold; font-size: 14px;")
             self.btn_connect.setText("Disconnect")
             self.clear_graphs()
@@ -295,6 +299,11 @@ class TelemetryMainWindow(QMainWindow):
     def on_disconnected(self):
         self.lbl_status.setText("Status: Connection Lost")
         self.lbl_status.setStyleSheet("color: #ff003c; font-weight: bold; font-size: 14px;")
+
+    @pyqtSlot(str)
+    def on_client_error(self, err_msg):
+        self.lbl_status.setText(f"Error: {err_msg}")
+        self.lbl_status.setStyleSheet("color: #ff003c; font-weight: bold; font-size: 12px;")
             
     @pyqtSlot(GT7TelemetryPacket)
     def _cache_packet(self, packet: GT7TelemetryPacket):
