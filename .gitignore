@@ -5,3 +5,5 @@ __pycache__/
 *.gt7
 Sessions/
 cars.csv
+dist/
+build/
