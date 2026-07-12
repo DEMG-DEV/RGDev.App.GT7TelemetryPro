@@ -39,11 +39,11 @@ class GT7LiveClient(TelemetryProvider):
         self.db_writer = None
         self.record_start_time = 0.0
 
-    def start_recording(self, filename: str):
+    def start_recording(self, filename: str, car_id: int, car_name: str):
         if not self.recording:
             try:
                 self.db_writer = SessionDatabaseWriter(filename)
-                self.db_writer.start()
+                self.db_writer.start(car_id, car_name)
                 self.record_start_time = time.time()
                 self.recording = True
                 logging.info(f"Successfully started DB recording to {filename}")

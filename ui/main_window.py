@@ -243,15 +243,17 @@ class TelemetryMainWindow(QMainWindow):
     def _auto_start_recording(self, packet: GT7TelemetryPacket):
         if not self.has_started_auto_save and self.client.running:
             self.has_started_auto_save = True
-            date_str = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-            filename = f"GT7Session_Car{packet.car_code}_{date_str}.sqlite"
+            filename = "telemetry_master.sqlite"
             
             sessions_dir = os.path.join(os.getcwd(), 'Sessions')
             os.makedirs(sessions_dir, exist_ok=True)
             save_path = os.path.join(sessions_dir, filename)
             
-            if self.client.start_recording(save_path):
-                self.lbl_save_status.setText(f"Auto-Save: ACTIVO ({filename})")
+            car_db = CarDatabase()
+            car_name = car_db.get_car_name(packet.car_code)
+            
+            if self.client.start_recording(save_path, packet.car_code, car_name):
+                self.lbl_save_status.setText(f"Auto-Save: ACTIVO (Master DB)")
                 self.lbl_save_status.setStyleSheet("color: #00ff7f; font-weight: bold; font-size: 14px;")
             else:
                 self.lbl_save_status.setText("Auto-Save: FALLÓ")
@@ -283,13 +285,63 @@ class TelemetryMainWindow(QMainWindow):
             self.clear_graphs()
             
     def load_session(self):
-        filename, _ = QFileDialog.getOpenFileName(self, "Open Session", "", "SQLite Databases (*.sqlite);;All Files (*)")
-        if filename:
-            self.player.load(filename)
-            self.btn_play.setEnabled(True)
-            self.lbl_status.setText(f"Loaded: {os.path.basename(filename)}")
-            self.lbl_status.setStyleSheet("color: #66fcf1; font-weight: bold; font-size: 14px;")
-            self.clear_graphs()
+        sessions_dir = os.path.join(os.getcwd(), 'Sessions')
+        master_db = os.path.join(sessions_dir, 'telemetry_master.sqlite')
+        
+        if not os.path.exists(master_db):
+            self.lbl_status.setText("Status: No Master DB found")
+            return
+            
+        import sqlite3
+        from PyQt6.QtWidgets import QInputDialog
+        
+        try:
+            with sqlite3.connect(master_db) as conn:
+                cursor = conn.cursor()
+                cursor.execute("SELECT id, start_time, car_name, total_laps, best_laptime FROM sessions ORDER BY id DESC")
+                sessions = cursor.fetchall()
+                
+            if not sessions:
+                self.lbl_status.setText("Status: No sessions found")
+                return
+                
+            session_items = []
+            session_ids = []
+            for s in sessions:
+                s_id, s_time, c_name, t_laps, b_lap = s
+                # Format b_lap from ms to MM:SS.ms
+                if b_lap and b_lap > 0:
+                    minutes = b_lap // 60000
+                    seconds = (b_lap % 60000) / 1000
+                    lap_str = f"{minutes:02d}:{seconds:06.3f}"
+                else:
+                    lap_str = "N/A"
+                    
+                display_text = f"#{s_id} - {s_time[:16]} | {c_name} | Laps: {t_laps} | Best: {lap_str}"
+                session_items.append(display_text)
+                session_ids.append(s_id)
+                
+            item, ok = QInputDialog.getItem(
+                self, 
+                "Select Session", 
+                "Choose a historical session to replay:", 
+                session_items, 
+                0, 
+                False
+            )
+            
+            if ok and item:
+                index = session_items.index(item)
+                selected_id = session_ids[index]
+                self.player.load(master_db, selected_id)
+                self.player.play()
+                self.btn_play.setEnabled(True)
+                self.lbl_status.setText(f"Status: Playing Session #{selected_id}")
+                self.lbl_status.setStyleSheet("color: #00ff7f; font-weight: bold; font-size: 14px;")
+                self.btn_connect.setEnabled(False)
+        except Exception as e:
+            self.lbl_status.setText(f"Status: Error loading sessions ({e})")
+            logging.error(f"Failed to load sessions: {e}")
             
     def toggle_playback(self):
         if self.player.running:

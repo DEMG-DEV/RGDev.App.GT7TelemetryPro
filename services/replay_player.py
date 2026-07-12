@@ -14,10 +14,12 @@ class GT7SessionPlayer(TelemetryProvider):
         super().__init__()
         self.running = False
         self.filename = None
+        self.session_id = None
         self.play_thread = None
         
-    def load(self, filename: str):
+    def load(self, filename: str, session_id: int = None):
         self.filename = filename
+        self.session_id = session_id
         
     def play(self):
         if self.running or not self.filename:
@@ -39,8 +41,11 @@ class GT7SessionPlayer(TelemetryProvider):
         try:
             with sqlite3.connect(self.filename) as conn:
                 cursor = conn.cursor()
-                # Asumimos que los id están ordenados cronológicamente
-                cursor.execute("SELECT timestamp, raw_packet FROM telemetry ORDER BY id")
+                if self.session_id is not None:
+                    cursor.execute("SELECT timestamp, raw_packet FROM telemetry WHERE session_id = ? ORDER BY id", (self.session_id,))
+                else:
+                    # Fallback for old single-file DBs without session_id
+                    cursor.execute("SELECT timestamp, raw_packet FROM telemetry ORDER BY id")
                 
                 for row in cursor:
                     if not self.running:

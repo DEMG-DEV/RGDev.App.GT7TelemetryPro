@@ -26,6 +26,28 @@ Los usuarios finalmente podrán entrar a la sección de "Releases" (Lanzamientos
 
 ---
 
+## ✅ Historial de Sesiones en Archivo Único y Menú de Replay Inteligente
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-12 15:52:00 |
+| **Responsable** | David Mendez |
+
+### ¿Qué se realizó?
+
+Se reestructuró la forma en la que el sistema guarda la información de las carreras. En lugar de crear docenas de archivos sueltos en tu computadora (uno por cada vez que sales a pista), ahora el sistema tiene un único "archivo maestro" que guarda el historial de todas tus sesiones ordenadamente.
+
+### ¿Qué significa para el proyecto?
+
+- **Mayor Organización:** Toda tu información, estadísticas y vueltas de telemetría vivirán en un solo lugar.
+- **Trazabilidad:** El sistema ahora sabe exactamente cuántas vueltas diste y cuál fue tu mejor tiempo en cada sesión de manera nativa.
+
+### ¿Qué va a notar el usuario/cliente?
+
+Ya no tendrás que buscar archivos oscuros en el explorador de Windows/Mac al usar el Replay. Ahora, al hacer clic en "Load Replay", el sistema desplegará automáticamente un menú elegante mostrando la fecha, el coche que usaste, la cantidad de vueltas y tu mejor tiempo, preguntándote directamente qué sesión histórica quieres revivir.
+
+---
+
 ## ✅ Transformación a Muro de Boxes F1: Análisis de Vuelta, Heatmap y Grabación SQLite
 
 | Campo | Detalle |

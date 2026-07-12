@@ -30,6 +30,41 @@ El pipeline `.github/workflows/release.yml` se engancha al evento `release`, ini
 
 ---
 
+## Feature: Base de Datos Maestra y Seguimiento de Sesiones
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-12 15:52:00 |
+| **Autor** | David Mendez (demg@outlook.com) |
+| **Branch** | master |
+| **Tipo** | Feature / Refactor |
+
+### Archivos Modificados
+
+| Archivo | Estado | Descripción del Cambio |
+|---------|--------|----------------------|
+| `core/database.py` | Modificado | Se rediseñó el esquema creando tabla `sessions`. Se añadió lógica de trackeo de sesión (start/end) y metadatos (vueltas, mejor tiempo). |
+| `services/live_client.py` | Modificado | Se modificó `start_recording` para recibir datos del vehículo e instanciar la sesión en la base maestra. |
+| `ui/main_window.py` | Modificado | Se cambió el auto-save para usar un archivo único y se implementó `QInputDialog` para seleccionar qué sesión reproducir del histórico. |
+| `services/replay_player.py` | Modificado | Ahora filtra los queries SQL basándose en `session_id`. |
+
+### Detalle Técnico
+
+Se eliminó el comportamiento de crear un archivo `.sqlite` individual por cada sesión grabada. Ahora se emplea una base de datos maestra `telemetry_master.sqlite` donde se agrupan las sesiones utilizando una tabla relacional `sessions`. 
+- **Base de datos:** Se creó un modelo de llaves foráneas (`session_id`) en la tabla de `telemetry`.
+- **UI:** El reproductor ya no requiere buscar archivos manualmente; detecta el DB maestro y expone un menú interactivo con el resumen de la sesión (fecha, coche, total de vueltas y mejor tiempo).
+
+### Fragmentos de Código Relevantes
+
+```diff
+-        self.db_writer = SessionDatabaseWriter(filename)
+-        self.db_writer.start()
++        self.db_writer = SessionDatabaseWriter(filename)
++        self.db_writer.start(car_id, car_name)
+```
+
+---
+
 ## Feature: Arquitectura Analítica F1 y Persistencia SQLite
 
 | Campo | Detalle |
