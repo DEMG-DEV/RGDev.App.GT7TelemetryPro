@@ -5,6 +5,31 @@
 
 ---
 
+## CI/CD: Pipeline de compilación multiplataforma (Release v1.0.0)
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-12 14:56:00 |
+| **Autor** | David Mendez (demg@outlook.com) |
+| **Branch** | master |
+| **Tipo** | Configuration / CI-CD |
+
+### Archivos Modificados
+
+| Archivo | Estado | Descripción del Cambio |
+|---------|--------|----------------------|
+| `core/car_database.py` | Modificado | Inyección del helper `resource_path` utilizando `sys._MEIPASS` para mapear el empaquetado interno de recursos JSON generados por PyInstaller. |
+| `GT7TelemetryPro.spec` | Agregado | Declaración formal de empaquetado para PyInstaller (`--windowed`), añadiendo la persistencia de `gt7_cars.json` al binario compilado. |
+| `.github/workflows/release.yml` | Agregado | Pipeline de GitHub Actions basado en matriz de OS (`ubuntu-latest`, `windows-latest`, `macos-latest`) para compilar automáticamente en cada Release creada en GitHub. |
+
+### Detalle Técnico
+
+Se configuró la infraestructura *DevOps* necesaria para distribución pública en binarios nativos sin requerir intérprete Python por parte del cliente.
+Dado que PyInstaller desempaca los recursos dependientes (`gt7_cars.json`) en una carpeta temporal generada por el sistema operativo, se alteró la clase Singleton `CarDatabase` para interceptar dinámicamente `sys._MEIPASS` y rutear adecuadamente el origen del archivo JSON sin romper el entorno de desarrollo local.
+El pipeline `.github/workflows/release.yml` se engancha al evento `release`, inicializa 3 instancias virtuales paralelas (Windows, Linux, macOS), instala dependencias, ejecuta `pyinstaller` con el archivo `.spec` previamente creado, renombra o comprime (`.zip` para Mac) los binarios y los anexa automáticamente a los Assets de GitHub utilizando `softprops/action-gh-release`.
+
+---
+
 ## Feature: Arquitectura Analítica F1 y Persistencia SQLite
 
 | Campo | Detalle |

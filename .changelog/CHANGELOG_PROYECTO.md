@@ -5,6 +5,27 @@
 
 ---
 
+## ✅ Preparación para Lanzamiento Oficial v1.0.0 (Windows, Mac y Linux)
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-12 14:56:00 |
+| **Responsable** | David Mendez |
+
+### ¿Qué se realizó?
+
+Hemos preparado la "fábrica de software" del proyecto en la nube. Añadimos un sistema automático que, a partir de hoy, tomará el código del proyecto y lo convertirá en aplicaciones de "un solo clic" (ejecutables) para Windows, Mac y Linux. Además, arreglamos un pequeño detalle interno para que el catálogo de autos se empaquete correctamente dentro de estos programas y nunca falte.
+
+### ¿Qué significa para el proyecto?
+
+Significa que hemos alcanzado la madurez necesaria para lanzar la **Versión 1.0.0**. Gracias a este sistema automático (basado en GitHub Actions), nunca más tendrás que preocuparte por compilar a mano o pedirles a tus usuarios que instalen cosas raras de programadores. La nube hará el trabajo pesado por ti cada vez que anuncies una nueva versión, ¡y de forma gratuita!
+
+### ¿Qué va a notar el usuario/cliente?
+
+Los usuarios finalmente podrán entrar a la sección de "Releases" (Lanzamientos) en la página del proyecto y ver botones directos para descargar `GT7TelemetryPro-Windows.exe` o el archivo para su Mac o Linux, dando doble clic y ejecutando el programa de inmediato sin instalaciones complejas.
+
+---
+
 ## ✅ Transformación a Muro de Boxes F1: Análisis de Vuelta, Heatmap y Grabación SQLite
 
 | Campo | Detalle |
