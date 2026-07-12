@@ -1,5 +1,7 @@
 # GT7 Telemetry Pro
 
+![GT7 Telemetry Interface](./screenshot.png)
+
 **GT7 Telemetry Pro** es una aplicación de escritorio moderna y multiplataforma (Windows y macOS) diseñada para capturar, descifrar y visualizar la telemetría en tiempo real desde *Gran Turismo 7* (PS4/PS5). 
 
 ## Características Principales

@@ -1,0 +1,3452 @@
+{
+    "24": {
+        "id": 24,
+        "maker": "Nissan",
+        "name": "180SX Type X '96",
+        "full_name": "Nissan 180SX Type X '96"
+    },
+    "31": {
+        "id": 31,
+        "maker": "Chevrolet",
+        "name": "Camaro Z28 '69",
+        "full_name": "Chevrolet Camaro Z28 '69"
+    },
+    "41": {
+        "id": 41,
+        "maker": "Chevrolet",
+        "name": "Corvette Stingray (C3) '69",
+        "full_name": "Chevrolet Corvette Stingray (C3) '69"
+    },
+    "48": {
+        "id": 48,
+        "maker": "Nissan",
+        "name": "Fairlady 240ZG (HS30) '71",
+        "full_name": "Nissan Fairlady 240ZG (HS30) '71"
+    },
+    "63": {
+        "id": 63,
+        "maker": "Toyota",
+        "name": "Corolla Levin 1600GT APEX (AE86) '83",
+        "full_name": "Toyota Corolla Levin 1600GT APEX (AE86) '83"
+    },
+    "82": {
+        "id": 82,
+        "maker": "Toyota",
+        "name": "Supra RZ '97",
+        "full_name": "Toyota Supra RZ '97"
+    },
+    "104": {
+        "id": 104,
+        "maker": "Nissan",
+        "name": "Sileighty '98",
+        "full_name": "Nissan Sileighty '98"
+    },
+    "105": {
+        "id": 105,
+        "maker": "Peugeot",
+        "name": "205 Turbo 16 Evolution 2 '86",
+        "full_name": "Peugeot 205 Turbo 16 Evolution 2 '86"
+    },
+    "135": {
+        "id": 135,
+        "maker": "Honda",
+        "name": "S800 '66",
+        "full_name": "Honda S800 '66"
+    },
+    "137": {
+        "id": 137,
+        "maker": "Honda",
+        "name": "Beat '91",
+        "full_name": "Honda Beat '91"
+    },
+    "145": {
+        "id": 145,
+        "maker": "Daihatsu",
+        "name": "Copen '02",
+        "full_name": "Daihatsu Copen '02"
+    },
+    "173": {
+        "id": 173,
+        "maker": "Renault",
+        "name": "R5 Turbo '80",
+        "full_name": "Renault R5 Turbo '80"
+    },
+    "187": {
+        "id": 187,
+        "maker": "TVR",
+        "name": "Tuscan Speed 6 '00",
+        "full_name": "TVR Tuscan Speed 6 '00"
+    },
+    "201": {
+        "id": 201,
+        "maker": "Mazda",
+        "name": "Eunos Roadster (NA) '89",
+        "full_name": "Mazda Eunos Roadster (NA) '89"
+    },
+    "203": {
+        "id": 203,
+        "maker": "Honda",
+        "name": "Integra Type R (DC2) '98",
+        "full_name": "Honda Integra Type R (DC2) '98"
+    },
+    "204": {
+        "id": 204,
+        "maker": "Honda",
+        "name": "Civic Type R (EK) '98",
+        "full_name": "Honda Civic Type R (EK) '98"
+    },
+    "205": {
+        "id": 205,
+        "maker": "Mazda",
+        "name": "RX-7 Spirit R Type A (FD) '02",
+        "full_name": "Mazda RX-7 Spirit R Type A (FD) '02"
+    },
+    "207": {
+        "id": 207,
+        "maker": "Toyota",
+        "name": "MR2 GT-S '97",
+        "full_name": "Toyota MR2 GT-S '97"
+    },
+    "210": {
+        "id": 210,
+        "maker": "Nissan",
+        "name": "R34 GT-R V-spec II Nur '02",
+        "full_name": "Nissan R34 GT-R V-spec II Nur '02"
+    },
+    "211": {
+        "id": 211,
+        "maker": "Mitsubishi",
+        "name": "Lancer Evolution V GSR '98",
+        "full_name": "Mitsubishi Lancer Evolution V GSR '98"
+    },
+    "216": {
+        "id": 216,
+        "maker": "BMW",
+        "name": "McLaren F1 GTR Race Car '97",
+        "full_name": "BMW McLaren F1 GTR Race Car '97"
+    },
+    "293": {
+        "id": 293,
+        "maker": "Honda",
+        "name": "NSX Type R '92",
+        "full_name": "Honda NSX Type R '92"
+    },
+    "296": {
+        "id": 296,
+        "maker": "Mazda",
+        "name": "787B '91",
+        "full_name": "Mazda 787B '91"
+    },
+    "301": {
+        "id": 301,
+        "maker": "Mitsubishi",
+        "name": "Lancer Evolution IV GSR '96",
+        "full_name": "Mitsubishi Lancer Evolution IV GSR '96"
+    },
+    "315": {
+        "id": 315,
+        "maker": "Shelby",
+        "name": "Cobra 427 '66",
+        "full_name": "Shelby Cobra 427 '66"
+    },
+    "334": {
+        "id": 334,
+        "maker": "Renault",
+        "name": "Clio V6 24V '00",
+        "full_name": "Renault Clio V6 24V '00"
+    },
+    "345": {
+        "id": 345,
+        "maker": "Toyota",
+        "name": "Sprinter Trueno 1600GT APEX (S.Shigeno Version)",
+        "full_name": "Toyota Sprinter Trueno 1600GT APEX (S.Shigeno Version)"
+    },
+    "365": {
+        "id": 365,
+        "maker": "Alfa Romeo",
+        "name": "155 2.5 V6 TI '93",
+        "full_name": "Alfa Romeo 155 2.5 V6 TI '93"
+    },
+    "374": {
+        "id": 374,
+        "maker": "Mazda",
+        "name": "RX-7 GT-X (FC) '90",
+        "full_name": "Mazda RX-7 GT-X (FC) '90"
+    },
+    "379": {
+        "id": 379,
+        "maker": "Subaru",
+        "name": "Impreza Coupe WRX Type R STi Ver.VI '99",
+        "full_name": "Subaru Impreza Coupe WRX Type R STi Ver.VI '99"
+    },
+    "387": {
+        "id": 387,
+        "maker": "Mercedes-Benz",
+        "name": "300 SL Coupe '54",
+        "full_name": "Mercedes-Benz 300 SL Coupe '54"
+    },
+    "396": {
+        "id": 396,
+        "maker": "Honda",
+        "name": "NSX Type R '02",
+        "full_name": "Honda NSX Type R '02"
+    },
+    "451": {
+        "id": 451,
+        "maker": "Subaru",
+        "name": "Impreza 22B-STi '98",
+        "full_name": "Subaru Impreza 22B-STi '98"
+    },
+    "485": {
+        "id": 485,
+        "maker": "Nissan",
+        "name": "GT-R GT500 '99",
+        "full_name": "Nissan GT-R GT500 '99"
+    },
+    "489": {
+        "id": 489,
+        "maker": "Nissan",
+        "name": "R33 GT-R V-spec '97",
+        "full_name": "Nissan R33 GT-R V-spec '97"
+    },
+    "514": {
+        "id": 514,
+        "maker": "Honda",
+        "name": "S2000 '99",
+        "full_name": "Honda S2000 '99"
+    },
+    "533": {
+        "id": 533,
+        "maker": "Lancia",
+        "name": "Stratos '73",
+        "full_name": "Lancia Stratos '73"
+    },
+    "604": {
+        "id": 604,
+        "maker": "Toyota",
+        "name": "2000GT '67",
+        "full_name": "Toyota 2000GT '67"
+    },
+    "665": {
+        "id": 665,
+        "maker": "Plymouth",
+        "name": "Superbird '70",
+        "full_name": "Plymouth Superbird '70"
+    },
+    "688": {
+        "id": 688,
+        "maker": "Honda",
+        "name": "Integra Type R (DC2) '95",
+        "full_name": "Honda Integra Type R (DC2) '95"
+    },
+    "709": {
+        "id": 709,
+        "maker": "Nissan",
+        "name": "Fairlady Z 300ZX TT 2seater '89",
+        "full_name": "Nissan Fairlady Z 300ZX TT 2seater '89"
+    },
+    "773": {
+        "id": 773,
+        "maker": "Nissan",
+        "name": "R32 GT-R V-spec II '94",
+        "full_name": "Nissan R32 GT-R V-spec II '94"
+    },
+    "810": {
+        "id": 810,
+        "maker": "Toyota",
+        "name": "Sprinter Trueno 1600GT APEX (AE86) '83",
+        "full_name": "Toyota Sprinter Trueno 1600GT APEX (AE86) '83"
+    },
+    "818": {
+        "id": 818,
+        "maker": "Chevrolet",
+        "name": "Corvette (C2) '63",
+        "full_name": "Chevrolet Corvette (C2) '63"
+    },
+    "821": {
+        "id": 821,
+        "maker": "Honda",
+        "name": "Civic Type R (EK) '97",
+        "full_name": "Honda Civic Type R (EK) '97"
+    },
+    "829": {
+        "id": 829,
+        "maker": "Lancia",
+        "name": "Delta HF Integrale Evoluzione '91",
+        "full_name": "Lancia Delta HF Integrale Evoluzione '91"
+    },
+    "837": {
+        "id": 837,
+        "maker": "Nissan",
+        "name": "Skyline Hard Top 2000GT-R (KPGC10) '70",
+        "full_name": "Nissan Skyline Hard Top 2000GT-R (KPGC10) '70"
+    },
+    "843": {
+        "id": 843,
+        "maker": "Toyota",
+        "name": "Supra 3.0GT Turbo A '88",
+        "full_name": "Toyota Supra 3.0GT Turbo A '88"
+    },
+    "919": {
+        "id": 919,
+        "maker": "Nissan",
+        "name": "Silvia Q's (S13) '88",
+        "full_name": "Nissan Silvia Q's (S13) '88"
+    },
+    "942": {
+        "id": 942,
+        "maker": "Chevrolet",
+        "name": "Corvette ZR-1 (C4) '89",
+        "full_name": "Chevrolet Corvette ZR-1 (C4) '89"
+    },
+    "954": {
+        "id": 954,
+        "maker": "Nissan",
+        "name": "R92CP '92",
+        "full_name": "Nissan R92CP '92"
+    },
+    "959": {
+        "id": 959,
+        "maker": "Audi",
+        "name": "TT Coupe 3.2 quattro '03",
+        "full_name": "Audi TT Coupe 3.2 quattro '03"
+    },
+    "998": {
+        "id": 998,
+        "maker": "Mercedes-Benz",
+        "name": "Sauber Mercedes C9 '89",
+        "full_name": "Mercedes-Benz Sauber Mercedes C9 '89"
+    },
+    "1027": {
+        "id": 1027,
+        "maker": "DMC",
+        "name": "DeLorean S2 '04",
+        "full_name": "DMC DeLorean S2 '04"
+    },
+    "1040": {
+        "id": 1040,
+        "maker": "Ford",
+        "name": "Ford GT LM Race Car Spec II",
+        "full_name": "Ford Ford GT LM Race Car Spec II"
+    },
+    "1044": {
+        "id": 1044,
+        "maker": "Toyota",
+        "name": "Sports 800 '65",
+        "full_name": "Toyota Sports 800 '65"
+    },
+    "1067": {
+        "id": 1067,
+        "maker": "Jaguar",
+        "name": "XJR-9 '88",
+        "full_name": "Jaguar XJR-9 '88"
+    },
+    "1069": {
+        "id": 1069,
+        "maker": "Chaparral",
+        "name": "2J '70",
+        "full_name": "Chaparral 2J '70"
+    },
+    "1365": {
+        "id": 1365,
+        "maker": "Audi",
+        "name": "R8 4.2 '07",
+        "full_name": "Audi R8 4.2 '07"
+    },
+    "1370": {
+        "id": 1370,
+        "maker": "MINI",
+        "name": "MINI Cooper S '05",
+        "full_name": "MINI MINI Cooper S '05"
+    },
+    "1373": {
+        "id": 1373,
+        "maker": "Dodge",
+        "name": "Viper GTS '02",
+        "full_name": "Dodge Viper GTS '02"
+    },
+    "1378": {
+        "id": 1378,
+        "maker": "Ferrari",
+        "name": "F430 '06",
+        "full_name": "Ferrari F430 '06"
+    },
+    "1384": {
+        "id": 1384,
+        "maker": "Nissan",
+        "name": "Fairlady Z Version S (Z33) '07",
+        "full_name": "Nissan Fairlady Z Version S (Z33) '07"
+    },
+    "1385": {
+        "id": 1385,
+        "maker": "Suzuki",
+        "name": "Swift Sport '07",
+        "full_name": "Suzuki Swift Sport '07"
+    },
+    "1399": {
+        "id": 1399,
+        "maker": "BMW",
+        "name": "M3 '07",
+        "full_name": "BMW M3 '07"
+    },
+    "1402": {
+        "id": 1402,
+        "maker": "Dodge",
+        "name": "Viper SRT10 Coupe '06",
+        "full_name": "Dodge Viper SRT10 Coupe '06"
+    },
+    "1409": {
+        "id": 1409,
+        "maker": "Ferrari",
+        "name": "F40 '92",
+        "full_name": "Ferrari F40 '92"
+    },
+    "1410": {
+        "id": 1410,
+        "maker": "Ferrari",
+        "name": "512 BB '76",
+        "full_name": "Ferrari 512 BB '76"
+    },
+    "1425": {
+        "id": 1425,
+        "maker": "Ford",
+        "name": "Ford GT LM Spec II Test Car",
+        "full_name": "Ford Ford GT LM Spec II Test Car"
+    },
+    "1426": {
+        "id": 1426,
+        "maker": "Ford",
+        "name": "Ford GT '06",
+        "full_name": "Ford Ford GT '06"
+    },
+    "1431": {
+        "id": 1431,
+        "maker": "RE Amemiya",
+        "name": "RE Amemiya FD3S RX-7",
+        "full_name": "RE Amemiya RE Amemiya FD3S RX-7"
+    },
+    "1433": {
+        "id": 1433,
+        "maker": "Amuse",
+        "name": "Amuse S2000 GT1 Turbo",
+        "full_name": "Amuse Amuse S2000 GT1 Turbo"
+    },
+    "1448": {
+        "id": 1448,
+        "maker": "Nissan",
+        "name": "SILVIA spec-R Aero (S15) '02",
+        "full_name": "Nissan SILVIA spec-R Aero (S15) '02"
+    },
+    "1458": {
+        "id": 1458,
+        "maker": "Nissan",
+        "name": "Fairlady Z (Z34) '08",
+        "full_name": "Nissan Fairlady Z (Z34) '08"
+    },
+    "1461": {
+        "id": 1461,
+        "maker": "Nissan",
+        "name": "Silvia K's Dia Selection (S13) '90",
+        "full_name": "Nissan Silvia K's Dia Selection (S13) '90"
+    },
+    "1466": {
+        "id": 1466,
+        "maker": "Nissan",
+        "name": "GT-R GT500 '08",
+        "full_name": "Nissan GT-R GT500 '08"
+    },
+    "1470": {
+        "id": 1470,
+        "maker": "Toyota",
+        "name": "Supra GT500 '97",
+        "full_name": "Toyota Supra GT500 '97"
+    },
+    "1474": {
+        "id": 1474,
+        "maker": "Ferrari",
+        "name": "Enzo Ferrari '02",
+        "full_name": "Ferrari Enzo Ferrari '02"
+    },
+    "1480": {
+        "id": 1480,
+        "maker": "Chevrolet",
+        "name": "Corvette ZR1 (C6) '09",
+        "full_name": "Chevrolet Corvette ZR1 (C6) '09"
+    },
+    "1481": {
+        "id": 1481,
+        "maker": "Lamborghini",
+        "name": "Countach 25th Anniversary '88",
+        "full_name": "Lamborghini Countach 25th Anniversary '88"
+    },
+    "1484": {
+        "id": 1484,
+        "maker": "Lamborghini",
+        "name": "Countach LP400 '74",
+        "full_name": "Lamborghini Countach LP400 '74"
+    },
+    "1504": {
+        "id": 1504,
+        "maker": "Ferrari",
+        "name": "458 Italia '09",
+        "full_name": "Ferrari 458 Italia '09"
+    },
+    "1507": {
+        "id": 1507,
+        "maker": "AMG",
+        "name": "SLS AMG '10",
+        "full_name": "AMG SLS AMG '10"
+    },
+    "1508": {
+        "id": 1508,
+        "maker": "Mitsubishi",
+        "name": "Lancer Evolution VI GSR T.M. SCP '99",
+        "full_name": "Mitsubishi Lancer Evolution VI GSR T.M. SCP '99"
+    },
+    "1510": {
+        "id": 1510,
+        "maker": "Honda",
+        "name": "NSX GT500 '08",
+        "full_name": "Honda NSX GT500 '08"
+    },
+    "1516": {
+        "id": 1516,
+        "maker": "Lexus",
+        "name": "SC430 GT500 '08",
+        "full_name": "Lexus SC430 GT500 '08"
+    },
+    "1523": {
+        "id": 1523,
+        "maker": "Fiat",
+        "name": "500 F '68",
+        "full_name": "Fiat 500 F '68"
+    },
+    "1527": {
+        "id": 1527,
+        "maker": "Fiat",
+        "name": "500 1.2 8V Lounge SS '08",
+        "full_name": "Fiat 500 1.2 8V Lounge SS '08"
+    },
+    "1528": {
+        "id": 1528,
+        "maker": "Mercedes-Benz",
+        "name": "SLR McLaren '09",
+        "full_name": "Mercedes-Benz SLR McLaren '09"
+    },
+    "1536": {
+        "id": 1536,
+        "maker": "Pagani",
+        "name": "Zonda R '09",
+        "full_name": "Pagani Zonda R '09"
+    },
+    "1537": {
+        "id": 1537,
+        "maker": "Toyota",
+        "name": "Prius G '09",
+        "full_name": "Toyota Prius G '09"
+    },
+    "1539": {
+        "id": 1539,
+        "maker": "Maserati",
+        "name": "GranTurismo S '08",
+        "full_name": "Maserati GranTurismo S '08"
+    },
+    "1540": {
+        "id": 1540,
+        "maker": "McLaren",
+        "name": "McLaren F1 '94",
+        "full_name": "McLaren McLaren F1 '94"
+    },
+    "1542": {
+        "id": 1542,
+        "maker": "Chevrolet",
+        "name": "Corvette Convertible (C3) '69",
+        "full_name": "Chevrolet Corvette Convertible (C3) '69"
+    },
+    "1543": {
+        "id": 1543,
+        "maker": "Dodge",
+        "name": "Challenger R/T '70",
+        "full_name": "Dodge Challenger R/T '70"
+    },
+    "1545": {
+        "id": 1545,
+        "maker": "Lamborghini",
+        "name": "Murcielago LP 640 '09",
+        "full_name": "Lamborghini Murcielago LP 640 '09"
+    },
+    "1549": {
+        "id": 1549,
+        "maker": "Amuse",
+        "name": "Amuse NISMO 380RS Super Leggera",
+        "full_name": "Amuse Amuse NISMO 380RS Super Leggera"
+    },
+    "1551": {
+        "id": 1551,
+        "maker": "Ferrari",
+        "name": "330 P4 '67",
+        "full_name": "Ferrari 330 P4 '67"
+    },
+    "1553": {
+        "id": 1553,
+        "maker": "Jaguar",
+        "name": "XJ13 '66",
+        "full_name": "Jaguar XJ13 '66"
+    },
+    "1563": {
+        "id": 1563,
+        "maker": "Renault",
+        "name": "Megane Trophy '11",
+        "full_name": "Renault Megane Trophy '11"
+    },
+    "1565": {
+        "id": 1565,
+        "maker": "Ford",
+        "name": "Mark IV Race Car '67",
+        "full_name": "Ford Mark IV Race Car '67"
+    },
+    "1578": {
+        "id": 1578,
+        "maker": "Alfa Romeo",
+        "name": "8C Competizione '08",
+        "full_name": "Alfa Romeo 8C Competizione '08"
+    },
+    "1581": {
+        "id": 1581,
+        "maker": "Citroen",
+        "name": "GT by Citroen Road Car",
+        "full_name": "Citroen GT by Citroen Road Car"
+    },
+    "1582": {
+        "id": 1582,
+        "maker": "Lamborghini",
+        "name": "Miura P400 Bertone Prototype '67",
+        "full_name": "Lamborghini Miura P400 Bertone Prototype '67"
+    },
+    "1645": {
+        "id": 1645,
+        "maker": "Alfa Romeo",
+        "name": "GIULIA TZ2 carrozzata da ZAGATO '65",
+        "full_name": "Alfa Romeo GIULIA TZ2 carrozzata da ZAGATO '65"
+    },
+    "1646": {
+        "id": 1646,
+        "maker": "Peugeot",
+        "name": "908 HDi FAP '10",
+        "full_name": "Peugeot 908 HDi FAP '10"
+    },
+    "1671": {
+        "id": 1671,
+        "maker": "Volkswagen",
+        "name": "Sambabus Typ 2 '62",
+        "full_name": "Volkswagen Sambabus Typ 2 '62"
+    },
+    "1689": {
+        "id": 1689,
+        "maker": "Honda",
+        "name": "Civic Type R (EK) Touring Car",
+        "full_name": "Honda Civic Type R (EK) Touring Car"
+    },
+    "1722": {
+        "id": 1722,
+        "maker": "McLaren",
+        "name": "MP4-12C '10",
+        "full_name": "McLaren MP4-12C '10"
+    },
+    "1729": {
+        "id": 1729,
+        "maker": "Ford",
+        "name": "Mustang Mach 1 '71",
+        "full_name": "Ford Mustang Mach 1 '71"
+    },
+    "1746": {
+        "id": 1746,
+        "maker": "Mazda",
+        "name": "Roadster Touring Car",
+        "full_name": "Mazda Roadster Touring Car"
+    },
+    "1770": {
+        "id": 1770,
+        "maker": "Lamborghini",
+        "name": "Aventador LP 700-4 '11",
+        "full_name": "Lamborghini Aventador LP 700-4 '11"
+    },
+    "1773": {
+        "id": 1773,
+        "maker": "Volkswagen",
+        "name": "Scirocco R '10",
+        "full_name": "Volkswagen Scirocco R '10"
+    },
+    "1778": {
+        "id": 1778,
+        "maker": "Volkswagen",
+        "name": "Volkswagen 1200 '66",
+        "full_name": "Volkswagen Volkswagen 1200 '66"
+    },
+    "1796": {
+        "id": 1796,
+        "maker": "Alpine",
+        "name": "A110 '72",
+        "full_name": "Alpine A110 '72"
+    },
+    "1797": {
+        "id": 1797,
+        "maker": "AMG",
+        "name": "SLS AMG GT3 '11",
+        "full_name": "AMG SLS AMG GT3 '11"
+    },
+    "1893": {
+        "id": 1893,
+        "maker": "BMW",
+        "name": "Z8 '01",
+        "full_name": "BMW Z8 '01"
+    },
+    "1895": {
+        "id": 1895,
+        "maker": "Ferrari",
+        "name": "Dino 246 GT '71",
+        "full_name": "Ferrari Dino 246 GT '71"
+    },
+    "1896": {
+        "id": 1896,
+        "maker": "Tesla",
+        "name": "Model S Signature Performance '12",
+        "full_name": "Tesla Model S Signature Performance '12"
+    },
+    "1898": {
+        "id": 1898,
+        "maker": "Aston Martin",
+        "name": "One-77 '11",
+        "full_name": "Aston Martin One-77 '11"
+    },
+    "1900": {
+        "id": 1900,
+        "maker": "Plymouth",
+        "name": "XNR Ghia Roadster '60",
+        "full_name": "Plymouth XNR Ghia Roadster '60"
+    },
+    "1902": {
+        "id": 1902,
+        "maker": "BMW",
+        "name": "Z4 GT3 '11",
+        "full_name": "BMW Z4 GT3 '11"
+    },
+    "1904": {
+        "id": 1904,
+        "maker": "BMW",
+        "name": "M3 GT '11",
+        "full_name": "BMW M3 GT '11"
+    },
+    "1905": {
+        "id": 1905,
+        "maker": "Nissan",
+        "name": "GT-R NISMO GT3 '13",
+        "full_name": "Nissan GT-R NISMO GT3 '13"
+    },
+    "1907": {
+        "id": 1907,
+        "maker": "KTM",
+        "name": "X-BOW R '12",
+        "full_name": "KTM X-BOW R '12"
+    },
+    "1916": {
+        "id": 1916,
+        "maker": "Chevrolet",
+        "name": "Corvette C7 '14",
+        "full_name": "Chevrolet Corvette C7 '14"
+    },
+    "1925": {
+        "id": 1925,
+        "maker": "Shelby",
+        "name": "G.T.350 '65",
+        "full_name": "Shelby G.T.350 '65"
+    },
+    "1926": {
+        "id": 1926,
+        "maker": "Shelby",
+        "name": "Cobra Daytona Coupe '64",
+        "full_name": "Shelby Cobra Daytona Coupe '64"
+    },
+    "1927": {
+        "id": 1927,
+        "maker": "Audi",
+        "name": "Sport quattro S1 Pikes Peak '87",
+        "full_name": "Audi Sport quattro S1 Pikes Peak '87"
+    },
+    "1931": {
+        "id": 1931,
+        "maker": "Ferrari",
+        "name": "250 GT Berlinetta passo corto '61",
+        "full_name": "Ferrari 250 GT Berlinetta passo corto '61"
+    },
+    "1932": {
+        "id": 1932,
+        "maker": "Abarth",
+        "name": "1500 Biposto Bertone B.A.T 1 '52",
+        "full_name": "Abarth 1500 Biposto Bertone B.A.T 1 '52"
+    },
+    "1933": {
+        "id": 1933,
+        "maker": "Alfa Romeo",
+        "name": "MiTo '09",
+        "full_name": "Alfa Romeo MiTo '09"
+    },
+    "1935": {
+        "id": 1935,
+        "maker": "Ford",
+        "name": "GT40 Mark I '66",
+        "full_name": "Ford GT40 Mark I '66"
+    },
+    "1956": {
+        "id": 1956,
+        "maker": "Dodge",
+        "name": "Viper GTS '13",
+        "full_name": "Dodge Viper GTS '13"
+    },
+    "1965": {
+        "id": 1965,
+        "maker": "Audi",
+        "name": "R18 TDI '11",
+        "full_name": "Audi R18 TDI '11"
+    },
+    "1973": {
+        "id": 1973,
+        "maker": "Abarth",
+        "name": "Abarth 500 '09",
+        "full_name": "Abarth Abarth 500 '09"
+    },
+    "1975": {
+        "id": 1975,
+        "maker": "Mazda",
+        "name": "RX500 '70",
+        "full_name": "Mazda RX500 '70"
+    },
+    "1984": {
+        "id": 1984,
+        "maker": "McLaren",
+        "name": "McLaren F1 GTR - BMW '95",
+        "full_name": "McLaren McLaren F1 GTR - BMW '95"
+    },
+    "1985": {
+        "id": 1985,
+        "maker": "Pontiac",
+        "name": "Firebird Trans Am '78",
+        "full_name": "Pontiac Firebird Trans Am '78"
+    },
+    "1986": {
+        "id": 1986,
+        "maker": "Renault",
+        "name": "R8 Gordini '66",
+        "full_name": "Renault R8 Gordini '66"
+    },
+    "1987": {
+        "id": 1987,
+        "maker": "Renault",
+        "name": "Megane R.S. Trophy '11",
+        "full_name": "Renault Megane R.S. Trophy '11"
+    },
+    "1990": {
+        "id": 1990,
+        "maker": "Lamborghini",
+        "name": "Diablo GT '00",
+        "full_name": "Lamborghini Diablo GT '00"
+    },
+    "2010": {
+        "id": 2010,
+        "maker": "Ferrari",
+        "name": "250 GTO '62",
+        "full_name": "Ferrari 250 GTO '62"
+    },
+    "2011": {
+        "id": 2011,
+        "maker": "Ferrari",
+        "name": "500 Mondial Pinin Farina Coupe '54",
+        "full_name": "Ferrari 500 Mondial Pinin Farina Coupe '54"
+    },
+    "2017": {
+        "id": 2017,
+        "maker": "Ferrari",
+        "name": "GTO '84",
+        "full_name": "Ferrari GTO '84"
+    },
+    "2018": {
+        "id": 2018,
+        "maker": "Ferrari",
+        "name": "365 GTB4 '71",
+        "full_name": "Ferrari 365 GTB4 '71"
+    },
+    "2026": {
+        "id": 2026,
+        "maker": "Toyota",
+        "name": "Aqua S '11",
+        "full_name": "Toyota Aqua S '11"
+    },
+    "2049": {
+        "id": 2049,
+        "maker": "Bugatti",
+        "name": "Veyron 16.4 '13",
+        "full_name": "Bugatti Veyron 16.4 '13"
+    },
+    "2050": {
+        "id": 2050,
+        "maker": "Pagani",
+        "name": "Huayra '13",
+        "full_name": "Pagani Huayra '13"
+    },
+    "2051": {
+        "id": 2051,
+        "maker": "Hyundai",
+        "name": "Genesis Coupe 3.8 '13",
+        "full_name": "Hyundai Genesis Coupe 3.8 '13"
+    },
+    "2055": {
+        "id": 2055,
+        "maker": "AMG",
+        "name": "Mercedes-Benz AMG VGT",
+        "full_name": "AMG Mercedes-Benz AMG VGT"
+    },
+    "2059": {
+        "id": 2059,
+        "maker": "Chevrolet",
+        "name": "Corvette Stingray Racer Concept '59",
+        "full_name": "Chevrolet Corvette Stingray Racer Concept '59"
+    },
+    "2060": {
+        "id": 2060,
+        "maker": "Gran Turismo",
+        "name": "Racing Kart 125 Shifter",
+        "full_name": "Gran Turismo Racing Kart 125 Shifter"
+    },
+    "2074": {
+        "id": 2074,
+        "maker": "BMW",
+        "name": "M4 '14",
+        "full_name": "BMW M4 '14"
+    },
+    "2076": {
+        "id": 2076,
+        "maker": "AMG",
+        "name": "Mercedes-Benz AMG VGT Racing Series",
+        "full_name": "AMG Mercedes-Benz AMG VGT Racing Series"
+    },
+    "2077": {
+        "id": 2077,
+        "maker": "Gran Turismo",
+        "name": "Red Bull X2014 Standard",
+        "full_name": "Gran Turismo Red Bull X2014 Standard"
+    },
+    "2078": {
+        "id": 2078,
+        "maker": "Gran Turismo",
+        "name": "Red Bull X2014 Junior",
+        "full_name": "Gran Turismo Red Bull X2014 Junior"
+    },
+    "2080": {
+        "id": 2080,
+        "maker": "Toyota",
+        "name": "FT-1",
+        "full_name": "Toyota FT-1"
+    },
+    "2087": {
+        "id": 2087,
+        "maker": "BMW",
+        "name": "BMW VGT",
+        "full_name": "BMW BMW VGT"
+    },
+    "2095": {
+        "id": 2095,
+        "maker": "Mitsubishi",
+        "name": "Concept XR-PHEV EVOLUTION VGT",
+        "full_name": "Mitsubishi Concept XR-PHEV EVOLUTION VGT"
+    },
+    "2098": {
+        "id": 2098,
+        "maker": "Volkswagen",
+        "name": "GTI Roadster VGT",
+        "full_name": "Volkswagen GTI Roadster VGT"
+    },
+    "2099": {
+        "id": 2099,
+        "maker": "Subaru",
+        "name": "VIZIV GT VGT",
+        "full_name": "Subaru VIZIV GT VGT"
+    },
+    "2101": {
+        "id": 2101,
+        "maker": "Toyota",
+        "name": "TS030 Hybrid '12",
+        "full_name": "Toyota TS030 Hybrid '12"
+    },
+    "2103": {
+        "id": 2103,
+        "maker": "Aston Martin",
+        "name": "DP-100 VGT",
+        "full_name": "Aston Martin DP-100 VGT"
+    },
+    "2106": {
+        "id": 2106,
+        "maker": "Toyota",
+        "name": "FT-1 VGT",
+        "full_name": "Toyota FT-1 VGT"
+    },
+    "2107": {
+        "id": 2107,
+        "maker": "Chaparral",
+        "name": "Chaparral 2X VGT",
+        "full_name": "Chaparral Chaparral 2X VGT"
+    },
+    "2108": {
+        "id": 2108,
+        "maker": "Dodge",
+        "name": "SRT Tomahawk X VGT",
+        "full_name": "Dodge SRT Tomahawk X VGT"
+    },
+    "2109": {
+        "id": 2109,
+        "maker": "MINI",
+        "name": "MINI Clubman VGT",
+        "full_name": "MINI MINI Clubman VGT"
+    },
+    "2110": {
+        "id": 2110,
+        "maker": "Dodge",
+        "name": "SRT Tomahawk GTS-R VGT",
+        "full_name": "Dodge SRT Tomahawk GTS-R VGT"
+    },
+    "2111": {
+        "id": 2111,
+        "maker": "Dodge",
+        "name": "SRT Tomahawk S VGT",
+        "full_name": "Dodge SRT Tomahawk S VGT"
+    },
+    "2112": {
+        "id": 2112,
+        "maker": "Alpine",
+        "name": "Alpine VGT",
+        "full_name": "Alpine Alpine VGT"
+    },
+    "2113": {
+        "id": 2113,
+        "maker": "Peugeot",
+        "name": "PEUGEOT VGT",
+        "full_name": "Peugeot PEUGEOT VGT"
+    },
+    "2116": {
+        "id": 2116,
+        "maker": "Alpine",
+        "name": "Alpine VGT Race",
+        "full_name": "Alpine Alpine VGT Race"
+    },
+    "2117": {
+        "id": 2117,
+        "maker": "Infiniti",
+        "name": "INFINITI CONCEPT VGT",
+        "full_name": "Infiniti INFINITI CONCEPT VGT"
+    },
+    "2118": {
+        "id": 2118,
+        "maker": "Mazda",
+        "name": "LM55 VGT",
+        "full_name": "Mazda LM55 VGT"
+    },
+    "2121": {
+        "id": 2121,
+        "maker": "Honda",
+        "name": "Honda Sports VGT",
+        "full_name": "Honda Honda Sports VGT"
+    },
+    "2122": {
+        "id": 2122,
+        "maker": "Zagato",
+        "name": "IsoRivolta Zagato VGT",
+        "full_name": "Zagato IsoRivolta Zagato VGT"
+    },
+    "2123": {
+        "id": 2123,
+        "maker": "Lexus",
+        "name": "LF-LC GT VGT",
+        "full_name": "Lexus LF-LC GT VGT"
+    },
+    "2124": {
+        "id": 2124,
+        "maker": "Volkswagen",
+        "name": "GTI Supersport VGT",
+        "full_name": "Volkswagen GTI Supersport VGT"
+    },
+    "2127": {
+        "id": 2127,
+        "maker": "Nissan",
+        "name": "GT-R LM NISMO '15",
+        "full_name": "Nissan GT-R LM NISMO '15"
+    },
+    "2131": {
+        "id": 2131,
+        "maker": "Aston Martin",
+        "name": "V12 Vantage GT3 '12",
+        "full_name": "Aston Martin V12 Vantage GT3 '12"
+    },
+    "2134": {
+        "id": 2134,
+        "maker": "Bugatti",
+        "name": "Bugatti VGT",
+        "full_name": "Bugatti Bugatti VGT"
+    },
+    "2135": {
+        "id": 2135,
+        "maker": "Hyundai",
+        "name": "HYUNDAI N 2025 VGT",
+        "full_name": "Hyundai HYUNDAI N 2025 VGT"
+    },
+    "2136": {
+        "id": 2136,
+        "maker": "Alfa Romeo",
+        "name": "4C '14",
+        "full_name": "Alfa Romeo 4C '14"
+    },
+    "2138": {
+        "id": 2138,
+        "maker": "Ford",
+        "name": "Mustang GT '15",
+        "full_name": "Ford Mustang GT '15"
+    },
+    "2139": {
+        "id": 2139,
+        "maker": "Lexus",
+        "name": "RC F '14",
+        "full_name": "Lexus RC F '14"
+    },
+    "2141": {
+        "id": 2141,
+        "maker": "Volkswagen",
+        "name": "Golf VII GTI '14",
+        "full_name": "Volkswagen Golf VII GTI '14"
+    },
+    "2142": {
+        "id": 2142,
+        "maker": "Nissan",
+        "name": "NISSAN CONCEPT 2020 VGT",
+        "full_name": "Nissan NISSAN CONCEPT 2020 VGT"
+    },
+    "2143": {
+        "id": 2143,
+        "maker": "Audi",
+        "name": "R8 LMS '15",
+        "full_name": "Audi R8 LMS '15"
+    },
+    "2144": {
+        "id": 2144,
+        "maker": "Toyota",
+        "name": "S-FR '15",
+        "full_name": "Toyota S-FR '15"
+    },
+    "2145": {
+        "id": 2145,
+        "maker": "Ford",
+        "name": "Focus ST '15",
+        "full_name": "Ford Focus ST '15"
+    },
+    "2146": {
+        "id": 2146,
+        "maker": "Jaguar",
+        "name": "F-type R '14",
+        "full_name": "Jaguar F-type R '14"
+    },
+    "2147": {
+        "id": 2147,
+        "maker": "Lamborghini",
+        "name": "Veneno '14",
+        "full_name": "Lamborghini Veneno '14"
+    },
+    "2148": {
+        "id": 2148,
+        "maker": "Mazda",
+        "name": "Roadster S (ND) '15",
+        "full_name": "Mazda Roadster S (ND) '15"
+    },
+    "2149": {
+        "id": 2149,
+        "maker": "AMG",
+        "name": "Mercedes-AMG GT S '15",
+        "full_name": "AMG Mercedes-AMG GT S '15"
+    },
+    "2150": {
+        "id": 2150,
+        "maker": "Mitsubishi",
+        "name": "Lancer Evolution Final '15",
+        "full_name": "Mitsubishi Lancer Evolution Final '15"
+    },
+    "2152": {
+        "id": 2152,
+        "maker": "Dodge",
+        "name": "Charger SRT Hellcat '15",
+        "full_name": "Dodge Charger SRT Hellcat '15"
+    },
+    "2153": {
+        "id": 2153,
+        "maker": "Subaru",
+        "name": "WRX STI Type S '14",
+        "full_name": "Subaru WRX STI Type S '14"
+    },
+    "2154": {
+        "id": 2154,
+        "maker": "Toyota",
+        "name": "86 GT '15",
+        "full_name": "Toyota 86 GT '15"
+    },
+    "2155": {
+        "id": 2155,
+        "maker": "Volkswagen",
+        "name": "Polo GTI '14",
+        "full_name": "Volkswagen Polo GTI '14"
+    },
+    "2156": {
+        "id": 2156,
+        "maker": "Honda",
+        "name": "2&4 powered by RC213V",
+        "full_name": "Honda 2&4 powered by RC213V"
+    },
+    "2157": {
+        "id": 2157,
+        "maker": "Aston Martin",
+        "name": "V8 Vantage Gr.4",
+        "full_name": "Aston Martin V8 Vantage Gr.4"
+    },
+    "2158": {
+        "id": 2158,
+        "maker": "Ferrari",
+        "name": "458 Italia GT3 '13",
+        "full_name": "Ferrari 458 Italia GT3 '13"
+    },
+    "2159": {
+        "id": 2159,
+        "maker": "Ford",
+        "name": "Mustang Gr.3",
+        "full_name": "Ford Mustang Gr.3"
+    },
+    "2160": {
+        "id": 2160,
+        "maker": "Hyundai",
+        "name": "Genesis Gr.3",
+        "full_name": "Hyundai Genesis Gr.3"
+    },
+    "2161": {
+        "id": 2161,
+        "maker": "Nissan",
+        "name": "GT-R Gr.4",
+        "full_name": "Nissan GT-R Gr.4"
+    },
+    "2162": {
+        "id": 2162,
+        "maker": "Ferrari",
+        "name": "LaFerrari '13",
+        "full_name": "Ferrari LaFerrari '13"
+    },
+    "2163": {
+        "id": 2163,
+        "maker": "Hyundai",
+        "name": "Genesis Gr.4",
+        "full_name": "Hyundai Genesis Gr.4"
+    },
+    "2164": {
+        "id": 2164,
+        "maker": "Ford",
+        "name": "Mustang Gr.4",
+        "full_name": "Ford Mustang Gr.4"
+    },
+    "2166": {
+        "id": 2166,
+        "maker": "Alfa Romeo",
+        "name": "4C Gr.4",
+        "full_name": "Alfa Romeo 4C Gr.4"
+    },
+    "2167": {
+        "id": 2167,
+        "maker": "Nissan",
+        "name": "GT-R '17",
+        "full_name": "Nissan GT-R '17"
+    },
+    "2169": {
+        "id": 2169,
+        "maker": "Audi",
+        "name": "TTS Coupe '14",
+        "full_name": "Audi TTS Coupe '14"
+    },
+    "2170": {
+        "id": 2170,
+        "maker": "AMG",
+        "name": "A 45 AMG '13",
+        "full_name": "AMG A 45 AMG '13"
+    },
+    "2171": {
+        "id": 2171,
+        "maker": "Lamborghini",
+        "name": "Huracan LP 610-4 '15",
+        "full_name": "Lamborghini Huracan LP 610-4 '15"
+    },
+    "2172": {
+        "id": 2172,
+        "maker": "DS AUTOMOBILES",
+        "name": "DS 3 Racing '11",
+        "full_name": "DS AUTOMOBILES DS 3 Racing '11"
+    },
+    "2173": {
+        "id": 2173,
+        "maker": "Mazda",
+        "name": "Atenza Sedan XD L Package '15",
+        "full_name": "Mazda Atenza Sedan XD L Package '15"
+    },
+    "2174": {
+        "id": 2174,
+        "maker": "McLaren",
+        "name": "650S '14",
+        "full_name": "McLaren 650S '14"
+    },
+    "2175": {
+        "id": 2175,
+        "maker": "Aston Martin",
+        "name": "V8 Vantage S '15",
+        "full_name": "Aston Martin V8 Vantage S '15"
+    },
+    "2176": {
+        "id": 2176,
+        "maker": "Peugeot",
+        "name": "RCZ GT Line '15",
+        "full_name": "Peugeot RCZ GT Line '15"
+    },
+    "2177": {
+        "id": 2177,
+        "maker": "Lamborghini",
+        "name": "Huracan GT3 '15",
+        "full_name": "Lamborghini Huracan GT3 '15"
+    },
+    "2178": {
+        "id": 2178,
+        "maker": "Toyota",
+        "name": "S-FR Racing Concept '16",
+        "full_name": "Toyota S-FR Racing Concept '16"
+    },
+    "2179": {
+        "id": 2179,
+        "maker": "Bugatti",
+        "name": "Bugatti VGT (Gr.1)",
+        "full_name": "Bugatti Bugatti VGT (Gr.1)"
+    },
+    "2180": {
+        "id": 2180,
+        "maker": "Hyundai",
+        "name": "HYUNDAI N 2025 VGT (Gr.1)",
+        "full_name": "Hyundai HYUNDAI N 2025 VGT (Gr.1)"
+    },
+    "2181": {
+        "id": 2181,
+        "maker": "Mazda",
+        "name": "LM55 VGT (Gr.1)",
+        "full_name": "Mazda LM55 VGT (Gr.1)"
+    },
+    "2182": {
+        "id": 2182,
+        "maker": "McLaren",
+        "name": "650S GT3 '15",
+        "full_name": "McLaren 650S GT3 '15"
+    },
+    "2183": {
+        "id": 2183,
+        "maker": "Chevrolet",
+        "name": "Corvette C7 Gr.3",
+        "full_name": "Chevrolet Corvette C7 Gr.3"
+    },
+    "2184": {
+        "id": 2184,
+        "maker": "Jaguar",
+        "name": "F-type Gr.3",
+        "full_name": "Jaguar F-type Gr.3"
+    },
+    "2185": {
+        "id": 2185,
+        "maker": "Mitsubishi",
+        "name": "Lancer Evolution Final Gr.3",
+        "full_name": "Mitsubishi Lancer Evolution Final Gr.3"
+    },
+    "2186": {
+        "id": 2186,
+        "maker": "Subaru",
+        "name": "WRX Gr.3",
+        "full_name": "Subaru WRX Gr.3"
+    },
+    "2187": {
+        "id": 2187,
+        "maker": "Toyota",
+        "name": "FT-1 VGT (Gr.3)",
+        "full_name": "Toyota FT-1 VGT (Gr.3)"
+    },
+    "2188": {
+        "id": 2188,
+        "maker": "Renault",
+        "name": "R.S.01 GT3 '16",
+        "full_name": "Renault R.S.01 GT3 '16"
+    },
+    "2190": {
+        "id": 2190,
+        "maker": "Citroen",
+        "name": "GT by Citroen Race Car (Gr.3)",
+        "full_name": "Citroen GT by Citroen Race Car (Gr.3)"
+    },
+    "2192": {
+        "id": 2192,
+        "maker": "Volkswagen",
+        "name": "Volkswagen GTI VGT (Gr.3)",
+        "full_name": "Volkswagen Volkswagen GTI VGT (Gr.3)"
+    },
+    "3183": {
+        "id": 3183,
+        "maker": "Peugeot",
+        "name": "PEUGEOT VGT (Gr.3)",
+        "full_name": "Peugeot PEUGEOT VGT (Gr.3)"
+    },
+    "3185": {
+        "id": 3185,
+        "maker": "Alfa Romeo",
+        "name": "4C Gr.3",
+        "full_name": "Alfa Romeo 4C Gr.3"
+    },
+    "3187": {
+        "id": 3187,
+        "maker": "Alpine",
+        "name": "Alpine VGT '17",
+        "full_name": "Alpine Alpine VGT '17"
+    },
+    "3188": {
+        "id": 3188,
+        "maker": "Dodge",
+        "name": "SRT Tomahawk VGT (Gr.1)",
+        "full_name": "Dodge SRT Tomahawk VGT (Gr.1)"
+    },
+    "3192": {
+        "id": 3192,
+        "maker": "AMG",
+        "name": "SLS AMG Gr.4",
+        "full_name": "AMG SLS AMG Gr.4"
+    },
+    "3209": {
+        "id": 3209,
+        "maker": "BMW",
+        "name": "M4 Safety Car",
+        "full_name": "BMW M4 Safety Car"
+    },
+    "3210": {
+        "id": 3210,
+        "maker": "AMG",
+        "name": "Mercedes-AMG GT Safety Car",
+        "full_name": "AMG Mercedes-AMG GT Safety Car"
+    },
+    "3214": {
+        "id": 3214,
+        "maker": "Honda",
+        "name": "Civic Type R (FK2) '15",
+        "full_name": "Honda Civic Type R (FK2) '15"
+    },
+    "3215": {
+        "id": 3215,
+        "maker": "Peugeot",
+        "name": "208 GTi by Peugeot Sport '14",
+        "full_name": "Peugeot 208 GTi by Peugeot Sport '14"
+    },
+    "3216": {
+        "id": 3216,
+        "maker": "Renault",
+        "name": "R.S.01 '16",
+        "full_name": "Renault R.S.01 '16"
+    },
+    "3217": {
+        "id": 3217,
+        "maker": "Chevrolet",
+        "name": "Camaro SS '16",
+        "full_name": "Chevrolet Camaro SS '16"
+    },
+    "3218": {
+        "id": 3218,
+        "maker": "BMW",
+        "name": "M6 GT3 Endurance Model '16",
+        "full_name": "BMW M6 GT3 Endurance Model '16"
+    },
+    "3219": {
+        "id": 3219,
+        "maker": "Honda",
+        "name": "NSX '17",
+        "full_name": "Honda NSX '17"
+    },
+    "3220": {
+        "id": 3220,
+        "maker": "Renault",
+        "name": "Clio R.S. 220 Trophy '15",
+        "full_name": "Renault Clio R.S. 220 Trophy '15"
+    },
+    "3221": {
+        "id": 3221,
+        "maker": "BMW",
+        "name": "M6 GT3 Sprint Model '16",
+        "full_name": "BMW M6 GT3 Sprint Model '16"
+    },
+    "3222": {
+        "id": 3222,
+        "maker": "Toyota",
+        "name": "86 GRMN '16",
+        "full_name": "Toyota 86 GRMN '16"
+    },
+    "3223": {
+        "id": 3223,
+        "maker": "Dodge",
+        "name": "Viper SRT GT3-R '15",
+        "full_name": "Dodge Viper SRT GT3-R '15"
+    },
+    "3224": {
+        "id": 3224,
+        "maker": "AMG",
+        "name": "Mercedes-AMG GT3 '16",
+        "full_name": "AMG Mercedes-AMG GT3 '16"
+    },
+    "3225": {
+        "id": 3225,
+        "maker": "Nissan",
+        "name": "GT-R Safety Car",
+        "full_name": "Nissan GT-R Safety Car"
+    },
+    "3227": {
+        "id": 3227,
+        "maker": "Lexus",
+        "name": "LC500 '17",
+        "full_name": "Lexus LC500 '17"
+    },
+    "3228": {
+        "id": 3228,
+        "maker": "Lexus",
+        "name": "RC F GT3 prototype '16",
+        "full_name": "Lexus RC F GT3 prototype '16"
+    },
+    "3229": {
+        "id": 3229,
+        "maker": "Ford",
+        "name": "Mustang Gr.B Rally Car",
+        "full_name": "Ford Mustang Gr.B Rally Car"
+    },
+    "3230": {
+        "id": 3230,
+        "maker": "Mitsubishi",
+        "name": "Lancer Evolution Final Gr.B Rally Car",
+        "full_name": "Mitsubishi Lancer Evolution Final Gr.B Rally Car"
+    },
+    "3231": {
+        "id": 3231,
+        "maker": "Volkswagen",
+        "name": "Scirocco Gr.4",
+        "full_name": "Volkswagen Scirocco Gr.4"
+    },
+    "3232": {
+        "id": 3232,
+        "maker": "Subaru",
+        "name": "WRX Gr.B Rally Car",
+        "full_name": "Subaru WRX Gr.B Rally Car"
+    },
+    "3234": {
+        "id": 3234,
+        "maker": "Hyundai",
+        "name": "Genesis Gr.B Rally Car",
+        "full_name": "Hyundai Genesis Gr.B Rally Car"
+    },
+    "3235": {
+        "id": 3235,
+        "maker": "Honda",
+        "name": "NSX Gr.3",
+        "full_name": "Honda NSX Gr.3"
+    },
+    "3237": {
+        "id": 3237,
+        "maker": "Mazda",
+        "name": "Atenza Gr.3",
+        "full_name": "Mazda Atenza Gr.3"
+    },
+    "3238": {
+        "id": 3238,
+        "maker": "Peugeot",
+        "name": "RCZ Gr.3",
+        "full_name": "Peugeot RCZ Gr.3"
+    },
+    "3239": {
+        "id": 3239,
+        "maker": "Honda",
+        "name": "NSX Gr.B Rally Car",
+        "full_name": "Honda NSX Gr.B Rally Car"
+    },
+    "3241": {
+        "id": 3241,
+        "maker": "Nissan",
+        "name": "GT-R Gr.B Rally Car",
+        "full_name": "Nissan GT-R Gr.B Rally Car"
+    },
+    "3242": {
+        "id": 3242,
+        "maker": "Peugeot",
+        "name": "RCZ Gr.B Rally Car",
+        "full_name": "Peugeot RCZ Gr.B Rally Car"
+    },
+    "3245": {
+        "id": 3245,
+        "maker": "BMW",
+        "name": "M4 Gr.4",
+        "full_name": "BMW M4 Gr.4"
+    },
+    "3246": {
+        "id": 3246,
+        "maker": "Bugatti",
+        "name": "Veyron Gr.4",
+        "full_name": "Bugatti Veyron Gr.4"
+    },
+    "3247": {
+        "id": 3247,
+        "maker": "Chevrolet",
+        "name": "Corvette C7 Gr.4",
+        "full_name": "Chevrolet Corvette C7 Gr.4"
+    },
+    "3248": {
+        "id": 3248,
+        "maker": "Citroen",
+        "name": "GT by Citroen Gr.4",
+        "full_name": "Citroen GT by Citroen Gr.4"
+    },
+    "3249": {
+        "id": 3249,
+        "maker": "Dodge",
+        "name": "Viper Gr.4",
+        "full_name": "Dodge Viper Gr.4"
+    },
+    "3251": {
+        "id": 3251,
+        "maker": "Honda",
+        "name": "NSX Gr.4",
+        "full_name": "Honda NSX Gr.4"
+    },
+    "3252": {
+        "id": 3252,
+        "maker": "Jaguar",
+        "name": "F-type Gr.4",
+        "full_name": "Jaguar F-type Gr.4"
+    },
+    "3253": {
+        "id": 3253,
+        "maker": "Lamborghini",
+        "name": "Huracan Gr.4",
+        "full_name": "Lamborghini Huracan Gr.4"
+    },
+    "3254": {
+        "id": 3254,
+        "maker": "Lexus",
+        "name": "RC F Gr.4",
+        "full_name": "Lexus RC F Gr.4"
+    },
+    "3256": {
+        "id": 3256,
+        "maker": "Mazda",
+        "name": "Atenza Gr.4",
+        "full_name": "Mazda Atenza Gr.4"
+    },
+    "3257": {
+        "id": 3257,
+        "maker": "McLaren",
+        "name": "650S Gr.4",
+        "full_name": "McLaren 650S Gr.4"
+    },
+    "3258": {
+        "id": 3258,
+        "maker": "Mitsubishi",
+        "name": "Lancer Evolution Final Gr.4",
+        "full_name": "Mitsubishi Lancer Evolution Final Gr.4"
+    },
+    "3259": {
+        "id": 3259,
+        "maker": "Peugeot",
+        "name": "RCZ Gr.4",
+        "full_name": "Peugeot RCZ Gr.4"
+    },
+    "3260": {
+        "id": 3260,
+        "maker": "Renault",
+        "name": "Megane Gr.4",
+        "full_name": "Renault Megane Gr.4"
+    },
+    "3261": {
+        "id": 3261,
+        "maker": "Subaru",
+        "name": "WRX Gr.4",
+        "full_name": "Subaru WRX Gr.4"
+    },
+    "3262": {
+        "id": 3262,
+        "maker": "Toyota",
+        "name": "86 Gr.4",
+        "full_name": "Toyota 86 Gr.4"
+    },
+    "3263": {
+        "id": 3263,
+        "maker": "Ferrari",
+        "name": "458 Italia Gr.4",
+        "full_name": "Ferrari 458 Italia Gr.4"
+    },
+    "3264": {
+        "id": 3264,
+        "maker": "Ford",
+        "name": "Focus Gr.B Rally Car",
+        "full_name": "Ford Focus Gr.B Rally Car"
+    },
+    "3265": {
+        "id": 3265,
+        "maker": "Toyota",
+        "name": "86 Gr.B Rally Car",
+        "full_name": "Toyota 86 Gr.B Rally Car"
+    },
+    "3266": {
+        "id": 3266,
+        "maker": "BMW",
+        "name": "i3 '15",
+        "full_name": "BMW i3 '15"
+    },
+    "3267": {
+        "id": 3267,
+        "maker": "Ferrari",
+        "name": "F12berlinetta '12",
+        "full_name": "Ferrari F12berlinetta '12"
+    },
+    "3268": {
+        "id": 3268,
+        "maker": "Porsche",
+        "name": "911 GT3 RS (991) '16",
+        "full_name": "Porsche 911 GT3 RS (991) '16"
+    },
+    "3295": {
+        "id": 3295,
+        "maker": "Toyota",
+        "name": "86 GT 'Limited' '16",
+        "full_name": "Toyota 86 GT 'Limited' '16"
+    },
+    "3296": {
+        "id": 3296,
+        "maker": "Chevrolet",
+        "name": "Corvette C7 Gr.3 Road Car",
+        "full_name": "Chevrolet Corvette C7 Gr.3 Road Car"
+    },
+    "3297": {
+        "id": 3297,
+        "maker": "Subaru",
+        "name": "WRX STI Isle of Man '16",
+        "full_name": "Subaru WRX STI Isle of Man '16"
+    },
+    "3298": {
+        "id": 3298,
+        "maker": "Audi",
+        "name": "TT Cup '16",
+        "full_name": "Audi TT Cup '16"
+    },
+    "3299": {
+        "id": 3299,
+        "maker": "Alfa Romeo",
+        "name": "4C Gr.3 Road Car",
+        "full_name": "Alfa Romeo 4C Gr.3 Road Car"
+    },
+    "3300": {
+        "id": 3300,
+        "maker": "Ford",
+        "name": "Mustang Gr.3 Road Car",
+        "full_name": "Ford Mustang Gr.3 Road Car"
+    },
+    "3301": {
+        "id": 3301,
+        "maker": "Mitsubishi",
+        "name": "Lancer Evolution Final Gr.B Road Car",
+        "full_name": "Mitsubishi Lancer Evolution Final Gr.B Road Car"
+    },
+    "3303": {
+        "id": 3303,
+        "maker": "Peugeot",
+        "name": "RCZ Gr.3 Road Car",
+        "full_name": "Peugeot RCZ Gr.3 Road Car"
+    },
+    "3304": {
+        "id": 3304,
+        "maker": "Subaru",
+        "name": "WRX Gr.B Road Car",
+        "full_name": "Subaru WRX Gr.B Road Car"
+    },
+    "3305": {
+        "id": 3305,
+        "maker": "Volkswagen",
+        "name": "Beetle Gr.3",
+        "full_name": "Volkswagen Beetle Gr.3"
+    },
+    "3306": {
+        "id": 3306,
+        "maker": "Mazda",
+        "name": "Atenza Gr.3 Road Car",
+        "full_name": "Mazda Atenza Gr.3 Road Car"
+    },
+    "3309": {
+        "id": 3309,
+        "maker": "Aston Martin",
+        "name": "Vulcan '16",
+        "full_name": "Aston Martin Vulcan '16"
+    },
+    "3310": {
+        "id": 3310,
+        "maker": "Porsche",
+        "name": "Cayman GT4 Clubsport '16",
+        "full_name": "Porsche Cayman GT4 Clubsport '16"
+    },
+    "3311": {
+        "id": 3311,
+        "maker": "Porsche",
+        "name": "911 RSR (991) '17",
+        "full_name": "Porsche 911 RSR (991) '17"
+    },
+    "3312": {
+        "id": 3312,
+        "maker": "Toyota",
+        "name": "TS050 - Hybrid '16",
+        "full_name": "Toyota TS050 - Hybrid '16"
+    },
+    "3313": {
+        "id": 3313,
+        "maker": "Porsche",
+        "name": "919 Hybrid '16",
+        "full_name": "Porsche 919 Hybrid '16"
+    },
+    "3314": {
+        "id": 3314,
+        "maker": "Audi",
+        "name": "Audi VGT",
+        "full_name": "Audi Audi VGT"
+    },
+    "3315": {
+        "id": 3315,
+        "maker": "McLaren",
+        "name": "McLaren VGT",
+        "full_name": "McLaren McLaren VGT"
+    },
+    "3316": {
+        "id": 3316,
+        "maker": "Daihatsu",
+        "name": "COPEN RJ VGT",
+        "full_name": "Daihatsu COPEN RJ VGT"
+    },
+    "3332": {
+        "id": 3332,
+        "maker": "Peugeot",
+        "name": "L500R HYbrid VGT 2017",
+        "full_name": "Peugeot L500R HYbrid VGT 2017"
+    },
+    "3333": {
+        "id": 3333,
+        "maker": "Peugeot",
+        "name": "L750R HYbrid VGT 2017",
+        "full_name": "Peugeot L750R HYbrid VGT 2017"
+    },
+    "3334": {
+        "id": 3334,
+        "maker": "Audi",
+        "name": "R18 '16",
+        "full_name": "Audi R18 '16"
+    },
+    "3335": {
+        "id": 3335,
+        "maker": "McLaren",
+        "name": "McLaren VGT (Gr.1)",
+        "full_name": "McLaren McLaren VGT (Gr.1)"
+    },
+    "3336": {
+        "id": 3336,
+        "maker": "Ford",
+        "name": "F-150 SVT Raptor '11",
+        "full_name": "Ford F-150 SVT Raptor '11"
+    },
+    "3337": {
+        "id": 3337,
+        "maker": "Alpine",
+        "name": "A110 '17",
+        "full_name": "Alpine A110 '17"
+    },
+    "3338": {
+        "id": 3338,
+        "maker": "Chris Holstrom Concepts",
+        "name": "CHC 1967 Chevy Nova",
+        "full_name": "Chris Holstrom Concepts CHC 1967 Chevy Nova"
+    },
+    "3339": {
+        "id": 3339,
+        "maker": "Subaru",
+        "name": "BRZ Drift Car '17",
+        "full_name": "Subaru BRZ Drift Car '17"
+    },
+    "3340": {
+        "id": 3340,
+        "maker": "Lexus",
+        "name": "RC F GT3 '17",
+        "full_name": "Lexus RC F GT3 '17"
+    },
+    "3341": {
+        "id": 3341,
+        "maker": "De Tomaso",
+        "name": "Pantera '71",
+        "full_name": "De Tomaso Pantera '71"
+    },
+    "3342": {
+        "id": 3342,
+        "maker": "Gran Turismo",
+        "name": "F1500T-A",
+        "full_name": "Gran Turismo F1500T-A"
+    },
+    "3343": {
+        "id": 3343,
+        "maker": "Aston Martin",
+        "name": "DB11 '16",
+        "full_name": "Aston Martin DB11 '16"
+    },
+    "3344": {
+        "id": 3344,
+        "maker": "BMW",
+        "name": "M3 Sport Evolution '89",
+        "full_name": "BMW M3 Sport Evolution '89"
+    },
+    "3345": {
+        "id": 3345,
+        "maker": "Nissan",
+        "name": "GT-R NISMO '17",
+        "full_name": "Nissan GT-R NISMO '17"
+    },
+    "3346": {
+        "id": 3346,
+        "maker": "Eckert's Rod & Custom",
+        "name": "Mach Forty",
+        "full_name": "Eckert's Rod & Custom Mach Forty"
+    },
+    "3348": {
+        "id": 3348,
+        "maker": "Honda",
+        "name": "NSX CONCEPT-GT '16",
+        "full_name": "Honda NSX CONCEPT-GT '16"
+    },
+    "3349": {
+        "id": 3349,
+        "maker": "Lexus",
+        "name": "RC F GT500 '16",
+        "full_name": "Lexus RC F GT500 '16"
+    },
+    "3350": {
+        "id": 3350,
+        "maker": "Nissan",
+        "name": "GT-R NISMO GT500 '16",
+        "full_name": "Nissan GT-R NISMO GT500 '16"
+    },
+    "3351": {
+        "id": 3351,
+        "maker": "Audi",
+        "name": "Audi e-tron VGT",
+        "full_name": "Audi Audi e-tron VGT"
+    },
+    "3352": {
+        "id": 3352,
+        "maker": "Toyota",
+        "name": "GR Supra Racing Concept '18",
+        "full_name": "Toyota GR Supra Racing Concept '18"
+    },
+    "3353": {
+        "id": 3353,
+        "maker": "Renault",
+        "name": "Clio R.S. 220 Trophy '16",
+        "full_name": "Renault Clio R.S. 220 Trophy '16"
+    },
+    "3354": {
+        "id": 3354,
+        "maker": "Subaru",
+        "name": "BRZ S '15",
+        "full_name": "Subaru BRZ S '15"
+    },
+    "3356": {
+        "id": 3356,
+        "maker": "MINI",
+        "name": "Mini-Cooper 'S' '65",
+        "full_name": "MINI Mini-Cooper 'S' '65"
+    },
+    "3357": {
+        "id": 3357,
+        "maker": "Honda",
+        "name": "S660 '15",
+        "full_name": "Honda S660 '15"
+    },
+    "3358": {
+        "id": 3358,
+        "maker": "Porsche",
+        "name": "911 GT3 (996) '01",
+        "full_name": "Porsche 911 GT3 (996) '01"
+    },
+    "3359": {
+        "id": 3359,
+        "maker": "Porsche",
+        "name": "911 GT3 (997) '09",
+        "full_name": "Porsche 911 GT3 (997) '09"
+    },
+    "3360": {
+        "id": 3360,
+        "maker": "McLaren",
+        "name": "McLaren P1 GTR '16",
+        "full_name": "McLaren McLaren P1 GTR '16"
+    },
+    "3361": {
+        "id": 3361,
+        "maker": "Jaguar",
+        "name": "E-type Coupe '61",
+        "full_name": "Jaguar E-type Coupe '61"
+    },
+    "3362": {
+        "id": 3362,
+        "maker": "Ferrari",
+        "name": "F50 '95",
+        "full_name": "Ferrari F50 '95"
+    },
+    "3363": {
+        "id": 3363,
+        "maker": "Aston Martin",
+        "name": "DB3S '53",
+        "full_name": "Aston Martin DB3S '53"
+    },
+    "3364": {
+        "id": 3364,
+        "maker": "Greddy",
+        "name": "Greddy Fugu Z",
+        "full_name": "Greddy Greddy Fugu Z"
+    },
+    "3365": {
+        "id": 3365,
+        "maker": "Porsche",
+        "name": "356 A/1500 GS GT Carrera Speedster '56",
+        "full_name": "Porsche 356 A/1500 GS GT Carrera Speedster '56"
+    },
+    "3367": {
+        "id": 3367,
+        "maker": "Toyota",
+        "name": "GR Supra RZ '19",
+        "full_name": "Toyota GR Supra RZ '19"
+    },
+    "3368": {
+        "id": 3368,
+        "maker": "Toyota",
+        "name": "Tundra TRD Pro '19",
+        "full_name": "Toyota Tundra TRD Pro '19"
+    },
+    "3369": {
+        "id": 3369,
+        "maker": "Radical",
+        "name": "SR3 SL '13",
+        "full_name": "Radical SR3 SL '13"
+    },
+    "3370": {
+        "id": 3370,
+        "maker": "Honda",
+        "name": "Fit Hybrid '14",
+        "full_name": "Honda Fit Hybrid '14"
+    },
+    "3371": {
+        "id": 3371,
+        "maker": "Super Formula (Dallara)",
+        "name": "SF19 Super Formula / Toyota '19",
+        "full_name": "Super Formula (Dallara) SF19 Super Formula / Toyota '19"
+    },
+    "3372": {
+        "id": 3372,
+        "maker": "Super Formula (Dallara)",
+        "name": "SF19 Super Formula / Honda '19",
+        "full_name": "Super Formula (Dallara) SF19 Super Formula / Honda '19"
+    },
+    "3373": {
+        "id": 3373,
+        "maker": "Porsche",
+        "name": "962 C '88",
+        "full_name": "Porsche 962 C '88"
+    },
+    "3374": {
+        "id": 3374,
+        "maker": "Gran Turismo",
+        "name": "Red Bull X2019 Competition",
+        "full_name": "Gran Turismo Red Bull X2019 Competition"
+    },
+    "3375": {
+        "id": 3375,
+        "maker": "Porsche",
+        "name": "356 A/1500 GS Carrera '56",
+        "full_name": "Porsche 356 A/1500 GS Carrera '56"
+    },
+    "3376": {
+        "id": 3376,
+        "maker": "Jaguar",
+        "name": "D-type '54",
+        "full_name": "Jaguar D-type '54"
+    },
+    "3377": {
+        "id": 3377,
+        "maker": "Dodge",
+        "name": "Super Bee '70",
+        "full_name": "Dodge Super Bee '70"
+    },
+    "3383": {
+        "id": 3383,
+        "maker": "Mazda",
+        "name": "Demio XD Touring '15",
+        "full_name": "Mazda Demio XD Touring '15"
+    },
+    "3384": {
+        "id": 3384,
+        "maker": "Mitsubishi",
+        "name": "GTO Twin Turbo '91",
+        "full_name": "Mitsubishi GTO Twin Turbo '91"
+    },
+    "3385": {
+        "id": 3385,
+        "maker": "Porsche",
+        "name": "911 Turbo (930) '81",
+        "full_name": "Porsche 911 Turbo (930) '81"
+    },
+    "3387": {
+        "id": 3387,
+        "maker": "Chevrolet",
+        "name": "Camaro ZL1 1LE Package '18",
+        "full_name": "Chevrolet Camaro ZL1 1LE Package '18"
+    },
+    "3388": {
+        "id": 3388,
+        "maker": "AMG",
+        "name": "300 SEL 6.8 AMG '71",
+        "full_name": "AMG 300 SEL 6.8 AMG '71"
+    },
+    "3389": {
+        "id": 3389,
+        "maker": "BMW",
+        "name": "M3 '03",
+        "full_name": "BMW M3 '03"
+    },
+    "3390": {
+        "id": 3390,
+        "maker": "Porsche",
+        "name": "Taycan Turbo S '19",
+        "full_name": "Porsche Taycan Turbo S '19"
+    },
+    "3391": {
+        "id": 3391,
+        "maker": "Ford",
+        "name": "Shelby GT350R '16",
+        "full_name": "Ford Shelby GT350R '16"
+    },
+    "3392": {
+        "id": 3392,
+        "maker": "Lamborghini",
+        "name": "Aventador LP 750-4 SV '15",
+        "full_name": "Lamborghini Aventador LP 750-4 SV '15"
+    },
+    "3393": {
+        "id": 3393,
+        "maker": "Porsche",
+        "name": "Carrera GT '04",
+        "full_name": "Porsche Carrera GT '04"
+    },
+    "3394": {
+        "id": 3394,
+        "maker": "Aston Martin",
+        "name": "DBR9 GT1 '10",
+        "full_name": "Aston Martin DBR9 GT1 '10"
+    },
+    "3396": {
+        "id": 3396,
+        "maker": "Jaguar",
+        "name": "Jaguar VGT Coupe",
+        "full_name": "Jaguar Jaguar VGT Coupe"
+    },
+    "3397": {
+        "id": 3397,
+        "maker": "Mercedes-Benz",
+        "name": "CLK-LM '98",
+        "full_name": "Mercedes-Benz CLK-LM '98"
+    },
+    "3398": {
+        "id": 3398,
+        "maker": "RUF",
+        "name": "CTR3 '07",
+        "full_name": "RUF CTR3 '07"
+    },
+    "3399": {
+        "id": 3399,
+        "maker": "Toyota",
+        "name": "GR Supra Race Car '19",
+        "full_name": "Toyota GR Supra Race Car '19"
+    },
+    "3400": {
+        "id": 3400,
+        "maker": "Porsche",
+        "name": "911 GT1 Strassenversion '97",
+        "full_name": "Porsche 911 GT1 Strassenversion '97"
+    },
+    "3401": {
+        "id": 3401,
+        "maker": "Toyota",
+        "name": "Crown Athlete G '13",
+        "full_name": "Toyota Crown Athlete G '13"
+    },
+    "3402": {
+        "id": 3402,
+        "maker": "Ford",
+        "name": "Ford GT '17",
+        "full_name": "Ford Ford GT '17"
+    },
+    "3403": {
+        "id": 3403,
+        "maker": "Volkswagen",
+        "name": "Golf I GTI '83",
+        "full_name": "Volkswagen Golf I GTI '83"
+    },
+    "3404": {
+        "id": 3404,
+        "maker": "Porsche",
+        "name": "911 Carrera RS CS (993) '95",
+        "full_name": "Porsche 911 Carrera RS CS (993) '95"
+    },
+    "3405": {
+        "id": 3405,
+        "maker": "Audi",
+        "name": "R8 LMS Evo '19",
+        "full_name": "Audi R8 LMS Evo '19"
+    },
+    "3406": {
+        "id": 3406,
+        "maker": "Dodge",
+        "name": "Charger SRT Hellcat Safety Car",
+        "full_name": "Dodge Charger SRT Hellcat Safety Car"
+    },
+    "3407": {
+        "id": 3407,
+        "maker": "Renault",
+        "name": "Megane R.S. Trophy Safety Car",
+        "full_name": "Renault Megane R.S. Trophy Safety Car"
+    },
+    "3408": {
+        "id": 3408,
+        "maker": "Toyota",
+        "name": "Crown Athlete G Safety Car",
+        "full_name": "Toyota Crown Athlete G Safety Car"
+    },
+    "3409": {
+        "id": 3409,
+        "maker": "BAC",
+        "name": "Mono '16",
+        "full_name": "BAC Mono '16"
+    },
+    "3410": {
+        "id": 3410,
+        "maker": "Porsche",
+        "name": "917K '70",
+        "full_name": "Porsche 917K '70"
+    },
+    "3413": {
+        "id": 3413,
+        "maker": "Subaru",
+        "name": "BRZ STI Sport '18",
+        "full_name": "Subaru BRZ STI Sport '18"
+    },
+    "3414": {
+        "id": 3414,
+        "maker": "Lamborghini",
+        "name": "Lambo V12 VGT",
+        "full_name": "Lamborghini Lambo V12 VGT"
+    },
+    "3415": {
+        "id": 3415,
+        "maker": "Alfa Romeo",
+        "name": "8C 2900B Touring Berlinetta '38",
+        "full_name": "Alfa Romeo 8C 2900B Touring Berlinetta '38"
+    },
+    "3416": {
+        "id": 3416,
+        "maker": "AMG",
+        "name": "Mercedes-AMG GT R '17",
+        "full_name": "AMG Mercedes-AMG GT R '17"
+    },
+    "3417": {
+        "id": 3417,
+        "maker": "Jaguar",
+        "name": "Jaguar VGT SV",
+        "full_name": "Jaguar Jaguar VGT SV"
+    },
+    "3418": {
+        "id": 3418,
+        "maker": "Toyota",
+        "name": "GR Supra RZ '20",
+        "full_name": "Toyota GR Supra RZ '20"
+    },
+    "3419": {
+        "id": 3419,
+        "maker": "Mazda",
+        "name": "RX-VISION GT3 CONCEPT",
+        "full_name": "Mazda RX-VISION GT3 CONCEPT"
+    },
+    "3420": {
+        "id": 3420,
+        "maker": "Ford",
+        "name": "Focus RS '18",
+        "full_name": "Ford Focus RS '18"
+    },
+    "3422": {
+        "id": 3422,
+        "maker": "BMW",
+        "name": "3.0 CSL '73",
+        "full_name": "BMW 3.0 CSL '73"
+    },
+    "3423": {
+        "id": 3423,
+        "maker": "Wicked Fabrication",
+        "name": "Wicked Fabrication GT 51",
+        "full_name": "Wicked Fabrication Wicked Fabrication GT 51"
+    },
+    "3427": {
+        "id": 3427,
+        "maker": "Mazda",
+        "name": "RX-8 Spirit R '12",
+        "full_name": "Mazda RX-8 Spirit R '12"
+    },
+    "3428": {
+        "id": 3428,
+        "maker": "Mercedes-Benz",
+        "name": "S Barker Tourer '29",
+        "full_name": "Mercedes-Benz S Barker Tourer '29"
+    },
+    "3429": {
+        "id": 3429,
+        "maker": "Nissan",
+        "name": "Fairlady Z 432 '69",
+        "full_name": "Nissan Fairlady Z 432 '69"
+    },
+    "3430": {
+        "id": 3430,
+        "maker": "Jeep",
+        "name": "Willys MB '45",
+        "full_name": "Jeep Willys MB '45"
+    },
+    "3431": {
+        "id": 3431,
+        "maker": "Porsche",
+        "name": "911 Carrera RS (964) '92",
+        "full_name": "Porsche 911 Carrera RS (964) '92"
+    },
+    "3433": {
+        "id": 3433,
+        "maker": "Ferrari",
+        "name": "FXX K '14",
+        "full_name": "Ferrari FXX K '14"
+    },
+    "3434": {
+        "id": 3434,
+        "maker": "Ferrari",
+        "name": "Testarossa '91",
+        "full_name": "Ferrari Testarossa '91"
+    },
+    "3436": {
+        "id": 3436,
+        "maker": "Ford",
+        "name": "Ford GT Race Car '18",
+        "full_name": "Ford Ford GT Race Car '18"
+    },
+    "3437": {
+        "id": 3437,
+        "maker": "De Tomaso",
+        "name": "Mangusta '69",
+        "full_name": "De Tomaso Mangusta '69"
+    },
+    "3438": {
+        "id": 3438,
+        "maker": "Abarth",
+        "name": "Abarth 595 SS '70",
+        "full_name": "Abarth Abarth 595 SS '70"
+    },
+    "3439": {
+        "id": 3439,
+        "maker": "Porsche",
+        "name": "911 Carrera RS (993) '95",
+        "full_name": "Porsche 911 Carrera RS (993) '95"
+    },
+    "3441": {
+        "id": 3441,
+        "maker": "Mercedes-Benz",
+        "name": "300 SL (W194) '52",
+        "full_name": "Mercedes-Benz 300 SL (W194) '52"
+    },
+    "3442": {
+        "id": 3442,
+        "maker": "Autobianchi",
+        "name": "A112 Abarth '85",
+        "full_name": "Autobianchi A112 Abarth '85"
+    },
+    "3443": {
+        "id": 3443,
+        "maker": "Ferrari",
+        "name": "308 GTB '75",
+        "full_name": "Ferrari 308 GTB '75"
+    },
+    "3445": {
+        "id": 3445,
+        "maker": "Aston Martin",
+        "name": "DB5 '64",
+        "full_name": "Aston Martin DB5 '64"
+    },
+    "3446": {
+        "id": 3446,
+        "maker": "Porsche",
+        "name": "Spyder type 550/1500RS '55",
+        "full_name": "Porsche Spyder type 550/1500RS '55"
+    },
+    "3449": {
+        "id": 3449,
+        "maker": "Chevrolet",
+        "name": "Corvette C7 ZR1 '19",
+        "full_name": "Chevrolet Corvette C7 ZR1 '19"
+    },
+    "3451": {
+        "id": 3451,
+        "maker": "Toyota",
+        "name": "GR Yaris RZ 'High performance' '20",
+        "full_name": "Toyota GR Yaris RZ 'High performance' '20"
+    },
+    "3452": {
+        "id": 3452,
+        "maker": "Porsche",
+        "name": "917 LIVING LEGEND",
+        "full_name": "Porsche 917 LIVING LEGEND"
+    },
+    "3453": {
+        "id": 3453,
+        "maker": "BMW",
+        "name": "M3 '89",
+        "full_name": "BMW M3 '89"
+    },
+    "3454": {
+        "id": 3454,
+        "maker": "BMW",
+        "name": "3.0 CSL '71",
+        "full_name": "BMW 3.0 CSL '71"
+    },
+    "3456": {
+        "id": 3456,
+        "maker": "Suzuki",
+        "name": "Swift Sport '17",
+        "full_name": "Suzuki Swift Sport '17"
+    },
+    "3457": {
+        "id": 3457,
+        "maker": "Alpine",
+        "name": "A220 Race Car '68",
+        "full_name": "Alpine A220 Race Car '68"
+    },
+    "3458": {
+        "id": 3458,
+        "maker": "AMG",
+        "name": "Mercedes-AMG C 63 S '15",
+        "full_name": "AMG Mercedes-AMG C 63 S '15"
+    },
+    "3467": {
+        "id": 3467,
+        "maker": "Honda",
+        "name": "Civic Type R Limited Edition (FK8) '20",
+        "full_name": "Honda Civic Type R Limited Edition (FK8) '20"
+    },
+    "3469": {
+        "id": 3469,
+        "maker": "Ferrari",
+        "name": "F8 Tributo '19",
+        "full_name": "Ferrari F8 Tributo '19"
+    },
+    "3471": {
+        "id": 3471,
+        "maker": "Toyota",
+        "name": "Celica GT-Four (ST205) '94",
+        "full_name": "Toyota Celica GT-Four (ST205) '94"
+    },
+    "3477": {
+        "id": 3477,
+        "maker": "Nissan",
+        "name": "Silvia spec-R Aero (S15) Touring Car",
+        "full_name": "Nissan Silvia spec-R Aero (S15) Touring Car"
+    },
+    "3478": {
+        "id": 3478,
+        "maker": "Porsche",
+        "name": "Porsche VGT",
+        "full_name": "Porsche Porsche VGT"
+    },
+    "3479": {
+        "id": 3479,
+        "maker": "Jaguar",
+        "name": "Jaguar VGT Roadster",
+        "full_name": "Jaguar Jaguar VGT Roadster"
+    },
+    "3480": {
+        "id": 3480,
+        "maker": "Suzuki",
+        "name": "Swift Sport Gr.4",
+        "full_name": "Suzuki Swift Sport Gr.4"
+    },
+    "3481": {
+        "id": 3481,
+        "maker": "Toyota",
+        "name": "GR86 RZ '21",
+        "full_name": "Toyota GR86 RZ '21"
+    },
+    "3485": {
+        "id": 3485,
+        "maker": "AMG",
+        "name": "Mercedes-AMG GT Black Series '20",
+        "full_name": "AMG Mercedes-AMG GT Black Series '20"
+    },
+    "3487": {
+        "id": 3487,
+        "maker": "Ford",
+        "name": "Mustang Boss 429 '69",
+        "full_name": "Ford Mustang Boss 429 '69"
+    },
+    "3495": {
+        "id": 3495,
+        "maker": "Mazda",
+        "name": "RX-VISION '15",
+        "full_name": "Mazda RX-VISION '15"
+    },
+    "3500": {
+        "id": 3500,
+        "maker": "Genesis",
+        "name": "G70 3.3T AWD Prestige Package '22",
+        "full_name": "Genesis G70 3.3T AWD Prestige Package '22"
+    },
+    "3501": {
+        "id": 3501,
+        "maker": "Genesis",
+        "name": "G70 GR4",
+        "full_name": "Genesis G70 GR4"
+    },
+    "3502": {
+        "id": 3502,
+        "maker": "Genesis",
+        "name": "Genesis X GR3",
+        "full_name": "Genesis Genesis X GR3"
+    },
+    "3503": {
+        "id": 3503,
+        "maker": "Mazda",
+        "name": "RX-VISION GT3 CONCEPT Stealth Model",
+        "full_name": "Mazda RX-VISION GT3 CONCEPT Stealth Model"
+    },
+    "3504": {
+        "id": 3504,
+        "maker": "Nissan",
+        "name": "Z Performance '23",
+        "full_name": "Nissan Z Performance '23"
+    },
+    "779": {
+        "id": 779,
+        "maker": "Suzuki",
+        "name": "Cappuccino (EA11R) '91",
+        "full_name": "Suzuki Cappuccino (EA11R) '91"
+    },
+    "3474": {
+        "id": 3474,
+        "maker": "Subaru",
+        "name": "BRZ GT300 '21",
+        "full_name": "Subaru BRZ GT300 '21"
+    },
+    "3506": {
+        "id": 3506,
+        "maker": "Subaru",
+        "name": "BRZ S '21",
+        "full_name": "Subaru BRZ S '21"
+    },
+    "3426": {
+        "id": 3426,
+        "maker": "Roadster Shop",
+        "name": "Roadster Shop Rampage",
+        "full_name": "Roadster Shop Roadster Shop Rampage"
+    },
+    "3476": {
+        "id": 3476,
+        "maker": "Suzuki",
+        "name": "Suzuki Vision Gran Turismo",
+        "full_name": "Suzuki Suzuki Vision Gran Turismo"
+    },
+    "3499": {
+        "id": 3499,
+        "maker": "Toyota",
+        "name": "GR010 HYBRID '21",
+        "full_name": "Toyota GR010 HYBRID '21"
+    },
+    "3508": {
+        "id": 3508,
+        "maker": "Suzuki",
+        "name": "SUZUKI Vision Gran Turismo (Gr.3 Version)",
+        "full_name": "Suzuki SUZUKI Vision Gran Turismo (Gr.3 Version)"
+    },
+    "3444": {
+        "id": 3444,
+        "maker": "Ford",
+        "name": "1932 Ford Roadster Hot Rod",
+        "full_name": "Ford 1932 Ford Roadster Hot Rod"
+    },
+    "808": {
+        "id": 808,
+        "maker": "Suzuki",
+        "name": "V6 Escudo Pikes Peak Special spec.98",
+        "full_name": "Suzuki V6 Escudo Pikes Peak Special spec.98"
+    },
+    "3459": {
+        "id": 3459,
+        "maker": "Porsche",
+        "name": "918 Spyder '13",
+        "full_name": "Porsche 918 Spyder '13"
+    },
+    "3489": {
+        "id": 3489,
+        "maker": "Maserati",
+        "name": "A6GCS/53 Spyder '54",
+        "full_name": "Maserati A6GCS/53 Spyder '54"
+    },
+    "3493": {
+        "id": 3493,
+        "maker": "Nissan",
+        "name": "Skyline Super Silhouette Group 5 '84",
+        "full_name": "Nissan Skyline Super Silhouette Group 5 '84"
+    },
+    "3488": {
+        "id": 3488,
+        "maker": "Porsche",
+        "name": "Cayman GT4 '16",
+        "full_name": "Porsche Cayman GT4 '16"
+    },
+    "3505": {
+        "id": 3505,
+        "maker": "De Tomaso",
+        "name": "Mangusta (Christian Dior)",
+        "full_name": "De Tomaso Mangusta (Christian Dior)"
+    },
+    "3475": {
+        "id": 3475,
+        "maker": "McLaren",
+        "name": "MP4/4 '88",
+        "full_name": "McLaren MP4/4 '88"
+    },
+    "3462": {
+        "id": 3462,
+        "maker": "Pontiac",
+        "name": "GTO 'The Judge' '69",
+        "full_name": "Pontiac GTO 'The Judge' '69"
+    },
+    "3507": {
+        "id": 3507,
+        "maker": "Porsche",
+        "name": "Porsche VGT Spyder",
+        "full_name": "Porsche Porsche VGT Spyder"
+    },
+    "3511": {
+        "id": 3511,
+        "maker": "Volkswagen",
+        "name": "ID.R '19",
+        "full_name": "Volkswagen ID.R '19"
+    },
+    "3513": {
+        "id": 3513,
+        "maker": "Nissan",
+        "name": "Silvia K's Type S (S14) '94",
+        "full_name": "Nissan Silvia K's Type S (S14) '94"
+    },
+    "836": {
+        "id": 836,
+        "maker": "Nissan",
+        "name": "Skyline 2000GT-R (KPGC110) '73",
+        "full_name": "Nissan Skyline 2000GT-R (KPGC110) '73"
+    },
+    "3421": {
+        "id": 3421,
+        "maker": "Maserati",
+        "name": "Merak SS '80",
+        "full_name": "Maserati Merak SS '80"
+    },
+    "3450": {
+        "id": 3450,
+        "maker": "Nissan",
+        "name": "GT-R NISMO GT3 '18",
+        "full_name": "Nissan GT-R NISMO GT3 '18"
+    },
+    "3512": {
+        "id": 3512,
+        "maker": "Mazda",
+        "name": "Roadster NR-A (ND) '22",
+        "full_name": "Mazda Roadster NR-A (ND) '22"
+    },
+    "3466": {
+        "id": 3466,
+        "maker": "Ford",
+        "name": "Sierra RS 500 Cosworth '87",
+        "full_name": "Ford Sierra RS 500 Cosworth '87"
+    },
+    "3483": {
+        "id": 3483,
+        "maker": "BMW",
+        "name": "M2 Competition '18",
+        "full_name": "BMW M2 Competition '18"
+    },
+    "78": {
+        "id": 78,
+        "maker": "Nissan",
+        "name": "Silvia K's Aero (S14) '96",
+        "full_name": "Nissan Silvia K's Aero (S14) '96"
+    },
+    "3517": {
+        "id": 3517,
+        "maker": "Gran Turismo",
+        "name": "Red Bull X2019 25th Anniversary",
+        "full_name": "Gran Turismo Red Bull X2019 25th Anniversary"
+    },
+    "3411": {
+        "id": 3411,
+        "maker": "Alfa Romeo",
+        "name": "Giulia GTAm '20",
+        "full_name": "Alfa Romeo Giulia GTAm '20"
+    },
+    "3473": {
+        "id": 3473,
+        "maker": "Bugatti",
+        "name": "Chiron '16",
+        "full_name": "Bugatti Chiron '16"
+    },
+    "3510": {
+        "id": 3510,
+        "maker": "Ferrari",
+        "name": "Ferrari Vision Gran Turismo",
+        "full_name": "Ferrari Ferrari Vision Gran Turismo"
+    },
+    "3518": {
+        "id": 3518,
+        "maker": "Chevrolet",
+        "name": "Corvette C8 Stingray '20",
+        "full_name": "Chevrolet Corvette C8 Stingray '20"
+    },
+    "781": {
+        "id": 781,
+        "maker": "Toyota",
+        "name": "Celica GT-FOUR Rally Car (ST205) '95",
+        "full_name": "Toyota Celica GT-FOUR Rally Car (ST205) '95"
+    },
+    "2119": {
+        "id": 2119,
+        "maker": "Italdesign",
+        "name": "Italdesign VGT Street Mode",
+        "full_name": "Italdesign Italdesign VGT Street Mode"
+    },
+    "2120": {
+        "id": 2120,
+        "maker": "Italdesign",
+        "name": "Italdesign VGT Off-road Mode",
+        "full_name": "Italdesign Italdesign VGT Off-road Mode"
+    },
+    "3509": {
+        "id": 3509,
+        "maker": "Porsche",
+        "name": "911 Carrera RS (901) '73",
+        "full_name": "Porsche 911 Carrera RS (901) '73"
+    },
+    "3514": {
+        "id": 3514,
+        "maker": "Citroen",
+        "name": "DS 21 Pallas '70",
+        "full_name": "Citroen DS 21 Pallas '70"
+    },
+    "3525": {
+        "id": 3525,
+        "maker": "Honda",
+        "name": "RA272 '65",
+        "full_name": "Honda RA272 '65"
+    },
+    "3490": {
+        "id": 3490,
+        "maker": "Porsche",
+        "name": "Carrera GTS (904) '64",
+        "full_name": "Porsche Carrera GTS (904) '64"
+    },
+    "3519": {
+        "id": 3519,
+        "maker": "Porsche",
+        "name": "959 '87",
+        "full_name": "Porsche 959 '87"
+    },
+    "3494": {
+        "id": 3494,
+        "maker": "Toyota",
+        "name": "Alphard Executive Lounge '18",
+        "full_name": "Toyota Alphard Executive Lounge '18"
+    },
+    "3521": {
+        "id": 3521,
+        "maker": "Mazda",
+        "name": "Mazda3 '19",
+        "full_name": "Mazda Mazda3 '19"
+    },
+    "3523": {
+        "id": 3523,
+        "maker": "Audi",
+        "name": "RS 5 Turbo DTM '19",
+        "full_name": "Audi RS 5 Turbo DTM '19"
+    },
+    "543": {
+        "id": 543,
+        "maker": "Jaguar",
+        "name": "XJ220 '92",
+        "full_name": "Jaguar XJ220 '92"
+    },
+    "3528": {
+        "id": 3528,
+        "maker": "Super Formula (Dallara)",
+        "name": "SF23 Super Formula / Honda '23",
+        "full_name": "Super Formula (Dallara) SF23 Super Formula / Honda '23"
+    },
+    "3529": {
+        "id": 3529,
+        "maker": "Super Formula (Dallara)",
+        "name": "SF23 Super Formula / Toyota '23",
+        "full_name": "Super Formula (Dallara) SF23 Super Formula / Toyota '23"
+    },
+    "3531": {
+        "id": 3531,
+        "maker": "AMG",
+        "name": "GT3 '20",
+        "full_name": "AMG GT3 '20"
+    },
+    "3515": {
+        "id": 3515,
+        "maker": "Toyota",
+        "name": "GR010 HYBRID (Olympic Esports Series) '21",
+        "full_name": "Toyota GR010 HYBRID (Olympic Esports Series) '21"
+    },
+    "3522": {
+        "id": 3522,
+        "maker": "Greening Auto Company",
+        "name": "Maverick",
+        "full_name": "Greening Auto Company Maverick"
+    },
+    "3524": {
+        "id": 3524,
+        "maker": "Nissan",
+        "name": "GT-R NISMO (R32) '90",
+        "full_name": "Nissan GT-R NISMO (R32) '90"
+    },
+    "3530": {
+        "id": 3530,
+        "maker": "Alfa Romeo",
+        "name": "Giulia Sprint GT Veloce '67",
+        "full_name": "Alfa Romeo Giulia Sprint GT Veloce '67"
+    },
+    "931": {
+        "id": 931,
+        "maker": "Mitsubishi",
+        "name": "Lancer Evolution III GSR '95",
+        "full_name": "Mitsubishi Lancer Evolution III GSR '95"
+    },
+    "3432": {
+        "id": 3432,
+        "maker": "Subaru",
+        "name": "Impreza Sedan WRX STi '04",
+        "full_name": "Subaru Impreza Sedan WRX STi '04"
+    },
+    "3532": {
+        "id": 3532,
+        "maker": "Aston Martin",
+        "name": "Valkyrie '21",
+        "full_name": "Aston Martin Valkyrie '21"
+    },
+    "3464": {
+        "id": 3464,
+        "maker": "Chevrolet",
+        "name": "Corvette (C1) '58",
+        "full_name": "Chevrolet Corvette (C1) '58"
+    },
+    "3533": {
+        "id": 3533,
+        "maker": "Maserati",
+        "name": "MC20 '20",
+        "full_name": "Maserati MC20 '20"
+    },
+    "3534": {
+        "id": 3534,
+        "maker": "Toyota",
+        "name": "Ambulance Himedic '21",
+        "full_name": "Toyota Ambulance Himedic '21"
+    },
+    "3535": {
+        "id": 3535,
+        "maker": "Toyota",
+        "name": "GR Corolla MORIZO Edition '22",
+        "full_name": "Toyota GR Corolla MORIZO Edition '22"
+    },
+    "3526": {
+        "id": 3526,
+        "maker": "Garage RCR",
+        "name": "Civic",
+        "full_name": "Garage RCR Civic"
+    },
+    "3536": {
+        "id": 3536,
+        "maker": "Honda",
+        "name": "Civic Type R (FL5) '22",
+        "full_name": "Honda Civic Type R (FL5) '22"
+    },
+    "3537": {
+        "id": 3537,
+        "maker": "Mazda",
+        "name": "MAZDA3 Gr.4",
+        "full_name": "Mazda MAZDA3 Gr.4"
+    },
+    "1562": {
+        "id": 1562,
+        "maker": "Lexus",
+        "name": "LFA '10",
+        "full_name": "Lexus LFA '10"
+    },
+    "3486": {
+        "id": 3486,
+        "maker": "Dodge",
+        "name": "Challenger SRT Demon '18",
+        "full_name": "Dodge Challenger SRT Demon '18"
+    },
+    "3520": {
+        "id": 3520,
+        "maker": "NISMO",
+        "name": "400R '95",
+        "full_name": "NISMO 400R '95"
+    },
+    "575": {
+        "id": 575,
+        "maker": "Mercedes-Benz",
+        "name": "190 E 2.5-16 Evolution II '91",
+        "full_name": "Mercedes-Benz 190 E 2.5-16 Evolution II '91"
+    },
+    "3538": {
+        "id": 3538,
+        "maker": "Dodge",
+        "name": "Charger R/T 426 Hemi '68",
+        "full_name": "Dodge Charger R/T 426 Hemi '68"
+    },
+    "3539": {
+        "id": 3539,
+        "maker": "Porsche",
+        "name": "911 GT3 RS (992) '22",
+        "full_name": "Porsche 911 GT3 RS (992) '22"
+    },
+    "3540": {
+        "id": 3540,
+        "maker": "Tesla",
+        "name": "Model 3 Performance '23",
+        "full_name": "Tesla Model 3 Performance '23"
+    },
+    "3541": {
+        "id": 3541,
+        "maker": "BVLGARI",
+        "name": "BVLGARI Aluminium VGT",
+        "full_name": "BVLGARI BVLGARI Aluminium VGT"
+    },
+    "3543": {
+        "id": 3543,
+        "maker": "Genesis",
+        "name": "Genesis X Gran Berlinetta VGT Concept",
+        "full_name": "Genesis Genesis X Gran Berlinetta VGT Concept"
+    },
+    "3545": {
+        "id": 3545,
+        "maker": "Suzuki",
+        "name": "Jimny XC '18",
+        "full_name": "Suzuki Jimny XC '18"
+    },
+    "1541": {
+        "id": 1541,
+        "maker": "Audi",
+        "name": "TTS Coupe '09",
+        "full_name": "Audi TTS Coupe '09"
+    },
+    "3424": {
+        "id": 3424,
+        "maker": "Mitsubishi",
+        "name": "Lancer Evolution IX MR GSR '06",
+        "full_name": "Mitsubishi Lancer Evolution IX MR GSR '06"
+    },
+    "3547": {
+        "id": 3547,
+        "maker": "Renault",
+        "name": "R4 GTL '85",
+        "full_name": "Renault R4 GTL '85"
+    },
+    "116": {
+        "id": 116,
+        "maker": "Toyota",
+        "name": "GT-One (TS020) '99",
+        "full_name": "Toyota GT-One (TS020) '99"
+    },
+    "3412": {
+        "id": 3412,
+        "maker": "Audi",
+        "name": "R8 Coupé V10 plus '16",
+        "full_name": "Audi R8 Coupé V10 plus '16"
+    },
+    "3548": {
+        "id": 3548,
+        "maker": "Lamborghini",
+        "name": "Urus '18",
+        "full_name": "Lamborghini Urus '18"
+    },
+    "36": {
+        "id": 36,
+        "maker": "Chevrolet",
+        "name": "Chevelle SS 454 Sport Coupé '70",
+        "full_name": "Chevrolet Chevelle SS 454 Sport Coupé '70"
+    },
+    "3542": {
+        "id": 3542,
+        "maker": "Skoda",
+        "name": "SKODA Vision Gran Turismo",
+        "full_name": "Skoda SKODA Vision Gran Turismo"
+    },
+    "3546": {
+        "id": 3546,
+        "maker": "AFEELA",
+        "name": "AFEELA Prototype 2024",
+        "full_name": "AFEELA AFEELA Prototype 2024"
+    },
+    "37": {
+        "id": 37,
+        "maker": "Honda",
+        "name": "Civic SiR-II (EG) '93",
+        "full_name": "Honda Civic SiR-II (EG) '93"
+    },
+    "140": {
+        "id": 140,
+        "maker": "Honda",
+        "name": "NSX GT500 '00",
+        "full_name": "Honda NSX GT500 '00"
+    },
+    "102": {
+        "id": 102,
+        "maker": "Nissan",
+        "name": "Skyline GTS-R (R31) '87",
+        "full_name": "Nissan Skyline GTS-R (R31) '87"
+    },
+    "3482": {
+        "id": 3482,
+        "maker": "Volvo",
+        "name": "V40 T5 R-Design '13",
+        "full_name": "Volvo V40 T5 R-Design '13"
+    },
+    "3549": {
+        "id": 3549,
+        "maker": "Volvo",
+        "name": "240 SE Estate '93",
+        "full_name": "Volvo 240 SE Estate '93"
+    },
+    "3551": {
+        "id": 3551,
+        "maker": "BMW",
+        "name": "M3 '97",
+        "full_name": "BMW M3 '97"
+    },
+    "1544": {
+        "id": 1544,
+        "maker": "Ferrari",
+        "name": "430 Scuderia '07",
+        "full_name": "Ferrari 430 Scuderia '07"
+    },
+    "3544": {
+        "id": 3544,
+        "maker": "Genesis",
+        "name": "Genesis X Gran Racer Vision Gran Turismo Concept",
+        "full_name": "Genesis Genesis X Gran Racer Vision Gran Turismo Concept"
+    },
+    "1506": {
+        "id": 1506,
+        "maker": "Lamborghini",
+        "name": "Gallardo LP 560-4 '08",
+        "full_name": "Lamborghini Gallardo LP 560-4 '08"
+    },
+    "3468": {
+        "id": 3468,
+        "maker": "RUF",
+        "name": "RGT 4.2 '16",
+        "full_name": "RUF RGT 4.2 '16"
+    },
+    "3550": {
+        "id": 3550,
+        "maker": "Subaru",
+        "name": "Impreza Rally Car '98",
+        "full_name": "Subaru Impreza Rally Car '98"
+    },
+    "799": {
+        "id": 799,
+        "maker": "Mitsubishi",
+        "name": "Lancer Evolution VIII MR GSR '04",
+        "full_name": "Mitsubishi Lancer Evolution VIII MR GSR '04"
+    },
+    "3553": {
+        "id": 3553,
+        "maker": "Nissan",
+        "name": "GT-R Premium edition T-spec '24",
+        "full_name": "Nissan GT-R Premium edition T-spec '24"
+    },
+    "3554": {
+        "id": 3554,
+        "maker": "Toyota",
+        "name": "Hiace Van DX '16",
+        "full_name": "Toyota Hiace Van DX '16"
+    },
+    "3555": {
+        "id": 3555,
+        "maker": "Ford",
+        "name": "Escort RS Cosworth '92",
+        "full_name": "Ford Escort RS Cosworth '92"
+    },
+    "3557": {
+        "id": 3557,
+        "maker": "Mercedes-Benz",
+        "name": "W 196 R '55",
+        "full_name": "Mercedes-Benz W 196 R '55"
+    },
+    "3558": {
+        "id": 3558,
+        "maker": "Porsche",
+        "name": "911 Turbo S (992) '20",
+        "full_name": "Porsche 911 Turbo S (992) '20"
+    },
+    "3559": {
+        "id": 3559,
+        "maker": "Suzuki",
+        "name": "Jimny Sierra JC '18",
+        "full_name": "Suzuki Jimny Sierra JC '18"
+    },
+    "3560": {
+        "id": 3560,
+        "maker": "Porsche",
+        "name": "Mission X '23",
+        "full_name": "Porsche Mission X '23"
+    },
+    "3561": {
+        "id": 3561,
+        "maker": "Hyundai",
+        "name": "IONIQ 5 N '24",
+        "full_name": "Hyundai IONIQ 5 N '24"
+    },
+    "3562": {
+        "id": 3562,
+        "maker": "Gran Turismo",
+        "name": "F3500-A",
+        "full_name": "Gran Turismo F3500-A"
+    },
+    "3563": {
+        "id": 3563,
+        "maker": "Honda",
+        "name": "Civic Si Extra (EF) '87",
+        "full_name": "Honda Civic Si Extra (EF) '87"
+    },
+    "3565": {
+        "id": 3565,
+        "maker": "Toyota",
+        "name": "C-HR S '18",
+        "full_name": "Toyota C-HR S '18"
+    },
+    "655": {
+        "id": 655,
+        "maker": "BMW",
+        "name": "Z4 3.0i '03",
+        "full_name": "BMW Z4 3.0i '03"
+    },
+    "3564": {
+        "id": 3564,
+        "maker": "Peugeot",
+        "name": "205 GTI '88",
+        "full_name": "Peugeot 205 GTI '88"
+    },
+    "3556": {
+        "id": 3556,
+        "maker": "Mercedes-Benz",
+        "name": "Unimog Type 411 '62",
+        "full_name": "Mercedes-Benz Unimog Type 411 '62"
+    },
+    "3447": {
+        "id": 3447,
+        "maker": "Aston Martin",
+        "name": "Vantage '18",
+        "full_name": "Aston Martin Vantage '18"
+    },
+    "3566": {
+        "id": 3566,
+        "maker": "Mazda",
+        "name": "CX-30 X Smart Edition '21",
+        "full_name": "Mazda CX-30 X Smart Edition '21"
+    },
+    "3567": {
+        "id": 3567,
+        "maker": "Renault",
+        "name": "Kangoo 1.4 '01",
+        "full_name": "Renault Kangoo 1.4 '01"
+    },
+    "3470": {
+        "id": 3470,
+        "maker": "Ferrari",
+        "name": "812 Superfast '17",
+        "full_name": "Ferrari 812 Superfast '17"
+    },
+    "3570": {
+        "id": 3570,
+        "maker": "Chevrolet",
+        "name": "Corvette Z06 (C5) '01",
+        "full_name": "Chevrolet Corvette Z06 (C5) '01"
+    },
+    "3571": {
+        "id": 3571,
+        "maker": "Suzuki",
+        "name": "Carry KC '12",
+        "full_name": "Suzuki Carry KC '12"
+    },
+    "3572": {
+        "id": 3572,
+        "maker": "Honda",
+        "name": "CR-V e:HEV EX Black Edition '21",
+        "full_name": "Honda CR-V e:HEV EX Black Edition '21"
+    },
+    "761": {
+        "id": 761,
+        "maker": "Lancia",
+        "name": "Lancia Delta HF Integrale Rally Car '92",
+        "full_name": "Lancia Lancia Delta HF Integrale Rally Car '92"
+    },
+    "3573": {
+        "id": 3573,
+        "maker": "Citroen",
+        "name": "BX 19 TRS '87",
+        "full_name": "Citroen BX 19 TRS '87"
+    },
+    "3574": {
+        "id": 3574,
+        "maker": "Peugeot",
+        "name": "SUV 2008 Allure '21",
+        "full_name": "Peugeot SUV 2008 Allure '21"
+    },
+    "3568": {
+        "id": 3568,
+        "maker": "Nissan",
+        "name": "Qashqai Tekna 190 2wd e-Power '22",
+        "full_name": "Nissan Qashqai Tekna 190 2wd e-Power '22"
+    },
+    "3569": {
+        "id": 3569,
+        "maker": "NISMO",
+        "name": "R34 GT-R Z-tune '05",
+        "full_name": "NISMO R34 GT-R Z-tune '05"
+    },
+    "3576": {
+        "id": 3576,
+        "maker": "Honda",
+        "name": "N-ONE RS '22",
+        "full_name": "Honda N-ONE RS '22"
+    },
+    "3579": {
+        "id": 3579,
+        "maker": "AFEELA",
+        "name": "AFEELA 1 '26",
+        "full_name": "AFEELA AFEELA 1 '26"
+    },
+    "3581": {
+        "id": 3581,
+        "maker": "Chevrolet",
+        "name": "Corvette CX Concept '25",
+        "full_name": "Chevrolet Corvette CX Concept '25"
+    },
+    "3582": {
+        "id": 3582,
+        "maker": "Chevrolet",
+        "name": "Corvette CX.R Vision Gran Turismo Concept",
+        "full_name": "Chevrolet Corvette CX.R Vision Gran Turismo Concept"
+    },
+    "729": {
+        "id": 729,
+        "maker": "Renault",
+        "name": "Avantime 3.0 V6 24V '02",
+        "full_name": "Renault Avantime 3.0 V6 24V '02"
+    },
+    "3577": {
+        "id": 3577,
+        "maker": "Opel",
+        "name": "Corsa GSE Vision Gran Turismo",
+        "full_name": "Opel Corsa GSE Vision Gran Turismo"
+    },
+    "3578": {
+        "id": 3578,
+        "maker": "Mazda",
+        "name": "MAZDA SPIRIT RACING ROADSTER 12R '25",
+        "full_name": "Mazda MAZDA SPIRIT RACING ROADSTER 12R '25"
+    },
+    "3583": {
+        "id": 3583,
+        "maker": "Toyota",
+        "name": "RAV4 Adventure '20",
+        "full_name": "Toyota RAV4 Adventure '20"
+    },
+    "3584": {
+        "id": 3584,
+        "maker": "Toyota",
+        "name": "Land Cruiser FJ40V '74",
+        "full_name": "Toyota Land Cruiser FJ40V '74"
+    },
+    "3585": {
+        "id": 3585,
+        "maker": "Hyundai",
+        "name": "ELANTRA N '23",
+        "full_name": "Hyundai ELANTRA N '23"
+    },
+    "51": {
+        "id": 51,
+        "maker": "Mitsubishi",
+        "name": "FTO GP Version R '97",
+        "full_name": "Mitsubishi FTO GP Version R '97"
+    },
+    "1427": {
+        "id": 1427,
+        "maker": "Mine's",
+        "name": "BNR34 GT-R N1 base",
+        "full_name": "Mine's BNR34 GT-R N1 base"
+    },
+    "3575": {
+        "id": 3575,
+        "maker": "Fiat",
+        "name": "Panda 30 CL '85",
+        "full_name": "Fiat Panda 30 CL '85"
+    },
+    "3586": {
+        "id": 3586,
+        "maker": "Polestar",
+        "name": "Polestar 5 Performance",
+        "full_name": "Polestar Polestar 5 Performance"
+    },
+    "3587": {
+        "id": 3587,
+        "maker": "Ferrari",
+        "name": "296 GTB '22",
+        "full_name": "Ferrari 296 GTB '22"
+    },
+    "3588": {
+        "id": 3588,
+        "maker": "Ferrari",
+        "name": "296 GT3 '23",
+        "full_name": "Ferrari 296 GT3 '23"
+    },
+    "3589": {
+        "id": 3589,
+        "maker": "Gran Turismo",
+        "name": "F3500-B",
+        "full_name": "Gran Turismo F3500-B"
+    },
+    "3591": {
+        "id": 3591,
+        "maker": "Renault",
+        "name": "Espace F1 '95",
+        "full_name": "Renault Espace F1 '95"
+    },
+    "3593": {
+        "id": 3593,
+        "maker": "Volkswagen",
+        "name": "Beetle 1966 Desert Racer",
+        "full_name": "Volkswagen Beetle 1966 Desert Racer"
+    },
+    "3594": {
+        "id": 3594,
+        "maker": "Ford",
+        "name": "Mustang 2015 American Racer",
+        "full_name": "Ford Mustang 2015 American Racer"
+    },
+    "3595": {
+        "id": 3595,
+        "maker": "Nissan",
+        "name": "Skyline GT-R GP-Tuned (KPGC10)",
+        "full_name": "Nissan Skyline GT-R GP-Tuned (KPGC10)"
+    },
+    "3596": {
+        "id": 3596,
+        "maker": "Toyota",
+        "name": "Supra GT Road Car (JZA80)",
+        "full_name": "Toyota Supra GT Road Car (JZA80)"
+    },
+    "3597": {
+        "id": 3597,
+        "maker": "Porsche",
+        "name": "911 Turbo Rally (930)",
+        "full_name": "Porsche 911 Turbo Rally (930)"
+    },
+    "3598": {
+        "id": 3598,
+        "maker": "Toyota",
+        "name": "AE86 Levin D-Tuned",
+        "full_name": "Toyota AE86 Levin D-Tuned"
+    },
+    "3590": {
+        "id": 3590,
+        "maker": "Hyundai",
+        "name": "ELANTRA N TC '24",
+        "full_name": "Hyundai ELANTRA N TC '24"
+    },
+    "3599": {
+        "id": 3599,
+        "maker": "Xiaomi",
+        "name": "SU7 Ultra '25",
+        "full_name": "Xiaomi SU7 Ultra '25"
+    },
+    "3600": {
+        "id": 3600,
+        "maker": "Porsche",
+        "name": "911 GT3 R (992) '22",
+        "full_name": "Porsche 911 GT3 R (992) '22"
+    },
+    "3592": {
+        "id": 3592,
+        "maker": "Chevrolet",
+        "name": "Camaro 1969 Race-Mod",
+        "full_name": "Chevrolet Camaro 1969 Race-Mod"
+    },
+    "3601": {
+        "id": 3601,
+        "maker": "Renault",
+        "name": "Captur S Edition TCe 140 '21",
+        "full_name": "Renault Captur S Edition TCe 140 '21"
+    },
+    "967": {
+        "id": 967,
+        "maker": "Mazda",
+        "name": "efini RX-7 Type R (FD) '91",
+        "full_name": "Mazda efini RX-7 Type R (FD) '91"
+    },
+    "3440": {
+        "id": 3440,
+        "maker": "Porsche",
+        "name": "911 Turbo S Leichtbau (964) '93",
+        "full_name": "Porsche 911 Turbo S Leichtbau (964) '93"
+    },
+    "3602": {
+        "id": 3602,
+        "maker": "Yangwang",
+        "name": "U9 '24",
+        "full_name": "Yangwang U9 '24"
+    },
+    "3603": {
+        "id": 3603,
+        "maker": "Renault",
+        "name": "Twingo '93",
+        "full_name": "Renault Twingo '93"
+    }
+}

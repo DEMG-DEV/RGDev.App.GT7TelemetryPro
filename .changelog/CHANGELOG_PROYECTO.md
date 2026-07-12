@@ -5,6 +5,27 @@
 
 ---
 
+## ✅ Rediseño de Interfaz, Corrección de Pedales y Nombres de Autos Reales
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-12 11:46:00 |
+| **Responsable** | David Mendez |
+
+### ¿Qué se realizó?
+
+Se transformó por completo la pantalla principal para que sea idéntica al analizador de telemetría original del juego Gran Turismo 7, apilando las gráficas y añadiendo las temperaturas de neumáticos. Además, se solucionó un problema matemático grave que hacía que el acelerador y el freno marcaran datos incorrectos, y se integró una base de datos comunitaria para que el sistema reconozca más de 500 autos por su nombre real.
+
+### ¿Qué significa para el proyecto?
+
+Este avance otorga una apariencia mucho más profesional, estable y útil para ingenieros de pista. Resuelve los bloqueos y congelamientos de la pantalla gracias a un nuevo motor de dibujado más eficiente. También asegura que grabar sesiones (auto-guardado) funcione perfectamente, organizando todo el historial en una carpeta dedicada para nunca perder información importante.
+
+### ¿Qué va a notar el usuario/cliente?
+
+Al usar la aplicación, verán una interfaz completamente nueva, fluida y sin trabas. Al subir a un auto, en lugar de ver un simple número ID (ej. "1907"), verán directamente el nombre completo del vehículo (ej. "KTM X-BOW R '12"). Los gráficos del acelerador y el freno ahora responderán suave y exactamente a cómo pisan los pedales físicos o el mando, y todas sus sesiones se guardarán correctamente de forma automática.
+
+---
+
 ## ✅ Versión inicial completa de GT7 Telemetry Pro (Aplicación de Escritorio)
 
 | Campo | Detalle |

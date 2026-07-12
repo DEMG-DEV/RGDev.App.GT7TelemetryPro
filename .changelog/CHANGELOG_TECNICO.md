@@ -5,6 +5,52 @@
 
 ---
 
+## Refactorización UI asíncrona, fix de telemetría y nombres de autos
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-12 11:46:00 |
+| **Autor** | David Mendez (demg@outlook.com) |
+| **Branch** | master |
+| **Tipo** | Refactor / Bug Fix / Feature |
+
+### Archivos Modificados
+
+| Archivo | Estado | Descripción del Cambio |
+|---------|--------|----------------------|
+| `main.py` | Modificado | Refactor asíncrono con QTimer (30 FPS), nueva interfaz apilada (GT7 native), y consumo de DB de autos. |
+| `models.py` | Modificado | Corrección de empaquetado de memoria (Flags uint16) que causaba desfasaje de 2 bytes en marchas y pedales. |
+| `client.py` | Modificado | Solucionado crash silencioso en hilo de grabación al faltar `import struct`. |
+| `player.py` | Agregado | Lógica de reproducción de sesiones `.gt7` guardadas con simulación de tiempo real. |
+| `gt7_cars.json` | Agregado | Base de datos de 575 autos para traducir el `car_code` a nombres reales. |
+| `download_cars.py` | Agregado | Script automatizado para descargar y consolidar DB de GT7 desde fuentes comunitarias. |
+| `capture_ui.py` | Agregado | Script headless con QTimer para capturar pantalla. |
+| `screenshot.png` | Agregado | Captura visual de la UI. |
+| `README.md` | Modificado | Agregada captura de pantalla en la cabecera. |
+
+### Detalle Técnico
+
+- **Arquitectura UI Asíncrona:** Se desacopló la recepción de red de la renderización UI en `main.py`. El hilo de red ahora deposita el paquete en memoria caché (`_cache_packet`), y un `QTimer` independiente se encarga de refrescar los widgets y gráficas estrictamente a 30 Hz. Esto erradica los cuelgues (freezes) al cargar replays pesados.
+- **Bug Fix de Desfasaje de Memoria:** La documentación técnica indicaba que la variable `flags` era `uint32` (4 bytes). Mediante volcados hexagonales de las tramas se comprobó que es `uint16` (2 bytes). Esto causaba que `gears`, `throttle` y `brake` estuvieran desalineados leyendo basura de los floats subsiguientes. Se corrigió el string de empaquetado `format_A` encajando todo a exactamente 296 bytes.
+- **Auto-Guardado:** Se resolvió un error en `client.py` que dejaba los archivos binarios en 0 bytes debido a la falta de `import struct`. Se redirigieron todos los volcados binarios al directorio `/Sessions`.
+- **Integración Base de Datos de Autos:** Se incorporó el mapeo JSON `gt7_cars.json` cargado al inicio de la aplicación en un diccionario para traducir `packet.car_code` en cadenas de texto en tiempo real con una penalización `O(1)`.
+
+### Fragmentos de Código Relevantes
+
+```diff
+-    format_A = '<i9ff3f2fI7f4fi2h3i5hI4B4f12f8f4f8fi'
++    format_A = '<i9ff3f2fI7f4fi2h3i5hH4B4f12f8f4f8fi'
+```
+```diff
+-        self.packet_signal.connect(self.update_dashboard)
++        self.ui_timer = QTimer()
++        self.ui_timer.timeout.connect(self.update_dashboard_ui)
++        self.ui_timer.start(33) # ~30 FPS UI refresh
++        self.packet_signal.connect(self._cache_packet)
+```
+
+---
+
 ## Initial commit: Implement GT7 Telemetry Pro desktop application
 
 | Campo | Detalle |

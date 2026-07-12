@@ -120,59 +120,21 @@ def parse_telemetry_packet(data: bytes, packet_type: str) -> Optional[GT7Telemet
         return None
         
     # Unpack Base Packet 'A' (296 bytes)
-    # The format string uses '<' for Little-Endian
-    format_A = (
-        '<'
-        'i'         # 0x00 magic
-        '3f'        # 0x04 position
-        '3f'        # 0x10 worldVelocity
-        '3f'        # 0x1C rotation
-        'f'         # 0x28 orientationNorth
-        '3f'        # 0x2C angularVelocity
-        'f'         # 0x38 bodyHeight
-        'f'         # 0x3C engineRPM
-        'I'         # 0x40 ivSeed
-        'f'         # 0x44 fuelLevel
-        'f'         # 0x48 fuelCapacity
-        'f'         # 0x4C speed
-        'f'         # 0x50 boost
-        'f'         # 0x54 oilPressure
-        'f'         # 0x58 waterTemp
-        'f'         # 0x5C oilTemp
-        '4f'        # 0x60 tyreTemp
-        'i'         # 0x70 packetId
-        'h'         # 0x74 lapCount
-        'h'         # 0x76 totalLaps
-        'i'         # 0x78 bestLaptime
-        'i'         # 0x7C lastLaptime
-        'i'         # 0x80 dayProgression
-        'h'         # 0x84 startPosition
-        'h'         # 0x86 preRaceNumCars
-        'h'         # 0x88 minAlertRPM
-        'h'         # 0x8A maxAlertRPM
-        'h'         # 0x8C calcMaxSpeed
-        'I'         # 0x8E flags
-        'B'         # 0x92 gears
-        'B'         # 0x93 throttle
-        'B'         # 0x94 brake
-        'B'         # 0x95 padding1
-        '3f'        # 0x96 roadPlane
-        'f'         # 0xA2 roadDistance
-        '4f'        # 0xA6 wheelRPS
-        '4f'        # 0xB6 tyreRadius
-        '4f'        # 0xC6 suspHeight
-        '8f'        # 0xD6 unknownFloats
-        'f'         # 0xF6 clutch
-        'f'         # 0xFA clutchEngagement
-        'f'         # 0xFE clutchRpm
-        'f'         # 0x102 topGearRatio
-        '8f'        # 0x106 gearRatios
-        'i'         # 0x126 carCode
-    )
+    # Update struct to use H (uint16) for flags, because total size before flags is 142.
+    # Flags takes 2 bytes (142, 143), so gears is at 144 (0x90).
+    format_A = '<i9ff3f2fI7f4fi2h3i5hH4B4f12f8f4f8fi'
+    format_B = format_A + '4f'
+    format_C = format_B + '4Bif4s24s'
     
+    size = struct.calcsize(format_A)
+    # Pad the data buffer to avoid unpack errors if the console sends 296 instead of 298.
+    if len(data) < size:
+        data = data.ljust(size, b'\x00')
+        
     try:
-        unpacked = struct.unpack(format_A, data[:296])
-    except struct.error:
+        unpacked = struct.unpack(format_A, data[:size])
+    except struct.error as e:
+        print(f"Struct unpack error: {e}")
         return None
         
     packet = GT7TelemetryPacket(
@@ -221,8 +183,8 @@ def parse_telemetry_packet(data: bytes, packet_type: str) -> Optional[GT7Telemet
         car_code=unpacked[80]
     )
 
-    if packet_type in ['B', '~', 'C'] and len(data) >= 316:
-        # Motion Extensions
+    if packet_type in ['B', '~', 'C'] and len(data) >= 312:
+        # Motion Extensions start at 0x124 (292)
         motion_format = '<fffff'
         motion_unpacked = struct.unpack(motion_format, data[292:312])
         packet.wheel_rotation = motion_unpacked[0]
@@ -233,6 +195,7 @@ def parse_telemetry_packet(data: bytes, packet_type: str) -> Optional[GT7Telemet
 
     if packet_type in ['~', 'C'] and len(data) >= 344:
         if packet_type == '~':
+            # Assist starts at 0x138 (312)
             assist_format = '<BBBB4fff'
             assist_unpacked = struct.unpack(assist_format, data[312:344])
             packet.throttle_filtered = assist_unpacked[0]
@@ -240,7 +203,8 @@ def parse_telemetry_packet(data: bytes, packet_type: str) -> Optional[GT7Telemet
             packet.torque_vectors = assist_unpacked[4:8]
             packet.energy_recovery = assist_unpacked[8]
 
-    if packet_type == 'C' and len(data) >= 368:
+    if packet_type == 'C' and len(data) >= 352:
+        # Full starts at 0x138 (312)
         full_format = '<4sif f24s'
         full_unpacked = struct.unpack(full_format, data[312:352])
         
