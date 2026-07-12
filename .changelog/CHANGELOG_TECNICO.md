@@ -5,6 +5,34 @@
 
 ---
 
+## Refactor: Arquitectura modular, MVC y extracción de componentes UI
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-12 12:03:00 |
+| **Autor** | David Mendez (demg@outlook.com) |
+| **Branch** | master |
+| **Tipo** | Refactor |
+
+### Archivos Modificados
+
+| Archivo | Estado | Descripción del Cambio |
+|---------|--------|----------------------|
+| `main.py` | Modificado | Refactorizado de 603 a 19 líneas como puro entry point. |
+| `ui/main_window.py` | Agregado | Orquesta la ventana principal aislando el QTimer y el layout. |
+| `ui/widgets/*` | Agregado | Separación de UI en `map_widget.py`, `gforce_widget.py`, `telemetry_graphs.py`. |
+| `ui/styles/dark_theme.qss` | Agregado | Extracción del estilo bruto. |
+| `core/models.py` | Renombrado | Trasladado desde la raíz hacia el core. |
+| `core/car_database.py` | Agregado | Lógica Singleton para inyectar los autos, aislandola de `main.py`. |
+| `services/live_client.py` | Renombrado | `client.py` heredando ahora de `TelemetryProvider`. |
+| `services/replay_player.py` | Renombrado | `player.py` heredando ahora de `TelemetryProvider`. |
+| `services/crypto.py` | Renombrado | Decodificación Salsa20 reubicada. |
+
+### Detalle Técnico
+
+Se llevó a cabo una refactorización masiva y profunda eliminando el síndrome de "Archivo Monolítico". El proyecto abandonó su estructura de script para tomar forma de sistema modular con patrón MVC/Servicios. Se introdujo polimorfismo con una clase base abstracta `TelemetryProvider` de la que ahora heredan los emisores de red y reproductores de grabaciones, estandarizando la emisión del paquete procesado en la misma señal de PyQt. Los componentes del Dashboard pasaron de estar amontonados a ser Widgets completamente autónomos, responsables únicamente de su propia representación, mejorando la escalabilidad del sistema y su testabilidad de cara al futuro.
+
+
 ## Refactorización UI asíncrona, fix de telemetría y nombres de autos
 
 | Campo | Detalle |

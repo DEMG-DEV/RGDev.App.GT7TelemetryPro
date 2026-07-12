@@ -5,6 +5,26 @@
 
 ---
 
+## ✅ Modernización y Reestructuración del Motor Principal
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-12 12:03:00 |
+| **Responsable** | David Mendez |
+
+### ¿Qué se realizó?
+
+Reorganizamos desde cero todos los "engranajes" internos del sistema para que cada pieza tenga su lugar. El archivo principal que antes hacía todas las tareas al mismo tiempo se fragmentó en piezas especializadas: la estética por un lado, las reglas de autos por otro, los conectores de red separados de los de grabación, y cada gráfico de la pantalla convertido en una pieza independiente.
+
+### ¿Qué significa para el proyecto?
+
+Aunque visualmente se ve exactamente igual, internamente esto transforma nuestro código de un "experimento rápido" a una plataforma de grado empresarial, 100% robusta, escalable y muy fácil de entender. Ahora podemos añadir un coche nuevo, conectar un juego distinto, o cambiar los colores del diseño en minutos sin temor a romper el resto del sistema.
+
+### ¿Qué va a notar el usuario/cliente?
+
+Este cambio es interno y mejora la estructura del sistema. No genera cambios visibles para el usuario en este momento, pero garantiza que la aplicación sea súper estable.
+
+
 ## ✅ Rediseño de Interfaz, Corrección de Pedales y Nombres de Autos Reales
 
 | Campo | Detalle |
