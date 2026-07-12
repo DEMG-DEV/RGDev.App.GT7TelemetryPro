@@ -33,20 +33,21 @@ class GT7SessionPlayer(TelemetryProvider):
             self.play_thread.join(timeout=1.0)
             
     def _playback_loop(self):
+        import sqlite3
+        start_time = time.time()
+        
         try:
-            with open(self.filename, 'rb') as f:
-                start_time = time.time()
-                while self.running:
-                    header_bytes = f.read(12)
-                    if not header_bytes or len(header_bytes) < 12:
+            with sqlite3.connect(self.filename) as conn:
+                cursor = conn.cursor()
+                # Asumimos que los id están ordenados cronológicamente
+                cursor.execute("SELECT timestamp, raw_packet FROM telemetry ORDER BY id")
+                
+                for row in cursor:
+                    if not self.running:
                         break
                         
-                    packet_timestamp, packet_size = struct.unpack('<dI', header_bytes)
+                    packet_timestamp, payload = row
                     
-                    payload = f.read(packet_size)
-                    if not payload or len(payload) < packet_size:
-                        break
-                        
                     current_time = time.time() - start_time
                     time_to_wait = packet_timestamp - current_time
                     if time_to_wait > 0:
@@ -64,3 +65,4 @@ class GT7SessionPlayer(TelemetryProvider):
             
         self.running = False
         self.playback_finished.emit()
+

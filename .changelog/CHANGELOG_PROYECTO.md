@@ -5,6 +5,31 @@
 
 ---
 
+## ✅ Transformación a Muro de Boxes F1: Análisis de Vuelta, Heatmap y Grabación SQLite
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-12 14:52:00 |
+| **Responsable** | David Mendez |
+
+### ¿Qué se realizó?
+
+Hemos rediseñado el cerebro de la aplicación. En lugar de solo mostrar números, ahora la herramienta actúa como un ingeniero de pista inteligente. Introdujimos un sistema que calcula el "Delta" (el tiempo que ganas o pierdes contra tu mejor vuelta en tiempo real), un mapa térmico en vivo que dibuja exactamente dónde estás frenando y acelerando, y un sistema de alertas acústicas y visuales que vigila la temperatura de las llantas y del motor. Además, para soportar tanta información, cambiamos el motor interno de grabación a una base de datos SQLite súper rápida, que nunca pierde un solo dato.
+
+### ¿Qué significa para el proyecto?
+
+Este avance es enorme: pasamos de ser un simple "espejo" de los datos del juego a ser una plataforma de análisis del más alto nivel, comparable a las que se usan en la Fórmula 1 o Le Mans. El uso de la nueva base de datos permite que a futuro podamos extraer toda esta información para cruzarla en Excel o sistemas estadísticos, sin que el programa sufra caídas o se ponga lento al grabar.
+
+### ¿Qué va a notar el usuario/cliente?
+
+¡Un cambio total en la experiencia visual y analítica! 
+*   **En la pista:** Debajo de las gráficas verán un nuevo panel (Delta) que les dirá si en esa curva perdieron o ganaron tiempo frente a su vuelta récord.
+*   **En el mapa:** El circuito se dibujará dinámicamente pintando en rojo las zonas de frenado fuerte y en verde brillante las aceleraciones a fondo.
+*   **En seguridad:** Si queman el motor o sobrecalientan las gomas, el programa emitirá un pitido agudo y mostrará una alerta roja enorme en la pantalla para avisar del daño inminente.
+*   **Al guardar:** Ahora todas las sesiones se guardan en un formato de base de datos estándar que pueden consultar y cargar posteriormente en el reproductor integrado para estudiar cómo corrieron.
+
+---
+
 ## ✅ Mejoras en la Estabilidad de Conexión y Honestidad de Interfaz
 
 | Campo | Detalle |

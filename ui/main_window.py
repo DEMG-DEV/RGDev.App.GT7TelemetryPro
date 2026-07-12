@@ -8,12 +8,17 @@ from PyQt6.QtGui import QFont
 
 from core.models import GT7TelemetryPacket
 from core.car_database import CarDatabase
+from core.math_channels import MathEngine
+from core.lap_manager import LapManager
+from core.alert_engine import AlertEngine
 from services.live_client import GT7LiveClient
 from services.replay_player import GT7SessionPlayer
 
 from ui.widgets.map_widget import MapWidget
 from ui.widgets.gforce_widget import GForceWidget
 from ui.widgets.telemetry_graphs import TelemetryGraphsWidget
+from ui.widgets.delta_widget import DeltaWidget
+from ui.widgets.alert_widget import AlertWidget
 
 class TelemetryMainWindow(QMainWindow):
     def __init__(self):
@@ -23,6 +28,12 @@ class TelemetryMainWindow(QMainWindow):
         self.load_styles()
         
         self.car_db = CarDatabase()
+        
+        self.math_engine = MathEngine()
+        self.lap_manager = LapManager()
+        self.alert_engine = AlertEngine()
+        
+        self.latest_delta_ms = None
         
         self.client = GT7LiveClient()
         self.client.packet_signal.connect(self._cache_packet)
@@ -104,9 +115,16 @@ class TelemetryMainWindow(QMainWindow):
         self.lbl_time = QLabel("0:00.000")
         self.lbl_time.setFont(QFont("Consolas", 18, QFont.Weight.Bold))
         self.lbl_time.setStyleSheet("color: #a3e4d7;")
+        self.lbl_fuel_est = QLabel("Laps Restantes: ---")
+        self.lbl_fuel_est.setStyleSheet("color: #f2a900; font-weight: bold;")
+        self.lbl_wot = QLabel("WOT: NO")
+        self.lbl_wot.setStyleSheet("color: gray;")
+        
         info_l.addWidget(self.lbl_car_id)
         info_l.addWidget(self.lbl_lap)
         info_l.addWidget(self.lbl_time)
+        info_l.addWidget(self.lbl_fuel_est)
+        info_l.addWidget(self.lbl_wot)
         info_panel.setLayout(info_l)
         left_layout.addWidget(info_panel, 1)
         
@@ -118,11 +136,18 @@ class TelemetryMainWindow(QMainWindow):
         
         content_layout.addLayout(left_layout, 2)
         
-        # MIDDLE COLUMN (40%): Stacked Plots
+        # MIDDLE COLUMN (40%): Stacked Plots & Delta
+        mid_layout = QVBoxLayout()
         self.graphs_widget = TelemetryGraphsWidget()
-        content_layout.addWidget(self.graphs_widget, 4)
+        self.delta_widget = DeltaWidget()
+        self.delta_widget.setFixedHeight(150)
         
-        # RIGHT COLUMN (40%): Analyzer
+        mid_layout.addWidget(self.graphs_widget, 4)
+        mid_layout.addWidget(self.delta_widget, 1)
+        
+        content_layout.addLayout(mid_layout, 4)
+        
+        # RIGHT COLUMN (40%): Analyzer & Alerts
         right_panel = QGroupBox("Analizador de Derrape")
         r_layout = QVBoxLayout()
         r_layout.setContentsMargins(10, 20, 10, 10)
@@ -195,6 +220,9 @@ class TelemetryMainWindow(QMainWindow):
         r_layout.addLayout(bars_layout)
         r_layout.addWidget(self.lbl_gear, alignment=Qt.AlignmentFlag.AlignCenter)
         
+        self.alert_widget = AlertWidget()
+        r_layout.addWidget(self.alert_widget)
+        
         right_panel.setLayout(r_layout)
         content_layout.addWidget(right_panel, 4)
         layout.addLayout(content_layout)
@@ -216,7 +244,7 @@ class TelemetryMainWindow(QMainWindow):
         if not self.has_started_auto_save and self.client.running:
             self.has_started_auto_save = True
             date_str = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-            filename = f"GT7Session_Car{packet.car_code}_{date_str}.gt7"
+            filename = f"GT7Session_Car{packet.car_code}_{date_str}.sqlite"
             
             sessions_dir = os.path.join(os.getcwd(), 'Sessions')
             os.makedirs(sessions_dir, exist_ok=True)
@@ -255,7 +283,7 @@ class TelemetryMainWindow(QMainWindow):
             self.clear_graphs()
             
     def load_session(self):
-        filename, _ = QFileDialog.getOpenFileName(self, "Open Session", "", "GT7 Session Files (*.gt7);;All Files (*)")
+        filename, _ = QFileDialog.getOpenFileName(self, "Open Session", "", "SQLite Databases (*.sqlite);;All Files (*)")
         if filename:
             self.player.load(filename)
             self.btn_play.setEnabled(True)
@@ -281,6 +309,12 @@ class TelemetryMainWindow(QMainWindow):
         self.map_widget.clear()
         self.gforce_widget.clear()
         self.graphs_widget.clear()
+        
+        # Resetear motores al limpiar gráficas (ej. cambio de pista/coche)
+        self.math_engine = MathEngine()
+        self.lap_manager = LapManager()
+        self.alert_engine = AlertEngine()
+        self.latest_delta_ms = None
 
     @pyqtSlot()
     def on_playback_finished(self):
@@ -309,9 +343,19 @@ class TelemetryMainWindow(QMainWindow):
     def _cache_packet(self, packet: GT7TelemetryPacket):
         self.latest_packet = packet
         
+        # Motores F1/Le Mans
+        metrics = self.math_engine.process_packet(packet)
+        delta = self.lap_manager.process_packet(packet)
+        if delta is not None:
+            self.latest_delta_ms = delta
+            
+        alerts = self.alert_engine.check_alerts(packet, metrics)
+        for severity, title, msg in alerts:
+            self.alert_widget.push_alert(severity, title, msg)
+        
         # We must add to deques/arrays at 60Hz to not miss points
         if packet.position:
-            self.map_widget.add_point(packet.position[0], packet.position[2])
+            self.map_widget.add_point(packet.position[0], packet.position[2], packet.throttle, packet.brake)
             
         lat_g = packet.angular_velocity[1] * 2 if packet.angular_velocity else 0
         lon_g = packet.angular_velocity[0] * 2 if packet.angular_velocity else 0
@@ -332,6 +376,21 @@ class TelemetryMainWindow(QMainWindow):
         self.map_widget.update_plot()
         self.gforce_widget.update_plot()
         self.graphs_widget.update_plot()
+        
+        if self.latest_delta_ms is not None:
+            self.delta_widget.update_data(self.latest_delta_ms)
+            
+        metrics = self.math_engine.process_packet(packet)
+        est = metrics.get('estimated_laps_remaining', 999.0)
+        est_str = "999+" if est >= 999.0 else f"{est:.1f}"
+        self.lbl_fuel_est.setText(f"Laps Restantes: {est_str}")
+        
+        if metrics.get('is_wot', False):
+            self.lbl_wot.setText("WOT: YES")
+            self.lbl_wot.setStyleSheet("color: #00ff7f; font-weight: bold; background-color: #14161a; padding: 2px;")
+        else:
+            self.lbl_wot.setText("WOT: NO")
+            self.lbl_wot.setStyleSheet("color: gray; padding: 2px;")
         
         car_name = self.car_db.get_car_name(packet.car_code)
         self.lbl_car_id.setText(f"Auto: {car_name}")

@@ -1,77 +1,82 @@
-# GT7 Telemetry Pro 🏎️📊
+# 🏁 GT7 Telemetry Pro: F1 & Le Mans Edition
 
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows-lightgrey)](#)
+![GT7 Telemetry Pro Dashboard](docs/ui_screenshot.png)
 
-**GT7 Telemetry Pro** es una aplicación de escritorio profesional de ultra baja latencia diseñada para capturar, descifrar y visualizar la telemetría en tiempo real desde **Gran Turismo 7 (PS4/PS5)**.
-
-Al prescindir de tecnologías web (como Electron o navegadores embebidos), la aplicación ofrece un rendimiento puro a **60 FPS constantes**, ideal para analizar tus trazadas, fuerzas G, uso de pedales y tiempos por vuelta en tiempo real o mediante repeticiones guardadas.
-
-![GT7 Telemetry Interface](./screenshot.png)
+Una plataforma analítica de código abierto diseñada para transformar los datos crudos del Gran Turismo 7 en una consola de ingeniería virtual del más alto nivel, inspirada en los sistemas de telemetría de Fórmula 1 (Atlas) y Le Mans (MoTeC).
 
 ---
 
-## 🚀 Características Principales
+## 🏎️ Características Avanzadas del "Pit-Wall"
 
-*   **⚡ Rendimiento Nativo**: Interfaz gráfica desarrollada en `PyQt6` y `pyqtgraph` para asegurar cero latencia visual.
-*   **📡 Telemetría en Vivo (Live)**: Decodificación criptográfica (*Salsa20*) en tiempo real conectándose directamente a la PlayStation en tu red local.
-*   **💾 Grabación y Reproducción (Replays)**: Guarda tus sesiones de pista en formato `.gt7` y reprodúcelas más tarde para estudiar tu rendimiento al milímetro.
-*   **🏎️ Auto-Detección de Vehículos**: Base de datos integrada con cientos de vehículos de GT7 para identificar automáticamente el coche que estás conduciendo.
-*   **📊 Análisis Detallado**:
-    *   Gráfico de Velocidad (km/h) y R.P.M.
-    *   Telemetría de Pedales (Acelerador, Freno, Ángulo de Dirección).
-    *   Fricción y Fuerzas G (Círculo de tracción lateral y longitudinal).
-    *   Mapa del Circuito generado en vivo.
+Este no es un simple visor de números; es un motor matemático y analítico en tiempo real diseñado para extraer la máxima ventaja competitiva.
 
----
+### 📊 Análisis de Vuelta ("Ghosting" en vivo)
+*   **Gestor de Vueltas Inteligente:** El sistema rastrea de forma transparente toda tu sesión, detectando automáticamente cruces de meta.
+*   **Comparación de Delta Curve-by-Curve:** A través del *Delta Widget* lineal, el programa interpolea dinámicamente tu posición espacial (`x, z`) actual contra la telemetría de tu "Mejor Vuelta", graficando tu pérdida o ganancia en milisegundos precisos (Verde/Rojo).
 
-## 🛠️ Arquitectura de Software
+### 🔥 Mapa Táctico Termodinámico (Heatmap)
+*   **Dinámica Espacial:** Genera un trazado 2D del circuito que estás rodando de forma procedimental usando nubes de puntos de altísima densidad (10,000 puntos).
+*   **Mapas de Temperatura de Pedales:** El trazado revela tu comportamiento:
+    *   🔴 **Rojo intenso**: Zonas de frenado máximo.
+    *   🟢 **Verde brillante**: Tramos a acelerador a fondo (Wide Open Throttle).
+    *   🟡 **Gris/Amarillo**: Tramos de Lift & Coast.
 
-Este proyecto está construido bajo estrictos principios de diseño para asegurar el máximo rendimiento:
-1. **Clean Architecture**: Separación estricta entre la UI (`ui/`), la lógica de conexión (`services/`) y los modelos de datos (`core/`).
-2. **Multi-Threading Asíncrono**:
-    *   `Hilo de Red`: Recibe los paquetes crudos (UDP) sin bloquear la interfaz.
-    *   `Hilo de Procesamiento`: Descifra y parsea estructuras binarias dinámicamente.
-    *   `Hilo Principal`: Exclusivo para renderizar la interfaz a 60 hercios fluidos.
+### 🚨 Sistema Automático de Alertas 
+*   **Auditoría de Daños:** Revisa a cada milisegundo tu motor y tus sistemas.
+*   **Notificaciones Pit-Wall:** Si excedes drásticamente las revoluciones (riesgo de motor), o tus neumáticos sobrepasan los **105°C**, saltará una alarma crítica acústica y un banner visual exigiendo refrigeración inmediata.
 
----
-
-## ⚙️ Requisitos del Sistema
-
-*   **Python**: Versión 3.10 o superior.
-*   **Sistema Operativo**: Windows 10/11 o macOS (Intel/Apple Silicon).
-*   **Red**: Tu PC/Mac debe estar en la misma subred que la consola PS4/PS5.
-*   **Juego**: Copia completa de Gran Turismo 7 *(Las demos o pruebas como "My First Gran Turismo" pueden no tener habilitada la API de telemetría)*.
+### 🧮 Canales Matemáticos Propios
+*   **Gestión de Combustible Avanzada:** El sistema no te dice "cuántos litros tienes", te dice cuántas *vueltas* exactas puedes completar con el nivel de agresividad y el gasto que registraste en la última vuelta.
 
 ---
 
-## 📦 Instalación y Uso
+## 💾 Motor de Base de Datos SQLite (60 Hz)
 
-1. **Clonar el repositorio**:
-   ```bash
-   git clone https://github.com/tu-usuario/gt7-telemetry-pro.git
-   cd gt7-telemetry-pro
-   ```
+El proyecto abandona las capturas crudas en favor de un enfoque *Big Data*:
 
-2. **Crear entorno virtual e instalar dependencias**:
+*   **Sin Cuellos de Botella:** Utiliza el modo `WAL` (Write-Ahead Logging) de SQLite. Procesamiento en lotes asíncronos en hilos independientes, asegurando **0 drops** durante las intensas ráfagas de telemetría a 60 Hz.
+*   **Archivos Modulares:** Al salir a pista, se autogenera de manera transparente una base de datos local `GT7Session_..._db.sqlite`.
+*   **Data Structure:** Contiene tanto el Blob original de Polyphony Digital como columnas matemáticas listas (RPM, Marcha, Acelerador, Frenos, Tiempo, Vueltas) para que puedas importar la BD en Pandas, Excel o PowerBI.
+*   **Replay Player Integrado:** Carga tus bases de datos SQLite anteriores y relanza una sesión histórica completa dentro de las gráficas de interfaz, permitiéndote estudiar tus derrapes y vueltas mágicas en frio.
+
+---
+
+## ⚙️ Arquitectura Limpia (Clean Architecture)
+
+El código fuente está modularizado en tres componentes críticos y fuertemente desacoplados, idóneo para escalado o integraciones IoT.
+
+1.  **`services/` (Capa de Ingestión):**
+    *   Controla el Socket UDP (Puertos 33739/33740).
+    *   Encriptación/Desencriptación nativa del Salsa20.
+    *   Reproductor SQLite embebido para el Replay Mode.
+2.  **`core/` (Capa de Motores & Dominio):**
+    *   `LapManager`, `MathEngine`, `AlertEngine` analizan matrices numéricas a la velocidad del rayo.
+    *   `database.py`: Contiene el sub-hilo (worker thread) SQLite.
+3.  **`ui/` (Capa Gráfica):**
+    *   Implementación robusta en **PyQt6** y gráficos hiperrápidos acelerados mediante **PyQtGraph**.
+
+> 📖 *Para más detalles técnicos profundos de cómo operan los hilos (Threads), consulta [Architecture & Internals](.ai/architecture.md).*
+
+---
+
+## 🛠️ Instalación y Uso
+
+### Prerrequisitos
+- Python 3.10+
+- Consola PS4/PS5 con Gran Turismo 7 (Debe estar conectado en tu red local WiFi/Ethernet).
+
+### Configuración Rápida
+1. Clona el proyecto y crea tu entorno virtual:
    ```bash
    python3 -m venv .venv
-   source .venv/bin/activate  # En Windows: .venv\Scripts\activate
+   source .venv/bin/activate
    pip install -r requirements.txt
    ```
-
-3. **Ejecutar la aplicación**:
+2. Inicia el simulador del muro de boxes:
    ```bash
    python main.py
    ```
+3. En la esquina superior derecha, **Introduce la IP local de tu consola PS4/PS5** (Ej: `192.168.1.68`) y presiona **Connect Live**. 
+4. Entra a cualquier pista en GT7 y el Dashboard cobrará vida inmediatamente.
 
-### 🎮 Cómo conectar al juego
-Abre la aplicación, asegúrate de que tu PS4/PS5 está encendida.
-1. Ingresa la dirección IP de tu PlayStation (Opcional, el sistema soporta auto-descubrimiento en la mayoría de redes).
-2. Haz clic en **"Connect Live"**.
-3. **¡Importante!** Entra a una carrera, contrarreloj o práctica libre en GT7. La consola *no transmite datos mientras estás en el menú principal*.
-
----
-
-*Desarrollado con ❤️ para la comunidad de SimRacing.*
+> **Importante:** La telemetría solo se emite cuando estás *físicamente manejando en pista o viendo una repetición*. Los menús, boxes, y versiones limitadas como "My First Gran Turismo" no emiten el handshake UDP.

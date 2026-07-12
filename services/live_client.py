@@ -11,6 +11,7 @@ from PyQt6.QtCore import pyqtSignal
 from services.provider import TelemetryProvider
 from core.models import parse_telemetry_packet, GT7TelemetryPacket
 from services.crypto import decrypt_telemetry
+from core.database import SessionDatabaseWriter
 
 class GT7LiveClient(TelemetryProvider):
     connection_established = pyqtSignal(str)
@@ -35,36 +36,35 @@ class GT7LiveClient(TelemetryProvider):
         self.last_packet_time = 0
         
         self.recording = False
-        self.record_file = None
+        self.db_writer = None
         self.record_start_time = 0.0
 
     def start_recording(self, filename: str):
         if not self.recording:
             try:
-                self.record_file = open(filename, 'wb')
+                self.db_writer = SessionDatabaseWriter(filename)
+                self.db_writer.start()
                 self.record_start_time = time.time()
                 self.recording = True
-                logging.info(f"Successfully started recording to {filename}")
+                logging.info(f"Successfully started DB recording to {filename}")
                 return True
             except Exception as e:
-                logging.error(f"Failed to start recording to {filename}: {e}")
-                self.error_occurred.emit(f"Failed to start recording: {e}")
+                logging.error(f"Failed to start DB recording to {filename}: {e}")
+                self.error_occurred.emit(f"Failed to start DB recording: {e}")
                 return False
         return False
         
     def stop_recording(self):
         if self.recording:
             self.recording = False
-            if self.record_file:
-                logging.info("Stopping recording, flushing and fsyncing...")
+            if self.db_writer:
+                logging.info("Stopping DB recording and flushing queue...")
                 try:
-                    self.record_file.flush()
-                    os.fsync(self.record_file.fileno())
-                    logging.info("Flush and fsync successful.")
+                    self.db_writer.stop()
+                    logging.info("DB flush successful.")
                 except Exception as e:
-                    logging.error(f"Error flushing record file: {e}")
-                self.record_file.close()
-                self.record_file = None
+                    logging.error(f"Error flushing DB: {e}")
+                self.db_writer = None
                 
     def start(self):
         if self.running:
@@ -166,16 +166,15 @@ class GT7LiveClient(TelemetryProvider):
                     
                 decrypted = decrypt_telemetry(data, self.packet_type)
                 if decrypted:
-                    if self.recording and self.record_file:
-                        try:
-                            timestamp = time.time() - self.record_start_time
-                            header = struct.pack('<dI', timestamp, len(decrypted))
-                            self.record_file.write(header + decrypted)
-                        except Exception as e:
-                            logging.error(f"Recording error: {e}")
-                            
                     packet = parse_telemetry_packet(decrypted, self.packet_type)
                     if packet:
+                        if self.recording and self.db_writer:
+                            try:
+                                timestamp = time.time() - self.record_start_time
+                                self.db_writer.insert_packet(timestamp, packet, decrypted)
+                            except Exception as e:
+                                logging.error(f"DB Recording error: {e}")
+                        
                         self.packet_signal.emit(packet)
             except queue.Empty:
                 continue

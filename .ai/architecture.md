@@ -10,9 +10,23 @@ Este documento dicta las pautas arquitectónicas y las restricciones del proyect
 
 ### Estructura de Directorios Modular
 El proyecto sigue una arquitectura limpia (Clean Architecture):
-- `core/`: Lógica central, modelos de datos (`models.py`) independientes de la red o la UI.
-- `services/`: Servicios de infraestructura y obtención de datos (`live_client.py`, `replay_player.py`, `crypto.py`, `provider.py`). Proveen la abstracción base.
-- `ui/`: Componentes de interfaz gráfica en PyQt6 separados por responsabilidad (`main_window.py` y `widgets/`).
+La arquitectura original era un simple visor en tiempo real. Ahora es una **Herramienta Analítica de Nivel F1**, modularizada de la siguiente manera:
+
+- **`services/`**: Se encarga de la ingestión de datos crudos (UDP, sockets, criptografía y reproducción SQLite).
+- **`core/`**: Motores de cálculo de élite (parseo de paquetes, Math Channels, Gestor de Vueltas Delta, Sistema de Alertas, y escritura SQLite con transacciones asíncronas).
+- **`ui/`**: Interfaz pura de renderizado y layouts nativos de PyQt6 / PyQtGraph.
+
+### Capas
+
+1. **Capa de Ingestión (Services)**
+   - `services/live_client.py`: Socket UDP, descifra, graba en base de datos SQLite y despacha el binario a `parse_telemetry_packet`.
+   - `services/replay_player.py`: Reproductor de telemetría, simula la misma tasa de 60Hz leyendo `raw_packet` desde un archivo SQLite.
+
+2. **Capa de UI (PyQt6 + PyQtGraph)**
+   - `ui/main_window.py`: Ensambla el layout a tres columnas e integra todos los servicios. Instancia localmente los motores de Core y transfiere los datos a los widgets.
+   - `ui/widgets/map_widget.py`: Ahora funciona como un **Heatmap dinámico**. Pinta rojo puro en frenadas duras y verde en aceleraciones 100% WOT.
+   - `ui/widgets/delta_widget.py`: Gráfica lineal que se mueve en + o - según vayas más rápido o lento que tu "Ghost".
+   - `ui/widgets/alert_widget.py`: Panel Pit-Wall anclado a la derecha, muestra notificaciones de colores y emite sonido `Beep` del sistema.
 
 ### Arquitectura Multi-Hilo (Red/Live)
 1. **`Thread 1 (Network)`**: Lee de `socket.recvfrom` (UDP 33740) con timeout y empuja crudos a una `queue.Queue`.
