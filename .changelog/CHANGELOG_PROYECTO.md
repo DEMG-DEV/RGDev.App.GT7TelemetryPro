@@ -5,6 +5,27 @@
 
 ---
 
+## ✅ Limpieza de archivos obsoletos
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-13 09:00:03 |
+| **Responsable** | Antigravity AI |
+
+### ¿Qué se realizó?
+
+Se eliminaron del sistema las capturas de pantalla viejas del modo oscuro original que ya no se utilizaban en el manual. 
+
+### ¿Qué significa para el proyecto?
+
+- **Optimización y Limpieza:** Mantenemos el tamaño del proyecto lo más ligero posible y evitamos confundir a futuros desarrolladores con imágenes obsoletas.
+
+### ¿Qué va a notar el usuario/cliente?
+
+Este es un cambio puramente interno para mantener la calidad y el orden dentro de los archivos del proyecto.
+
+---
+
 ## 📝 Fotografías de sistema funcionando con datos reales
 
 | Campo | Detalle |

@@ -5,6 +5,27 @@
 
 ---
 
+## Chore: Eliminación de capturas de pantalla obsoletas
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-13 09:00:03 |
+| **Autor** | David Mendez (demg@outlook.com) |
+| **Branch** | master |
+| **Tipo** | Chore |
+
+### Archivos Modificados
+
+| Archivo | Estado | Descripción del Cambio |
+|---------|--------|----------------------|
+| `docs/ui_screenshot.png` | Eliminado | Archivo de documentación obsoleto, reemplazado por capturas especializadas para cada vista (`main_window.png` y `analysis_mode.png`). |
+
+### Detalle Técnico
+
+Se eliminó el archivo residual `docs/ui_screenshot.png` del control de versiones tras la migración a un formato de doble captura (Live Dashboard y Advanced Analysis). Esta eliminación asegura que el repositorio se mantenga limpio y el README solo apunte a los recursos gráficos actualizados con el "Light Mode".
+
+---
+
 ## Docs: Regenerate screenshots with populated telemetry data
 
 | Campo | Detalle |
