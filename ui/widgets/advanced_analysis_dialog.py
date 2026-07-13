@@ -9,6 +9,7 @@ from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout, QListWidget,
                              QAbstractItemView, QSlider, QApplication, QProgressDialog)
 from PyQt6.QtCore import Qt, QTimer
 from ui.widgets.map_widget import MapWidget
+from ui.widgets.live_telemetry_widget import LiveTelemetryWidget
 from core.models import parse_telemetry_packet
 from PyQt6.QtGui import QFont, QColor
 
@@ -539,15 +540,10 @@ class AdvancedAnalysisDialog(QDialog):
         
         self.proxy = pg.SignalProxy(self.p_speed.scene().sigMouseMoved, rateLimit=60, slot=self.mouseMoved)
         
-        self.table_corners = QTableWidget()
-        self.table_corners.setColumnCount(1)
-        self.table_corners.setHorizontalHeaderLabels(["Curva"])
-        header = self.table_corners.horizontalHeader()
-        header.setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
-        self.table_corners.setStyleSheet("QTableWidget { color: white; background-color: #1f2833; border: 1px solid #45a29e; } QHeaderView::section { background-color: #0b0c10; color: #66fcf1; font-weight: bold; }")
+        self.telemetry_dashboard = LiveTelemetryWidget()
         
         right_layout.addWidget(self.map_widget, stretch=6)
-        right_layout.addWidget(self.table_corners, stretch=4)
+        right_layout.addWidget(self.telemetry_dashboard, stretch=4)
         
         layout.addWidget(left_panel, stretch=25)
         layout.addWidget(graphs_widget, stretch=50)
@@ -605,6 +601,7 @@ class AdvancedAnalysisDialog(QDialog):
         if packet.position:
             self.map_widget.set_crosshair(packet.position[0], packet.position[2])
             
+        self.telemetry_dashboard.update_data(packet)
         
         # Calculate time based on packet index assuming 60fps
         # Or even better, if we have active_lap_data and the packet belongs to it, we can get precise time

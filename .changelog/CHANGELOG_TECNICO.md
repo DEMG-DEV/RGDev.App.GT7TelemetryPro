@@ -30,6 +30,30 @@ El pipeline `.github/workflows/release.yml` se engancha al evento `release`, ini
 
 ---
 
+## Feature: Dashboard de Telemetría en Vivo (Análisis Avanzado)
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-12 22:15:00 |
+| **Autor** | David Mendez (demg@outlook.com) |
+| **Branch** | master |
+| **Tipo** | Feature / UI |
+
+### Archivos Modificados
+
+| Archivo | Estado | Descripción del Cambio |
+|---------|--------|----------------------|
+| `ui/widgets/live_telemetry_widget.py` | Agregado | Se creó el componente `LiveTelemetryWidget` heredando de QFrame, con barras de progreso estilizadas mediante QSS (gradientes) para simular medidores de freno, acelerador y RPM. |
+| `ui/widgets/advanced_analysis_dialog.py` | Modificado | Se reemplazó la antigua tabla `table_corners` por el nuevo widget de telemetría y se conectó el flujo de datos inyectando los paquetes durante la reproducción (`update_playback_ui`). |
+
+### Detalle Técnico
+
+Se implementó un panel de instrumentos que proporciona retroalimentación instantánea sobre el estado físico del vehículo (telemetría cruda) sincronizada con el mapa interactivo durante la repetición.
+- **Rendimiento:** Se evitó el uso de gráficos pesados para estos indicadores, usando en su lugar componentes nativos (`QProgressBar`, `QLabel`) que se pueden actualizar a 60 FPS sin penalización en el hilo principal de la GUI (Zero-stutter).
+- **Diseño:** Se implementó QSS para lograr un acabado "Premium" con esquinas redondeadas y colores dinámicos (e.g., bordes rojos en *Shift Light* o cortes de inyección).
+
+---
+
 ## Chore: Remove GitHub Actions workflow
 
 | Campo | Detalle |

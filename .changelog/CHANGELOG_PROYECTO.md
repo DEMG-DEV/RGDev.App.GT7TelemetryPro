@@ -26,6 +26,31 @@ Los usuarios finalmente podrán entrar a la sección de "Releases" (Lanzamientos
 
 ---
 
+## ✅ Nuevo Tablero de Telemetría en Vivo (Muro de Boxes)
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-12 22:15:00 |
+| **Responsable** | David Mendez |
+
+### ¿Qué se realizó?
+
+Se diseñó e integró un tablero de instrumentos inspirado en los muros de boxes de la Fórmula 1 para la ventana de "Análisis Avanzado". Este panel se encuentra justo debajo del mapa interactivo y cobra vida al darle reproducir a tus sesiones.
+
+### ¿Qué significa para el proyecto?
+
+- **Análisis Profundo:** Ahora puedes entender exactamente por qué ganaste o perdiste tiempo. Podrás ver en tiempo real qué tanto presionaste el acelerador o freno en cada milisegundo de tu vuelta.
+- **Inmersión y Profesionalismo:** El sistema ahora luce como un software de grado profesional de *Motorsport*, sumando muchísimo valor visual.
+
+### ¿Qué va a notar el usuario/cliente?
+
+Al momento de reproducir una sesión guardada, debajo del mapa de la pista notarás:
+1. Una lectura gigante de tu Velocidad y Marcha actual.
+2. Dos barras dinámicas (Verde para el acelerador y Roja para el freno) que suben y bajan de manera hiper-fluida.
+3. Una barra horizontal de revoluciones por minuto (RPM) que parpadeará en rojo si llegas al límite de corte de inyección. Todo esto sin "trabarse" en ningún momento.
+
+---
+
 ## ✅ Eliminación de Compilación en la Nube
 
 | Campo | Detalle |
