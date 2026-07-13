@@ -5,6 +5,28 @@
 
 ---
 
+## Feat: Mejora del Filtro Topográfico de Detección de Trazados
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-13 09:40:08 |
+| **Autor** | David Mendez (demg@outlook.com) |
+| **Branch** | master |
+| **Tipo** | Feat |
+
+### Archivos Modificados
+
+| Archivo | Estado | Descripción del Cambio |
+|---------|--------|----------------------|
+| `ui/widgets/advanced_analysis_dialog.py` | Modificado | Refactorización de la heurística de detección de circuitos (`_load_sessions`). Reemplazo del umbral de tolerancia estático (300m) por un margen dinámico (`max(50, length * 0.015)`) y ponderación severa de discrepancias de elevación topográfica (multiplicador 10x). |
+| `README.md` | Modificado | Actualización de la documentación referente a la "Identificación Topográfica Automática" y sus nuevas tolerancias físicas. |
+
+### Detalle Técnico
+
+Se rediseñó el algoritmo de "Scoring" de trazados. Dado que el protocolo UDP de GT7 no transfiere un `Track ID` explícito, la validación se hace cruzando metadatos. El umbral estático de distancia causaba problemas de sobre-ajuste. La solución aplica una ventana de tolerancia dinámica: estricta a 50 metros base para pistas cortas (evitando confusión de variantes), y escalonada al 1.5% del recorrido total para pistas largas (absorbiendo la variación legítima de la línea de carrera en Nürburgring). Adicionalmente, el identificador inmutable de "diferencia de elevación" recibió un aumento masivo de peso en la fórmula para garantizar cruces topográficos libres de fallas independientemente del estilo de conducción.
+
+---
+
 ## Chore: Eliminación de capturas de pantalla obsoletas
 
 | Campo | Detalle |

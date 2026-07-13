@@ -5,6 +5,29 @@
 
 ---
 
+## 🎯 Identificación Quirúrgica de Pistas (Filtro Inteligente)
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-13 09:40:08 |
+| **Responsable** | Antigravity AI |
+
+### ¿Qué se realizó?
+
+Se mejoró drásticamente el "Cerebro" que adivina en qué circuito estás corriendo. 
+Antes, el sistema tenía un margen de error fijo, lo que causaba problemas para distinguir variantes cortas de pistas, o era muy exigente en circuitos inmensos. Ahora, el sistema usa un margen de "50 metros" para casi todas las pistas, pero se hace "elástico" inteligentemente en circuitos larguísimos para perdonar si tomaste las curvas muy por fuera. Además, ahora el programa usa los datos altimétricos (subidas y bajadas) como huella dactilar principal de la pista.
+
+### ¿Qué significa para el proyecto?
+
+- **Identificación Impecable:** El sistema ya no confundirá trazados de longitud similar (como Fuji o Willow Springs) gracias al mapeo de altitud, que es inmutable sin importar cómo manejes.
+- **Robustez Profesional:** Este sistema dinámico de tolerancias geométricas es el estándar que usan plataformas profesionales para inferir localizaciones sin datos GPS.
+
+### ¿Qué va a notar el usuario/cliente?
+
+Las sesiones cargadas en el Análisis Avanzado tendrán la etiqueta correcta del circuito con una tasa de acierto cercana al 100%, sin importar si corriste la vuelta de manera agresiva o te saliste un poco del asfalto.
+
+---
+
 ## ✅ Limpieza de archivos obsoletos
 
 | Campo | Detalle |

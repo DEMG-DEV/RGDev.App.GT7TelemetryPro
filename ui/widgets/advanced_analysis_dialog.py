@@ -365,12 +365,18 @@ class AdvancedAnalysisDialog(QDialog):
                     highest_score = 0
                     
                     for t in tracks:
-                        length_diff = abs(t.get('length_m', 0) - total_dist)
-                        if length_diff > 300:
+                        track_len = t.get('length_m', 0)
+                        length_diff = abs(track_len - total_dist)
+                        
+                        # Filtro dinámico: 50 metros estrictos, o 1.5% de la longitud del circuito para absorber variaciones largas
+                        dynamic_margin = max(50.0, track_len * 0.015)
+                        
+                        if length_diff > dynamic_margin:
                             continue
                         
                         score = 1000 - length_diff
-                        score -= abs(t.get('elevation_diff_m', 0) - elev_diff) * 2.0
+                        # Ponderación severa a la diferencia de elevación (identificador inmutable del relieve)
+                        score -= abs(t.get('elevation_diff_m', 0) - elev_diff) * 10.0
                         score -= abs(t.get('num_corners', 0) - num_corners) * 5.0
                         
                         if score > highest_score:
