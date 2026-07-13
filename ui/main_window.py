@@ -102,14 +102,14 @@ class TelemetryMainWindow(QMainWindow):
         info_panel = QGroupBox("Info de Vuelta")
         info_l = QVBoxLayout()
         self.lbl_car_id = QLabel("Auto: ---")
-        self.lbl_car_id.setStyleSheet("color: white; font-weight: bold;")
+        self.lbl_car_id.setStyleSheet("color: #1A1A1A; font-weight: bold;")
         self.lbl_lap = QLabel("Vuelta: -/-")
-        self.lbl_lap.setStyleSheet("background-color: #1e3a5f; color: #66fcf1; padding: 4px; font-weight: bold;")
+        self.lbl_lap.setStyleSheet("background-color: #E0E0E0; color: #1A1A1A; padding: 4px; font-weight: bold;")
         self.lbl_time = QLabel("0:00.000")
         self.lbl_time.setFont(QFont("Consolas", 18, QFont.Weight.Bold))
-        self.lbl_time.setStyleSheet("color: #a3e4d7;")
+        self.lbl_time.setStyleSheet("color: #1A1A1A;")
         self.lbl_fuel_est = QLabel("Laps Restantes: ---")
-        self.lbl_fuel_est.setStyleSheet("color: #f2a900; font-weight: bold;")
+        self.lbl_fuel_est.setStyleSheet("color: #FFA500; font-weight: bold;")
         self.lbl_wot = QLabel("WOT: NO")
         self.lbl_wot.setStyleSheet("color: gray;")
         
@@ -153,7 +153,7 @@ class TelemetryMainWindow(QMainWindow):
         self.lbl_v_val = QLabel("0")
         self.lbl_v_val.setFont(QFont("Consolas", 48, QFont.Weight.Bold))
         self.lbl_v_val.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.lbl_v_val.setStyleSheet("color: #66fcf1;")
+        self.lbl_v_val.setStyleSheet("color: #0000FF;")
         v_box.addWidget(lbl_v_title)
         v_box.addWidget(self.lbl_v_val)
         
@@ -163,7 +163,7 @@ class TelemetryMainWindow(QMainWindow):
         self.lbl_r_val = QLabel("0")
         self.lbl_r_val.setFont(QFont("Consolas", 48, QFont.Weight.Bold))
         self.lbl_r_val.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.lbl_r_val.setStyleSheet("color: #f2a900;")
+        self.lbl_r_val.setStyleSheet("color: #FF8C00;")
         r_box.addWidget(lbl_r_title)
         r_box.addWidget(self.lbl_r_val)
         
@@ -188,11 +188,11 @@ class TelemetryMainWindow(QMainWindow):
         
         self.lbl_thr_txt = QLabel("Acelerador\n0%")
         self.lbl_thr_txt.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.lbl_thr_txt.setStyleSheet("color: #00ff7f; font-weight: bold;")
+        self.lbl_thr_txt.setStyleSheet("color: #008000; font-weight: bold;")
         
         self.lbl_brk_txt = QLabel("Freno\n0%")
         self.lbl_brk_txt.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.lbl_brk_txt.setStyleSheet("color: #ff003c; font-weight: bold;")
+        self.lbl_brk_txt.setStyleSheet("color: #FF0000; font-weight: bold;")
         
         pedals_grid.addWidget(self.lbl_thr_txt, 0, 0)
         pedals_grid.addWidget(self.bar_thr, 1, 0, alignment=Qt.AlignmentFlag.AlignHCenter)
@@ -228,7 +228,7 @@ class TelemetryMainWindow(QMainWindow):
         bar.setFixedSize(40, 300)
         bar.setTextVisible(False)
         bar.setStyleSheet(f"""
-            QProgressBar {{ border: 2px solid #303641; border-radius: 4px; background-color: #0b0c10; }}
+            QProgressBar {{ border: 2px solid #CCCCCC; border-radius: 4px; background-color: #E0E0E0; }}
             QProgressBar::chunk {{ background-color: {color}; border-radius: 2px; }}
         """)
         return bar
@@ -381,7 +381,7 @@ class TelemetryMainWindow(QMainWindow):
         
         if metrics.get('is_wot', False):
             self.lbl_wot.setText("WOT: YES")
-            self.lbl_wot.setStyleSheet("color: #00ff7f; font-weight: bold; background-color: #14161a; padding: 2px;")
+            self.lbl_wot.setStyleSheet("color: #FFFFFF; font-weight: bold; background-color: #008000; padding: 2px;")
         else:
             self.lbl_wot.setText("WOT: NO")
             self.lbl_wot.setStyleSheet("color: gray; padding: 2px;")

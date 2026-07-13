@@ -1,13 +1,13 @@
 QMainWindow {
-    background-color: #0b0c10;
-    color: #c5c6c7;
+    background-color: #F0F0F0;
+    color: #1A1A1A;
 }
 QGroupBox {
-    border: 1px solid #303641;
+    border: 1px solid #CCCCCC;
     border-radius: 4px;
     margin-top: 15px;
-    background-color: #14161a;
-    color: #45a29e;
+    background-color: #FFFFFF;
+    color: #000000;
     font-weight: bold;
     font-size: 13px;
 }
@@ -17,29 +17,30 @@ QGroupBox::title {
     padding: 0 3px 0 3px;
 }
 QLabel {
-    color: #c5c6c7;
+    color: #1A1A1A;
 }
 QLineEdit {
-    background-color: #1f2833;
-    color: #66fcf1;
-    border: 1px solid #45a29e;
+    background-color: #FFFFFF;
+    color: #1A1A1A;
+    border: 1px solid #CCCCCC;
     padding: 4px;
     border-radius: 2px;
 }
 QPushButton {
-    background-color: #1f2833;
-    color: #66fcf1;
-    border: 1px solid #45a29e;
+    background-color: #E0E0E0;
+    color: #1A1A1A;
+    border: 1px solid #CCCCCC;
     padding: 6px 12px;
     border-radius: 2px;
     font-weight: bold;
 }
 QPushButton:hover {
-    background-color: #45a29e;
-    color: #0b0c10;
+    background-color: #D0D0D0;
+    color: #000000;
+    border: 1px solid #999999;
 }
 QPushButton:disabled {
-    background-color: #14161a;
-    color: #333333;
-    border: 1px solid #333333;
+    background-color: #F0F0F0;
+    color: #999999;
+    border: 1px solid #DDDDDD;
 }

@@ -5,6 +5,50 @@
 
 ---
 
+## Refactor: Implementación de tema visual "Daylight" (Light Mode)
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-13 08:42:18 |
+| **Autor** | David Mendez (demg@outlook.com) |
+| **Branch** | master |
+| **Tipo** | Refactor / Style |
+
+### Archivos Modificados
+
+| Archivo | Estado | Descripción del Cambio |
+|---------|--------|----------------------|
+| `ui/styles/dark_theme.qss` | Modificado | Reescritura completa del stylesheet general para usar paleta de colores claros. |
+| `ui/main_window.py` | Modificado | Sustitución de colores de alto contraste oscuros por colores aptos para fondos blancos (negros, grises oscuros, rojo, azul). |
+| `ui/widgets/advanced_analysis_dialog.py` | Modificado | Ajuste de colores en la tabla de sesiones, sliders, y corrección de colores hardcodeados en `setForeground`. |
+| `ui/widgets/live_telemetry_widget.py` | Modificado | Adaptación de barras de progreso y corrección de instanciación de etiquetas. |
+| `ui/widgets/telemetry_graphs.py` | Modificado | Cambio de `setBackground` a gris claro (`#FAFAFA`) y oscurecimiento de trazos. |
+| `ui/widgets/gforce_widget.py` | Modificado | Eliminación de fondo gris oscuro hardcodeado, ajuste de mira a gris claro. |
+| `ui/widgets/map_widget.py` | Modificado | Ajuste de punto del auto a negro para contraste en fondo transparente/blanco. |
+
+### Detalle Técnico
+
+Se llevó a cabo una migración de estética para pasar de un entorno nativo oscuro a un esquema "Light Mode" enfocado en uso diurno. Se eliminó el negro de los paneles de fondo priorizando blancos y grises claros (`#F0F0F0`, `#FAFAFA`, `#FFFFFF`) con texto gris oscuro (`#1A1A1A`).
+Los gráficos de `pyqtgraph` fueron invertidos:
+- Velocidad: Blanco a Azul Puro (`#0000FF`).
+- Acelerador/Freno: Degradados convertidos a tonos sólidos oscuros.
+Se detectó y solucionó la existencia de colores cian hardcodeados a través de `setForeground()` en las celdas de las tablas de `advanced_analysis_dialog.py` que impedían la correcta lectura.
+
+### Fragmentos de Código Relevantes
+
+```diff
+-        self.plot_stack = pg.GraphicsLayoutWidget()
+-        self.plot_stack.setBackground('#000000')
++        self.plot_stack = pg.GraphicsLayoutWidget()
++        self.plot_stack.setBackground('#FAFAFA')
+```
+```diff
+-                id_item.setForeground(QColor('#66fcf1') if not is_locked else QColor('#f44336'))
++                id_item.setForeground(QColor('#0000FF') if not is_locked else QColor('#CC0000'))
+```
+
+---
+
 ## feat: Grabación manual de sesiones y auto-corrección dinámica del ID del vehículo
 
 | Campo | Detalle |

@@ -11,7 +11,7 @@ class GForceWidget(QGroupBox):
         
         layout = QVBoxLayout()
         self.plot_widget = pg.PlotWidget()
-        self.plot_widget.setBackground('#14161a')
+        self.plot_widget.setBackground('#FAFAFA')
         self.plot_widget.hideAxis('bottom')
         self.plot_widget.hideAxis('left')
         self.plot_widget.setAspectLocked(True)
@@ -19,18 +19,18 @@ class GForceWidget(QGroupBox):
         self.plot_widget.setYRange(-2, 2)
         
         # Draw crosshairs
-        self.plot_widget.addLine(x=0, pen=pg.mkPen('#303641'))
-        self.plot_widget.addLine(y=0, pen=pg.mkPen('#303641'))
+        self.plot_widget.addLine(x=0, pen=pg.mkPen('#CCCCCC'))
+        self.plot_widget.addLine(y=0, pen=pg.mkPen('#CCCCCC'))
         
         # Draw circles at 1G and 2G
         circle1 = pg.QtGui.QPainterPath()
         circle1.addEllipse(pg.QtCore.QRectF(-1, -1, 2, 2))
         path_item1 = pg.QtWidgets.QGraphicsPathItem(circle1)
-        path_item1.setPen(pg.mkPen('#303641'))
+        path_item1.setPen(pg.mkPen('#CCCCCC'))
         self.plot_widget.addItem(path_item1)
         
-        self.g_plot = self.plot_widget.plot(pen=None, symbol='o', symbolBrush='#f2a900', symbolSize=5, alpha=0.5)
-        self.g_dot_latest = self.plot_widget.plot(pen=None, symbol='o', symbolBrush='#ff003c', symbolSize=10)
+        self.g_plot = self.plot_widget.plot(pen=None, symbol='o', symbolBrush='#FF8C00', symbolSize=5, alpha=0.5)
+        self.g_dot_latest = self.plot_widget.plot(pen=None, symbol='o', symbolBrush='#FF0000', symbolSize=10)
         
         layout.addWidget(self.plot_widget)
         self.setLayout(layout)

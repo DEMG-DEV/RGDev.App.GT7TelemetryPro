@@ -24,7 +24,7 @@ class MapWidget(QGroupBox):
         self.scatter = pg.ScatterPlotItem(size=4, pen=None)
         self.plot_widget.addItem(self.scatter)
         
-        self.car_dot = self.plot_widget.plot(pen=None, symbol='o', symbolBrush='w', symbolSize=10)
+        self.car_dot = self.plot_widget.plot(pen=None, symbol='o', symbolBrush='k', symbolSize=10)
         self.crosshair = self.plot_widget.plot(pen=None, symbol='+', symbolBrush='r', symbolSize=15)
 
         

@@ -19,14 +19,14 @@ class TelemetryGraphsWidget(QGroupBox):
         layout.setSpacing(0)
         
         self.plot_stack = pg.GraphicsLayoutWidget()
-        self.plot_stack.setBackground('#14161a')
+        self.plot_stack.setBackground('#FAFAFA')
         
         # 1. Velocidad
         self.p_vel = self.plot_stack.addPlot(title="Velocidad (km/h)")
         self.p_vel.showGrid(x=True, y=True, alpha=0.2)
-        self.p_vel.getAxis('left').setPen('#45a29e')
+        self.p_vel.getAxis('left').setPen('#CCCCCC')
         self.p_vel.getAxis('bottom').setStyle(showValues=False)
-        self.curve_vel = self.p_vel.plot(pen=pg.mkPen('#66fcf1', width=2))
+        self.curve_vel = self.p_vel.plot(pen=pg.mkPen('#0000FF', width=2))
         
         self.plot_stack.nextRow()
         
@@ -34,10 +34,10 @@ class TelemetryGraphsWidget(QGroupBox):
         self.p_pedal = self.plot_stack.addPlot(title="Acelerador / Freno (%)")
         self.p_pedal.showGrid(x=True, y=True, alpha=0.2)
         self.p_pedal.setYRange(0, 105)
-        self.p_pedal.getAxis('left').setPen('#45a29e')
+        self.p_pedal.getAxis('left').setPen('#CCCCCC')
         self.p_pedal.getAxis('bottom').setStyle(showValues=False)
-        self.curve_thr = self.p_pedal.plot(pen=pg.mkPen('#00ff7f', width=2), fillLevel=0, brush=(0,255,127,60))
-        self.curve_brk = self.p_pedal.plot(pen=pg.mkPen('#ff003c', width=2), fillLevel=0, brush=(255,0,60,60))
+        self.curve_thr = self.p_pedal.plot(pen=pg.mkPen('#008000', width=2), fillLevel=0, brush=(0,128,0,60))
+        self.curve_brk = self.p_pedal.plot(pen=pg.mkPen('#FF0000', width=2), fillLevel=0, brush=(255,0,0,60))
         
         self.plot_stack.nextRow()
         
@@ -45,18 +45,18 @@ class TelemetryGraphsWidget(QGroupBox):
         self.p_steer = self.plot_stack.addPlot(title="Ángulo de Dirección (Grados)")
         self.p_steer.showGrid(x=True, y=True, alpha=0.2)
         self.p_steer.setYRange(-180, 180)
-        self.p_steer.getAxis('left').setPen('#45a29e')
+        self.p_steer.getAxis('left').setPen('#CCCCCC')
         self.p_steer.getAxis('bottom').setStyle(showValues=False)
-        self.curve_steer = self.p_steer.plot(pen=pg.mkPen('#a3e4d7', width=2))
+        self.curve_steer = self.p_steer.plot(pen=pg.mkPen('#008080', width=2))
         
         self.plot_stack.nextRow()
         
         # 4. RPM
         self.p_rpm = self.plot_stack.addPlot(title="R.P.M.")
         self.p_rpm.showGrid(x=True, y=True, alpha=0.2)
-        self.p_rpm.getAxis('left').setPen('#45a29e')
-        self.p_rpm.getAxis('bottom').setPen('#45a29e')
-        self.curve_rpm = self.p_rpm.plot(pen=pg.mkPen('#f2a900', width=2))
+        self.p_rpm.getAxis('left').setPen('#CCCCCC')
+        self.p_rpm.getAxis('bottom').setPen('#CCCCCC')
+        self.curve_rpm = self.p_rpm.plot(pen=pg.mkPen('#FF8C00', width=2))
         
         layout.addWidget(self.plot_stack)
         self.setLayout(layout)

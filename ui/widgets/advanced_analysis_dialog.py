@@ -49,7 +49,7 @@ class AdvancedAnalysisDialog(QDialog):
         
         self.setWindowTitle(f"Análisis Avanzado & Explorador de Sesiones")
         self.setGeometry(50, 50, 1600, 900)
-        self.setStyleSheet("background-color: #0b0c10; color: #c5c6c7;")
+        self.setStyleSheet("background-color: #F0F0F0; color: #1A1A1A;")
         
         self.init_ui()
         self._load_sessions()
@@ -75,7 +75,7 @@ class AdvancedAnalysisDialog(QDialog):
                 id_item.setData(Qt.ItemDataRole.UserRole, row_data[0])
                 id_item.setData(Qt.ItemDataRole.UserRole + 1, is_locked)
                 id_item.setFont(QFont("Arial", 10, QFont.Weight.Bold))
-                id_item.setForeground(QColor('#66fcf1') if not is_locked else QColor('#f44336'))
+                id_item.setForeground(QColor('#0000FF') if not is_locked else QColor('#CC0000'))
                 self.table_sessions.setItem(row_idx, 0, id_item)
                 
                 # Fecha
@@ -97,10 +97,10 @@ class AdvancedAnalysisDialog(QDialog):
                     secs = (best_lap % 60000) / 1000.0
                     bl_str = f"{mins:02d}:{secs:06.3f}"
                     bl_item = QTableWidgetItem(bl_str)
-                    bl_item.setForeground(QColor('#45a29e'))
+                    bl_item.setForeground(QColor('#008080'))
                 else:
                     bl_item = QTableWidgetItem("N/A")
-                    bl_item.setForeground(QColor('gray'))
+                    bl_item.setForeground(QColor('#666666'))
                 bl_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
                 self.table_sessions.setItem(row_idx, 4, bl_item)
                 
@@ -234,7 +234,7 @@ class AdvancedAnalysisDialog(QDialog):
         progress = QProgressDialog("Cargando y procesando telemetría...", "Cancelar", 0, 100, self)
         progress.setWindowModality(Qt.WindowModality.WindowModal)
         progress.setWindowTitle("Cargando Sesión")
-        progress.setStyleSheet("QProgressDialog { background-color: #1f2833; color: white; } QLabel { color: white; }")
+        progress.setStyleSheet("QProgressDialog { background-color: #F0F0F0; color: #1A1A1A; } QLabel { color: #1A1A1A; }")
         progress.show()
         QApplication.processEvents()
         
@@ -414,7 +414,7 @@ class AdvancedAnalysisDialog(QDialog):
         left_layout.setContentsMargins(0, 0, 0, 0)
         
         lbl_sessions_title = QLabel("Historial de Sesiones")
-        lbl_sessions_title.setStyleSheet("font-weight: bold; font-size: 16px; color: #66fcf1;")
+        lbl_sessions_title.setStyleSheet("font-weight: bold; font-size: 16px; color: #1A1A1A;")
         
         self.table_sessions = QTableWidget()
         self.table_sessions.setColumnCount(5)
@@ -431,9 +431,9 @@ class AdvancedAnalysisDialog(QDialog):
         self.table_sessions.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
         self.table_sessions.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self.table_sessions.setStyleSheet("""
-            QTableWidget { background-color: #1f2833; color: white; border: 1px solid #45a29e; font-size: 13px; }
-            QHeaderView::section { background-color: #0b0c10; color: #66fcf1; font-weight: bold; }
-            QTableWidget::item:selected { background-color: #66fcf1; color: black; }
+            QTableWidget { background-color: #FFFFFF; color: #000000; border: 1px solid #CCCCCC; font-size: 13px; }
+            QHeaderView::section { background-color: #E0E0E0; color: #1A1A1A; font-weight: bold; }
+            QTableWidget::item:selected { background-color: #007ACC; color: white; }
         """)
         self.table_sessions.itemSelectionChanged.connect(self.on_session_selected)
         
@@ -454,21 +454,21 @@ class AdvancedAnalysisDialog(QDialog):
         
         playback_layout = QVBoxLayout()
         self.btn_play_pause = QPushButton("▶ Reproducir Sesión")
-        self.btn_play_pause.setStyleSheet("background-color: #45a29e; color: white; font-weight: bold; padding: 12px; border-radius: 5px;")
+        self.btn_play_pause.setStyleSheet("background-color: #CCCCCC; color: #000000; font-weight: bold; padding: 12px; border-radius: 5px;")
         self.btn_play_pause.setEnabled(False)
         self.btn_play_pause.clicked.connect(self.toggle_playback)
         
         slider_layout = QHBoxLayout()
         self.lbl_playback_time = QLabel("00:00.000")
-        self.lbl_playback_time.setStyleSheet("color: #a3e4d7; font-weight: bold; font-family: Consolas;")
+        self.lbl_playback_time.setStyleSheet("color: #1A1A1A; font-weight: bold; font-family: Consolas;")
         
         self.playback_slider = QSlider(Qt.Orientation.Horizontal)
         self.playback_slider.setEnabled(False)
         self.playback_slider.valueChanged.connect(self.on_slider_moved)
-        self.playback_slider.setStyleSheet("QSlider::handle:horizontal { background-color: #66fcf1; width: 12px; margin: -4px 0; border-radius: 6px; } QSlider::groove:horizontal { background: #1f2833; height: 4px; }")
+        self.playback_slider.setStyleSheet("QSlider::handle:horizontal { background-color: #1A1A1A; width: 12px; margin: -4px 0; border-radius: 6px; } QSlider::groove:horizontal { background: #CCCCCC; height: 4px; }")
         
         self.lbl_playback_best = QLabel("Best: --:--.---")
-        self.lbl_playback_best.setStyleSheet("color: #f2a900; font-weight: bold; font-family: Consolas;")
+        self.lbl_playback_best.setStyleSheet("color: #FF8C00; font-weight: bold; font-family: Consolas;")
         
         slider_layout.addWidget(self.lbl_playback_time)
         slider_layout.addWidget(self.playback_slider)
@@ -478,14 +478,14 @@ class AdvancedAnalysisDialog(QDialog):
         playback_layout.addLayout(slider_layout)
         
         lbl_list_title = QLabel("Vueltas (Multiselección)")
-        lbl_list_title.setStyleSheet("font-weight: bold; font-size: 16px; color: #66fcf1; padding-top: 15px;")
+        lbl_list_title.setStyleSheet("font-weight: bold; font-size: 16px; color: #1A1A1A; padding-top: 15px;")
         
         self.list_laps = QListWidget()
-        self.list_laps.setStyleSheet("background-color: #1f2833; color: white; font-size: 14px; border: 1px solid #45a29e;")
+        self.list_laps.setStyleSheet("background-color: #FFFFFF; color: #1A1A1A; font-size: 14px; border: 1px solid #CCCCCC;")
         self.list_laps.itemSelectionChanged.connect(self.on_lap_selected)
         self.list_laps.itemChanged.connect(self.refresh_plot)
         
-        self.colors = ['#00ffff', '#ff00ff', '#ffff00', '#00ff00', '#ff0000', '#ffffff', '#0000ff']
+        self.colors = ['#0000FF', '#FF00FF', '#008000', '#FF0000', '#800080', '#000000', '#FF8C00']
         
         sessions_container = QWidget()
         s_layout = QVBoxLayout(sessions_container)
@@ -517,7 +517,7 @@ class AdvancedAnalysisDialog(QDialog):
         self.p_speed = pg.PlotWidget(title="Velocidad (km/h)")
         self.p_speed.addLegend()
         self.p_speed.showGrid(x=True, y=True, alpha=0.3)
-        self.p_speed.setBackground('#0b0c10')
+        self.p_speed.setBackground('#FAFAFA')
         self.p_speed.setLabel('bottom', "Distancia de la vuelta (Metros)")
         
         self.vline = pg.InfiniteLine(angle=90, movable=False, pen=pg.mkPen('w', width=1, style=Qt.PenStyle.DashLine))
@@ -528,12 +528,12 @@ class AdvancedAnalysisDialog(QDialog):
         self.table_summary.horizontalHeader().setVisible(True)
         self.table_summary.verticalHeader().setVisible(False)
         self.table_summary.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
-        self.table_summary.setStyleSheet("QTableWidget { background-color: #1f2833; color: white; font-size: 14px; } QHeaderView::section { background-color: #0b0c10; color: #66fcf1; }")
+        self.table_summary.setStyleSheet("QTableWidget { background-color: #FFFFFF; color: #1A1A1A; font-size: 14px; } QHeaderView::section { background-color: #E0E0E0; color: #1A1A1A; }")
         
         graphs_layout.addWidget(self.p_speed, stretch=2)
         
         lbl_res = QLabel("📋 Resumen de Vueltas (Overlay)")
-        lbl_res.setStyleSheet("font-size: 16px; font-weight: bold; color: #66fcf1; padding-top: 10px;")
+        lbl_res.setStyleSheet("font-size: 16px; font-weight: bold; color: #1A1A1A; padding-top: 10px;")
         graphs_layout.addWidget(lbl_res)
         graphs_layout.addWidget(self.table_summary, stretch=1)
         

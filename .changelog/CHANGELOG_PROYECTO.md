@@ -5,6 +5,28 @@
 
 ---
 
+## ✅ Implementación de Modo Diurno y mejora de visibilidad
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-13 08:42:18 |
+| **Responsable** | David Mendez |
+
+### ¿Qué se realizó?
+
+Se transformó completamente el estilo visual del sistema. Pasamos de un "modo oscuro" con tonos brillantes a un "modo diurno" claro, diseñado específicamente para ser utilizado en lugares con mucha iluminación (como la zona exterior de los pits en una carrera). Ahora los paneles son blancos y grises, el texto es oscuro y las líneas de las gráficas tienen colores fuertes (azul, rojo, verde oscuro) que contrastan a la perfección contra el fondo claro.
+
+### ¿Qué significa para el proyecto?
+
+- **Ergonomía Profesional:** Garantiza que los ingenieros puedan analizar la telemetría en computadoras portátiles bajo la luz del sol sin sufrir por los reflejos sobre un fondo negro.
+- **Limpieza visual:** Se corrigieron elementos gráficos que tenían colores fijos diseñados para el modo oscuro, logrando una interfaz unificada y profesional de pies a cabeza.
+
+### ¿Qué va a notar el usuario/cliente?
+
+Un cambio dramático en la aplicación: todo se volvió claro. Las ventanas, gráficas y menús ahora usan fondos blancos/grises, las letras son oscuras, y los indicadores de colores brillantes ahora son sólidos y profundos (rojos, azules y verdes oscuros) para que todo se vea excelente y sin esfuerzo visual a plena luz del día.
+
+---
+
 ## ✅ Sistema de grabación manual y corrección inteligente de autos rivales
 
 | Campo | Detalle |
