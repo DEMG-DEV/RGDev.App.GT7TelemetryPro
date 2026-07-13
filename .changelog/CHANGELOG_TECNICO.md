@@ -5,6 +5,39 @@
 
 ---
 
+## Docs: Actualización de documentación y reglas arquitecturales de IA
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-13 13:25:00 |
+| **Autor** | Antigravity AI |
+| **Branch** | master |
+| **Tipo** | Documentation |
+
+### Archivos Modificados
+
+| Archivo | Estado | Descripción del Cambio |
+|---------|--------|----------------------|
+| `.agents/AGENTS.md` | Modificado | Inyección de 3 reglas arquitecturales estrictas (Vectorización NumPy, Seguridad Asteval, e Integración de distancias `dt` exactas). |
+| `README.md` | Modificado | Inclusión de nuevas secciones de producto documentando el "Pro Analysis Workspace" y "Formula Manager". |
+
+### Detalle Técnico
+Se realizó una actualización transversal de la documentación del proyecto tras finalizar el módulo Pro Analysis.
+En la parte interna (`AGENTS.md`), se documentó el aprendizaje técnico de esta sesión para futuros desarrollos IA:
+- Se prohíben iteradores tradicionales en favor de vectorización estricta (`numpy`) por rendimiento.
+- Se impone el uso de `asteval` para seguridad de la ejecución dinámica.
+- Se impone el uso de marcas de tiempo reales `np.diff(timestamps)` en lugar de deltas de frames teóricos (`0.016s`) para la integración de distancias geofísicas.
+
+En la capa externa (`README.md`), se detallaron las características del *Formula Manager*, el *Track Map Consolidado* y el *Overlay Milimétrico*.
+
+### Fragmentos de Código Relevantes
+```diff
++ 5. **Procesamiento de Datos Vectoriales y Gráficos**:
++   - Todo cálculo masivo sobre la telemetría extraída de SQLite DEBE convertirse a matrices de `numpy` puras.
+```
+
+---
+
 ## Implementación de Interfaz Pro Analysis y Corrección Heurística
 
 | Campo | Detalle |

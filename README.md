@@ -40,9 +40,34 @@ Al terminar de correr o cargar una repetición SQLite, GT7 Telemetry Pro desplie
 *   **Master View Unificada (Zero-Friction UX):** Navega por el historial de sesiones sin ventanas emergentes. La interfaz principal integra la tabla de historiales, la lista de vueltas multiselección y los gráficos en un solo layout de precisión.
 *   **Live Telemetry Dashboard:** Un panel de instrumentos inspirado en los muros de boxes de F1 incorporado directamente bajo el mapa interactivo. Al reproducir una sesión, este panel revive la actuación del piloto mostrando acelerador, freno, RPM y marcha en vivo a 60 FPS (*Zero-stutter*).
 *   **Gestión Segura de Datos (Lock & Delete):** Protege tus mejores carreras con el sistema de enclavamiento (`is_locked`), el cual bloquea visualmente y funcionalmente la sesión contra eliminaciones accidentales. Usa el botón de borrado masivo para purgar miles de paquetes y recuperar espacio en disco automáticamente (`VACUUM`).
-*   **Identificación Topográfica Automática (Hard Filter):** Incorpora un Integrador Matemático a 60 Hz que calcula tu distancia y aplica un filtro físico estricto (margen dinámico de 50m y ponderación de relieve) contra una base de datos de **122 trazados oficiales** para detectar exactamente en qué pista corriste (¡incluso diferencia entre Fuji y Willow Springs!).
+*   **Identificación Topográfica Automática (Hard Filter):** Incorpora un Integrador Matemático que calcula el *Delta-T* real a nivel de red para integrar tu distancia recorrida, combinándolo con la ponderación del relieve y número de curvas. Este sistema detecta exactamente en qué pista corriste (¡incluso diferencia entre Fuji y Willow Springs!) cruzando los datos contra una base de datos de **122 trazados oficiales**, ignorando inteligentemente vueltas incompletas (Out/In laps).
 *   **Comparación de Múltiples Vueltas (Multi-Lap Overlay):** Selecciona múltiples vueltas al mismo tiempo (Checkboxes) y compáralas instantáneamente. La gráfica principal de Velocidad (Speed Trace) dibujará los trazados encimados con colores distintivos.
 *   **Tablas de Datos Dinámicas (Multi-Columna):** ¡Adiós al ruido visual! Todos los datos complejos se resumen en **Data Grids**. Al comparar múltiples vueltas, las tablas generan columnas nuevas dinámicamente y el texto adopta el color de su respectiva gráfica para facilitar la lectura.
+
+---
+
+## 📈 Pro Analysis Workspace (Estilo MoTeC i2)
+
+![Pro Analysis Workspace](docs/pro_analysis.png)
+
+Accesible desde el menú principal, el **Pro Analysis Workspace** transforma la telemetría en un entorno de ingeniería puro para comparar múltiples vueltas con el nivel de detalle utilizado en Fórmula 1:
+
+*   **Overlay Milimétrico:** Las distancias de cada vuelta se integran tomando en cuenta las micro-fluctuaciones de los paquetes de red (sin depender de un estricto 60 Hz). Esto permite superponer perfectamente las gráficas de velocidad, freno y acelerador de diferentes vueltas sin sufrir desfases ("drift") al llegar al último sector del circuito.
+*   **Cursor Sincronizado Multigráfica:** Una línea transversal se dibuja y sincroniza en todas las gráficas (Velocidad, Inputs y Matemáticas), permitiéndote inspeccionar a profundidad exactamente qué estabas haciendo con tus pedales en cualquier punto del circuito.
+*   **Track Map Consolidado:** Agrupa todas las posiciones espaciales de las vueltas seleccionadas en un mapa unificado, revelando variaciones en la trazada y puntos críticos con gradientes de temperatura *Turbo* (rojo = frenada, azul = aceleración).
+*   **Histogramas Dinámicos de Suspensión:** Analiza la velocidad vertical de los 4 amortiguadores en tiempo real para perfeccionar el *Setup* y entender el comportamiento del auto sobre pianos y baches.
+
+---
+
+## 🧮 Canales Matemáticos (Formula Manager)
+
+![Formula Manager](docs/formula_manager.png)
+
+Los datos crudos no siempre dicen toda la verdad. GT7 Telemetry Pro integra un motor seguro de canales matemáticos (Math Channels) impulsado por `asteval` para proteger tu sistema mientras experimentas:
+
+*   **Editor Visual Integrado:** Crea y guarda tus propias fórmulas personalizadas sin tocar una sola línea de código fuente.
+*   **Parsing Seguro Vectorizado:** Escribe fórmulas complejas usando el arreglo de datos crudos (ej: `speed / 3.6`, `brake * throttle`, `sqrt(surge**2 + sway**2)`) y el motor calculará arreglos enteros de miles de puntos de manera instantánea mediante NumPy.
+*   **Persistencia Local:** Tus canales se guardan automáticamente en un archivo `math_channels.json` para que siempre estén disponibles en tus sesiones futuras.
 
 ---
 

@@ -21,3 +21,14 @@
 4. **Diseño Visual Fijo y Modo Diurno (Light Mode)**:
    - Las proporciones de la interfaz de Análisis Avanzado deben permanecer mediante `stretch` layout fijos y no mediante `QSplitter` dinámicos. Esto preserva la intención de "diseño de precisión" sin que el usuario desajuste los márgenes accidentalmente.
    - **Estricta Política de Tema Diurno**: Todo desarrollo de interfaz gráfica debe apuntar al modo diurno (Daylight Mode). Está prohibido el uso de colores neón o temas oscuros. Usa grises claros (`#F0F0F0`, `#FAFAFA`, `#FFFFFF`) para fondos y textos oscuros (`#1A1A1A`) para máximo contraste simulando ambientes de ingeniería con luz natural.
+
+5. **Procesamiento de Datos Vectoriales y Gráficos**:
+   - Todo cálculo masivo sobre la telemetría extraída de SQLite DEBE convertirse a matrices de `numpy` puras (`np.array`) de forma temprana (ej: en `get_lap_data_vectorized`).
+   - Evita iterar sobre listas nativas de Python (`for row in data`) para procesar 100,000+ puntos antes de graficar. Usa operaciones vectorizadas (Ej: `lap_speed / 3.6 * dt`).
+
+6. **Motores Matemáticos y Seguridad**:
+   - **Prohibido el uso de `eval()` o `exec()` nativos** para evaluar las fórmulas matemáticas definidas por el usuario (Math Channels). Usa siempre la librería `asteval` para crear un sandbox seguro que evite la ejecución de código arbitrario.
+
+7. **Heurísticas Espaciales e Integración de Tiempo**:
+   - **Nunca asumas un Frame Rate fijo (60Hz / 0.016s)** al calcular distancias, ya que el *jitter* de red acumula errores kilométricos a lo largo de una vuelta. Siempre debes calcular el `dt` real iterando sobre el arreglo de `timestamps` (`dt = np.diff(lap_time)` en segundos).
+   - Para evitar envenenar los promedios heurísticos, **DEBES excluir siempre las vueltas incompletas** (Out-lap y In-lap) al procesar métricas como la Mediana de Distancia para la detección automática de pistas contra `tracks.json`.
