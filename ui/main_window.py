@@ -12,8 +12,6 @@ from core.math_channels import MathEngine
 from core.lap_manager import LapManager
 from core.alert_engine import AlertEngine
 from services.live_client import GT7LiveClient
-from services.replay_player import GT7SessionPlayer
-
 from ui.widgets.map_widget import MapWidget
 from ui.widgets.gforce_widget import GForceWidget
 from ui.widgets.telemetry_graphs import TelemetryGraphsWidget
@@ -40,10 +38,6 @@ class TelemetryMainWindow(QMainWindow):
         self.client.connection_established.connect(self.on_connected)
         self.client.connection_lost.connect(self.on_disconnected)
         self.client.error_occurred.connect(self.on_client_error)
-        
-        self.player = GT7SessionPlayer()
-        self.player.packet_signal.connect(self._cache_packet)
-        self.player.playback_finished.connect(self.on_playback_finished)
         
         self.latest_packet = None
         self.ui_timer = QTimer()
@@ -84,20 +78,15 @@ class TelemetryMainWindow(QMainWindow):
         self.btn_connect = QPushButton("Connect Live")
         self.btn_connect.clicked.connect(self.toggle_connection)
         
-        self.btn_load = QPushButton("Load Replay")
-        self.btn_load.clicked.connect(self.load_session)
-        
-        self.btn_play = QPushButton("Play Replay")
-        self.btn_play.clicked.connect(self.toggle_playback)
-        self.btn_play.setEnabled(False)
+        self.btn_analysis = QPushButton("Historial y Análisis")
+        self.btn_analysis.clicked.connect(self.open_analysis)
         
         header_layout.addWidget(self.lbl_status)
         header_layout.addWidget(self.lbl_save_status)
         header_layout.addStretch()
         header_layout.addWidget(self.ip_input)
         header_layout.addWidget(self.btn_connect)
-        header_layout.addWidget(self.btn_load)
-        header_layout.addWidget(self.btn_play)
+        header_layout.addWidget(self.btn_analysis)
         layout.addLayout(header_layout)
         
         # --- MAIN 3-COLUMN LAYOUT ---
@@ -270,9 +259,7 @@ class TelemetryMainWindow(QMainWindow):
             self.lbl_save_status.setText("Auto-Save: Off")
             self.lbl_save_status.setStyleSheet("color: #888888; font-size: 14px;")
         else:
-            if self.player.running:
-                self.toggle_playback()
-                
+
             ip = self.ip_input.text().strip()
             self.client.console_ip = ip if ip else None
             self.client.start()
@@ -283,8 +270,8 @@ class TelemetryMainWindow(QMainWindow):
             self.lbl_status.setStyleSheet("color: #f2a900; font-weight: bold; font-size: 14px;")
             self.btn_connect.setText("Disconnect")
             self.clear_graphs()
-            
-    def load_session(self):
+
+    def open_analysis(self):
         sessions_dir = os.path.join(os.getcwd(), 'Sessions')
         master_db = os.path.join(sessions_dir, 'telemetry_master.sqlite')
         
@@ -293,37 +280,14 @@ class TelemetryMainWindow(QMainWindow):
             return
             
         from ui.widgets.advanced_analysis_dialog import AdvancedAnalysisDialog
-        from PyQt6.QtWidgets import QDialog
         
         try:
             dialog = AdvancedAnalysisDialog(db_path=master_db, session_id=None, parent=self)
-            if dialog.exec() == QDialog.DialogCode.Accepted:
-                if dialog.action_type == "PLAY" and dialog.selected_id:
-                    self.player.load(master_db, dialog.selected_id)
-                    self.player.play()
-                    self.btn_play.setEnabled(True)
-                    self.lbl_status.setText(f"Status: Playing Session #{dialog.selected_id}")
-                    self.lbl_status.setStyleSheet("color: #00ff7f; font-weight: bold; font-size: 14px;")
-                    self.btn_connect.setEnabled(False)
+            dialog.exec()
         except Exception as e:
-            self.lbl_status.setText(f"Status: Error loading sessions ({e})")
+            self.lbl_status.setText(f"Status: Error opening analysis ({e})")
             import logging
-            logging.error(f"Failed to load sessions: {e}")
-            
-
-    def toggle_playback(self):
-        if self.player.running:
-            self.player.stop()
-            self.btn_play.setText("Play Replay")
-        else:
-            if self.client.running:
-                self.toggle_connection()
-            
-            self.clear_graphs()
-            self.player.play()
-            self.btn_play.setText("Stop Replay")
-            self.lbl_status.setText("Status: Playing Replay")
-            self.lbl_status.setStyleSheet("color: #66fcf1; font-weight: bold; font-size: 14px;")
+            logging.error(f"Failed to open analysis: {e}")
 
     def clear_graphs(self):
         self.map_widget.clear()
@@ -335,12 +299,6 @@ class TelemetryMainWindow(QMainWindow):
         self.lap_manager = LapManager()
         self.alert_engine = AlertEngine()
         self.latest_delta_ms = None
-
-    @pyqtSlot()
-    def on_playback_finished(self):
-        self.btn_play.setText("Play Replay")
-        self.lbl_status.setText("Status: Replay Finished")
-        self.lbl_status.setStyleSheet("color: #45a29e; font-weight: bold; font-size: 14px;")
 
     @pyqtSlot(str)
     def on_connected(self, ip):
@@ -448,5 +406,4 @@ class TelemetryMainWindow(QMainWindow):
 
     def closeEvent(self, event):
         self.client.stop()
-        self.player.stop()
         event.accept()

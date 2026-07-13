@@ -6,8 +6,8 @@ import pyqtgraph as pg
 from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout, QListWidget, 
                              QTableWidget, QTableWidgetItem, QHeaderView, QLabel,
                              QSplitter, QWidget, QListWidgetItem, QPushButton,
-                             QAbstractItemView)
-from PyQt6.QtCore import Qt
+                             QAbstractItemView, QSlider, QApplication, QProgressDialog)
+from PyQt6.QtCore import Qt, QTimer
 from ui.widgets.map_widget import MapWidget
 from core.models import parse_telemetry_packet
 from PyQt6.QtGui import QFont, QColor
@@ -39,8 +39,12 @@ class AdvancedAnalysisDialog(QDialog):
         self.laps_data = {}  
         self.best_lap = None
         self.active_lap_data = None
-        self.action_type = None  # 'PLAY' or None
         self.selected_id = session_id
+        
+        self.all_packets = []
+        self.current_packet_index = 0
+        self.playback_timer = QTimer(self)
+        self.playback_timer.timeout.connect(self.playback_tick)
         
         self.setWindowTitle(f"Análisis Avanzado & Explorador de Sesiones")
         self.setGeometry(50, 50, 1600, 900)
@@ -123,7 +127,8 @@ class AdvancedAnalysisDialog(QDialog):
         id_item = self.table_sessions.item(row, 0)
         session_id = id_item.data(Qt.ItemDataRole.UserRole)
         
-        self.btn_play.setEnabled(True)
+        self.btn_play_pause.setEnabled(True)
+        self.playback_slider.setEnabled(True)
         self._update_action_buttons()
         
         if session_id != self.session_id:
@@ -222,19 +227,39 @@ class AdvancedAnalysisDialog(QDialog):
         self.best_lap = None
         self.active_lap_data = None
         self.track_name = "Pista Desconocida"
+        self.all_packets.clear()
+        self.current_packet_index = 0
+        
+        QApplication.processEvents()
+        progress = QProgressDialog("Cargando y procesando telemetría...", "Cancelar", 0, 100, self)
+        progress.setWindowModality(Qt.WindowModality.WindowModal)
+        progress.setWindowTitle("Cargando Sesión")
+        progress.setStyleSheet("QProgressDialog { background-color: #1f2833; color: white; } QLabel { color: white; }")
+        progress.show()
+        QApplication.processEvents()
         
         try:
             with sqlite3.connect(self.db_path) as conn:
                 cursor = conn.cursor()
+                cursor.execute("SELECT count(*) FROM telemetry WHERE session_id = ?", (session_id,))
+                total_rows = cursor.fetchone()[0]
+                
                 cursor.execute("SELECT raw_packet FROM telemetry WHERE session_id = ? ORDER BY id ASC", (session_id,))
                 rows = cursor.fetchall()
                 
-                for row in rows:
+                for i, row in enumerate(rows):
+                    if i % 1000 == 0:
+                        progress.setValue(int((i / total_rows) * 50))
+                        QApplication.processEvents()
+                        if progress.wasCanceled():
+                            return
+                            
                     blob = row[0]
                     packet = parse_telemetry_packet(blob, 'C')
                     if not packet:
                         continue
                     
+                    self.all_packets.append(packet)
                     lap = packet.lap_count
                     if lap not in self.laps_data:
                         self.laps_data[lap] = LapAnalysisData(lap)
@@ -242,7 +267,11 @@ class AdvancedAnalysisDialog(QDialog):
                     
             best_time = 999999999
             
-            for lap, data in list(self.laps_data.items()):
+            for i, (lap, data) in enumerate(list(self.laps_data.items())):
+                progress.setValue(50 + int((i / len(self.laps_data)) * 50))
+                QApplication.processEvents()
+                if progress.wasCanceled():
+                    return
                 if len(data.packets) < 100:
                     del self.laps_data[lap]
                     continue
@@ -354,6 +383,23 @@ class AdvancedAnalysisDialog(QDialog):
             self.setWindowTitle(f"Análisis Avanzado - {self.track_name} (Sesión #{session_id})")
             self._populate_laps_list()
             
+            if self.all_packets:
+                self.playback_slider.setRange(0, len(self.all_packets) - 1)
+                self.playback_slider.setValue(0)
+                self.update_playback_ui(0)
+            
+            if self.best_lap in self.laps_data:
+                bt = self.laps_data[self.best_lap].lap_time
+                if bt < 999999:
+                    mins = int(bt // 60000)
+                    secs = int((bt % 60000) / 1000)
+                    mils = int(bt % 1000)
+                    self.lbl_playback_best.setText(f"Best L{self.best_lap}: {mins}:{secs:02d}.{mils:03d}")
+            else:
+                self.lbl_playback_best.setText("Best: --:--.---")
+                
+            progress.setValue(100)
+            
         except Exception as e:
             import logging
             logging.error(f"Error loading telemetry for analysis: {e}")
@@ -406,10 +452,30 @@ class AdvancedAnalysisDialog(QDialog):
         btn_action_layout.addWidget(self.btn_lock)
         btn_action_layout.addWidget(self.btn_delete)
         
-        self.btn_play = QPushButton("▶ Reproducir Telemetría")
-        self.btn_play.setStyleSheet("background-color: #45a29e; color: white; font-weight: bold; padding: 12px; border-radius: 5px;")
-        self.btn_play.setEnabled(False)
-        self.btn_play.clicked.connect(self.on_play_clicked)
+        playback_layout = QVBoxLayout()
+        self.btn_play_pause = QPushButton("▶ Reproducir Sesión")
+        self.btn_play_pause.setStyleSheet("background-color: #45a29e; color: white; font-weight: bold; padding: 12px; border-radius: 5px;")
+        self.btn_play_pause.setEnabled(False)
+        self.btn_play_pause.clicked.connect(self.toggle_playback)
+        
+        slider_layout = QHBoxLayout()
+        self.lbl_playback_time = QLabel("00:00.000")
+        self.lbl_playback_time.setStyleSheet("color: #a3e4d7; font-weight: bold; font-family: Consolas;")
+        
+        self.playback_slider = QSlider(Qt.Orientation.Horizontal)
+        self.playback_slider.setEnabled(False)
+        self.playback_slider.valueChanged.connect(self.on_slider_moved)
+        self.playback_slider.setStyleSheet("QSlider::handle:horizontal { background-color: #66fcf1; width: 12px; margin: -4px 0; border-radius: 6px; } QSlider::groove:horizontal { background: #1f2833; height: 4px; }")
+        
+        self.lbl_playback_best = QLabel("Best: --:--.---")
+        self.lbl_playback_best.setStyleSheet("color: #f2a900; font-weight: bold; font-family: Consolas;")
+        
+        slider_layout.addWidget(self.lbl_playback_time)
+        slider_layout.addWidget(self.playback_slider)
+        slider_layout.addWidget(self.lbl_playback_best)
+        
+        playback_layout.addWidget(self.btn_play_pause)
+        playback_layout.addLayout(slider_layout)
         
         lbl_list_title = QLabel("Vueltas (Multiselección)")
         lbl_list_title.setStyleSheet("font-weight: bold; font-size: 16px; color: #66fcf1; padding-top: 15px;")
@@ -427,7 +493,7 @@ class AdvancedAnalysisDialog(QDialog):
         s_layout.addWidget(lbl_sessions_title)
         s_layout.addWidget(self.table_sessions)
         s_layout.addLayout(btn_action_layout)
-        s_layout.addWidget(self.btn_play)
+        s_layout.addLayout(playback_layout)
         
         laps_container = QWidget()
         l_layout = QVBoxLayout(laps_container)
@@ -507,10 +573,78 @@ class AdvancedAnalysisDialog(QDialog):
             
         self.refresh_plot()
         
-    def on_play_clicked(self):
-        self.action_type = "PLAY"
-        self.accept()
+    def toggle_playback(self):
+        if self.playback_timer.isActive():
+            self.playback_timer.stop()
+            self.btn_play_pause.setText("▶ Reproducir Sesión")
+        else:
+            if not self.all_packets: return
+            self.playback_timer.start(16)
+            self.btn_play_pause.setText("⏸ Pausar")
+            
+    def playback_tick(self):
+        if not self.all_packets: return
+        self.current_packet_index += 1
+        if self.current_packet_index >= len(self.all_packets):
+            self.current_packet_index = 0
+            self.toggle_playback()
+            
+        self.playback_slider.blockSignals(True)
+        self.playback_slider.setValue(self.current_packet_index)
+        self.playback_slider.blockSignals(False)
+        self.update_playback_ui(self.current_packet_index)
         
+    def on_slider_moved(self, value):
+        self.current_packet_index = value
+        self.update_playback_ui(self.current_packet_index)
+        
+    def update_playback_ui(self, index):
+        if not self.all_packets or index >= len(self.all_packets): return
+        packet = self.all_packets[index]
+        
+        if packet.position:
+            self.map_widget.set_crosshair(packet.position[0], packet.position[2])
+            
+        
+        # Calculate time based on packet index assuming 60fps
+        # Or even better, if we have active_lap_data and the packet belongs to it, we can get precise time
+        cur_time_ms = index * (1000.0 / 60.0)
+        
+        if self.active_lap_data and len(self.active_lap_data.distance) > 0:
+            lap = packet.lap_count
+            if lap == self.active_lap_data.lap_number:
+                for i, p in enumerate(self.active_lap_data.packets):
+                    if p == packet or i == len(self.active_lap_data.packets)-1:
+                        if i < len(self.active_lap_data.distance):
+                            dist = self.active_lap_data.distance[i]
+                            self.vline.setPos(dist)
+                        if i < len(self.active_lap_data.time_ms):
+                            cur_time_ms = self.active_lap_data.time_ms[i] * 1000.0
+                        break
+                        
+        mins = int(cur_time_ms // 60000)
+        secs = int((cur_time_ms % 60000) / 1000)
+        mils = int(cur_time_ms % 1000)
+        self.lbl_playback_time.setText(f"L{packet.lap_count} - {mins}:{secs:02d}.{mils:03d}")
+
+    def keyPressEvent(self, event):
+        if not self.all_packets:
+            super().keyPressEvent(event)
+            return
+            
+        if event.key() == Qt.Key.Key_Space:
+            self.toggle_playback()
+            event.accept()
+        elif event.key() == Qt.Key.Key_Right:
+            new_idx = min(self.current_packet_index + 60, len(self.all_packets) - 1)
+            self.playback_slider.setValue(new_idx)
+            event.accept()
+        elif event.key() == Qt.Key.Key_Left:
+            new_idx = max(self.current_packet_index - 60, 0)
+            self.playback_slider.setValue(new_idx)
+            event.accept()
+        else:
+            super().keyPressEvent(event)        
     def mouseMoved(self, evt):
         pos = evt[0]
         if self.p_speed.sceneBoundingRect().contains(pos):
