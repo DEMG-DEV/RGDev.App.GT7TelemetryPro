@@ -30,6 +30,17 @@ Este no es un simple visor de números; es un motor matemático y analítico en 
 
 ---
 
+## 🏁 Análisis Avanzado Post-Sesión (Zero-Friction UX)
+
+Al terminar de correr o cargar una repetición SQLite, GT7 Telemetry Pro despliega su **Módulo de Análisis Avanzado**, optimizado para lectura instantánea sin gráficos abrumadores:
+
+*   **Identificación Topográfica Automática (Hard Filter):** Incorpora un Integrador Matemático a 60 Hz que calcula tu distancia y aplica un filtro físico estricto (tolerancia de 200m) contra una base de datos de **122 trazados oficiales** para detectar exactamente en qué pista corriste (¡incluso diferencia entre Fuji y Willow Springs!).
+*   **Comparación de Múltiples Vueltas (Multi-Lap Overlay):** Selecciona múltiples vueltas al mismo tiempo (Checkboxes) y compáralas instantáneamente. La gráfica principal de Velocidad (Speed Trace) dibujará los trazados encimados con colores distintivos.
+*   **Tablas de Datos Dinámicas (Multi-Columna):** ¡Adiós al ruido visual! Todos los datos complejos (RPM, Acelerador, Frenos) se resumen en **Data Grids**. Al comparar múltiples vueltas, las tablas generan columnas nuevas dinámicamente y el texto adopta el color de su respectiva gráfica para facilitar la lectura.
+*   **Segmentación Automática de Curvas:** Un algoritmo escanea la telemetría reconociendo caídas de velocidad para autodetectar tus curvas y listar tus velocidades de Entrada, Ápice y % Freno Máximo.
+
+---
+
 ## 💾 Motor de Base de Datos SQLite (60 Hz)
 
 El proyecto abandona las capturas crudas en favor de un enfoque *Big Data*:

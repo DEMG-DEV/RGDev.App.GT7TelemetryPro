@@ -49,10 +49,13 @@ class AlertWidget(QWidget):
         
         # Mantener solo las últimas 3 alertas para no desbordar la pantalla
         while len(self.alert_labels) > 3:
-            oldest = self.alert_labels.pop(0)
+            oldest = self.alert_labels[0]
             self._remove_alert(oldest)
             
     def _remove_alert(self, label: QLabel):
         if label in self.alert_labels:
             self.alert_labels.remove(label)
-        label.deleteLater()
+            try:
+                label.deleteLater()
+            except RuntimeError:
+                pass

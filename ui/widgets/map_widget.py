@@ -25,6 +25,8 @@ class MapWidget(QGroupBox):
         self.plot_widget.addItem(self.scatter)
         
         self.car_dot = self.plot_widget.plot(pen=None, symbol='o', symbolBrush='w', symbolSize=10)
+        self.crosshair = self.plot_widget.plot(pen=None, symbol='+', symbolBrush='r', symbolSize=15)
+
         
         layout.addWidget(self.plot_widget)
         self.setLayout(layout)
@@ -53,9 +55,15 @@ class MapWidget(QGroupBox):
             self.scatter.setData(x=list(self.map_x), y=list(self.map_z), brush=list(self.colors))
             self.car_dot.setData([self.map_x[-1]], [self.map_z[-1]])
             
+    def set_crosshair(self, x: float, z: float):
+        if hasattr(self, 'crosshair'):
+            self.crosshair.setData([x], [z])
+            
     def clear(self):
         self.map_x.clear()
         self.map_z.clear()
         self.colors.clear()
         self.scatter.setData([], [])
         self.car_dot.setData([], [])
+        if hasattr(self, 'crosshair'):
+            self.crosshair.setData([], [])

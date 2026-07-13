@@ -293,7 +293,8 @@ class TelemetryMainWindow(QMainWindow):
             return
             
         import sqlite3
-        from PyQt6.QtWidgets import QInputDialog
+        from ui.widgets.session_browser import SessionBrowserDialog
+        from PyQt6.QtWidgets import QDialog
         
         try:
             with sqlite3.connect(master_db) as conn:
@@ -305,43 +306,35 @@ class TelemetryMainWindow(QMainWindow):
                 self.lbl_status.setText("Status: No sessions found")
                 return
                 
-            session_items = []
-            session_ids = []
-            for s in sessions:
-                s_id, s_time, c_name, t_laps, b_lap = s
-                # Format b_lap from ms to MM:SS.ms
-                if b_lap and b_lap > 0:
-                    minutes = b_lap // 60000
-                    seconds = (b_lap % 60000) / 1000
-                    lap_str = f"{minutes:02d}:{seconds:06.3f}"
-                else:
-                    lap_str = "N/A"
-                    
-                display_text = f"#{s_id} - {s_time[:16]} | {c_name} | Laps: {t_laps} | Best: {lap_str}"
-                session_items.append(display_text)
-                session_ids.append(s_id)
+            dialog = SessionBrowserDialog(sessions, self)
+            if dialog.exec() == QDialog.DialogCode.Accepted:
+                selected_id = dialog.selected_id
+                action = dialog.action_type
                 
-            item, ok = QInputDialog.getItem(
-                self, 
-                "Select Session", 
-                "Choose a historical session to replay:", 
-                session_items, 
-                0, 
-                False
-            )
-            
-            if ok and item:
-                index = session_items.index(item)
-                selected_id = session_ids[index]
-                self.player.load(master_db, selected_id)
-                self.player.play()
-                self.btn_play.setEnabled(True)
-                self.lbl_status.setText(f"Status: Playing Session #{selected_id}")
-                self.lbl_status.setStyleSheet("color: #00ff7f; font-weight: bold; font-size: 14px;")
-                self.btn_connect.setEnabled(False)
+                if action == "ANALYSIS":
+                    self.show_quick_analysis(master_db, selected_id)
+                elif action == "PLAY":
+                    self.player.load(master_db, selected_id)
+                    self.player.play()
+                    self.btn_play.setEnabled(True)
+                    self.lbl_status.setText(f"Status: Playing Session #{selected_id}")
+                    self.lbl_status.setStyleSheet("color: #00ff7f; font-weight: bold; font-size: 14px;")
+                    self.btn_connect.setEnabled(False)
         except Exception as e:
             self.lbl_status.setText(f"Status: Error loading sessions ({e})")
+            import logging
             logging.error(f"Failed to load sessions: {e}")
+            
+    def show_quick_analysis(self, master_db, session_id):
+        from ui.widgets.advanced_analysis_dialog import AdvancedAnalysisDialog
+        try:
+            dialog = AdvancedAnalysisDialog(master_db, session_id, self)
+            dialog.exec()
+        except Exception as e:
+            from PyQt6.QtWidgets import QMessageBox
+            QMessageBox.critical(self, "Error", f"Error cargando el análisis avanzado: {e}")
+            import logging
+            logging.error(f"Failed to open advanced analysis: {e}")
             
     def toggle_playback(self):
         if self.player.running:

@@ -238,3 +238,10 @@ Create a CLI application. Use `colorama` for a beautiful, clean dashboard termin
 - Automatic lap logging, saving telemetry outputs as clean CSV/JSON arrays on completed laps.
 
 Make the generated system resilient and easy to start!
+
+---
+
+### 7. TRACK DETECTION HEURISTICS
+To map raw telemetry to a physical track without explicit API support, the system correlates the final lap `distance` (meters) against a known database (`data/tracks.json`).
+- **Hard Filter**: The system MUST reject any track match where the absolute difference between `total_dist` and `track.length_m` is strictly greater than `200` meters.
+- **Scoring Weights**: Track detection relies primarily on minimizing physical length differences (heavy penalty for deviation), followed by elevation changes (medium penalty), and corner count differences (low penalty).

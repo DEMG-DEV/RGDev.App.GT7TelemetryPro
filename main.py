@@ -10,7 +10,12 @@ logging.basicConfig(
     filemode='a'
 )
 
+import signal
+
 def main():
+    # Habilitar Ctrl+C (SIGINT) nativo en PyQt6
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
+    
     app = QApplication(sys.argv)
     window = TelemetryMainWindow()
     window.show()
