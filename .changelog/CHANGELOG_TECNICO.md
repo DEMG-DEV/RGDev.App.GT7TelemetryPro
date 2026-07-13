@@ -5,6 +5,32 @@
 
 ---
 
+## Docs: Actualización de screenshots y especificaciones de IA (Light Mode)
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-13 08:52:07 |
+| **Autor** | David Mendez (demg@outlook.com) |
+| **Branch** | master |
+| **Tipo** | Docs |
+
+### Archivos Modificados
+
+| Archivo | Estado | Descripción del Cambio |
+|---------|--------|----------------------|
+| `.agents/AGENTS.md` | Modificado | Inclusión de directriz estricta para forzar diseños "Modo Diurno" en la generación de GUI por agentes. |
+| `.ai/architecture.md` | Modificado | Actualización de la documentación de capa UI señalando la implementación de esquemas de alto contraste diurno. |
+| `README.md` | Modificado | Adición de nota de diseño sobre el entorno Pit-Wall y regeneración de las miniaturas de documentación. |
+| `docs/main_window.png` | Modificado | Captura actualizada del dashboard principal en Modo Claro. |
+| `docs/analysis_mode.png` | Modificado | Captura actualizada de la herramienta de Análisis Avanzado exhibiendo el renderizado SQLite en Modo Claro. |
+
+### Detalle Técnico
+
+Se actualizaron los archivos de contexto persistente del repositorio para reflejar la última migración arquitectónica a una interfaz de modo diurno (*Light Mode*). Se inyectaron comandos en `.agents/AGENTS.md` para obligar a los agentes IA a respetar la paleta diurna de colores de aquí en adelante.
+Además, se ejecutó un script iterativo usando `QTimer` para instanciar las ventanas PyQt6 de forma asíncrona, conectarse a la BD `telemetry_master.sqlite` para poblar datos y emplear `QWidget.grab()` con el fin de generar las nuevas capturas de pantalla de la interfaz actualizada en el directorio `docs/`.
+
+---
+
 ## Refactor: Implementación de tema visual "Daylight" (Light Mode)
 
 | Campo | Detalle |

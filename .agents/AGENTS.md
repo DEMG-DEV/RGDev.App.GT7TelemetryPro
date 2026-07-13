@@ -18,5 +18,6 @@
    - Al ejecutar `VACUUM` u operaciones globales de BD, nunca lo hagas dentro de una transacción `WITH` iniciada por `sqlite3`.
    - El esquema usa una columna `is_locked` en la tabla `sessions` para la protección anti-borrado.
 
-4. **Diseño Visual Fijo (UI)**:
+4. **Diseño Visual Fijo y Modo Diurno (Light Mode)**:
    - Las proporciones de la interfaz de Análisis Avanzado deben permanecer mediante `stretch` layout fijos y no mediante `QSplitter` dinámicos. Esto preserva la intención de "diseño de precisión" sin que el usuario desajuste los márgenes accidentalmente.
+   - **Estricta Política de Tema Diurno**: Todo desarrollo de interfaz gráfica debe apuntar al modo diurno (Daylight Mode). Está prohibido el uso de colores neón o temas oscuros. Usa grises claros (`#F0F0F0`, `#FAFAFA`, `#FFFFFF`) para fondos y textos oscuros (`#1A1A1A`) para máximo contraste simulando ambientes de ingeniería con luz natural.

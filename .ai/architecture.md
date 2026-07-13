@@ -14,7 +14,7 @@ La arquitectura original era un simple visor en tiempo real. Ahora es una **Herr
 
 - **`services/`**: Se encarga de la ingestión de datos crudos (UDP, sockets, criptografía y reproducción SQLite).
 - **`core/`**: Motores de cálculo de élite (parseo de paquetes, Math Channels, Gestor de Vueltas Delta, Sistema de Alertas, y escritura SQLite con transacciones asíncronas).
-- **`ui/`**: Interfaz pura de renderizado y layouts nativos de PyQt6 / PyQtGraph.
+- **`ui/`**: Interfaz pura de renderizado y layouts nativos de PyQt6 / PyQtGraph. Implementa estrictamente un **Modo Diurno (Daylight Mode)** para alto contraste y ergonomía visual, evitando colores neón y temas oscuros.
 
 ### Capas
 

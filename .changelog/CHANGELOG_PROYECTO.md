@@ -5,6 +5,28 @@
 
 ---
 
+## 📝 Actualización del manual y capturas oficiales
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-13 08:52:07 |
+| **Responsable** | Antigravity AI |
+
+### ¿Qué se realizó?
+
+Se generaron automáticamente nuevas fotografías del sistema (capturas de pantalla) mostrando el recién estrenado "Modo Diurno" blanco y luminoso. Estas imágenes fueron incrustadas en el manual del proyecto (README) para que cualquier persona que visite la página pueda ver de inmediato el aspecto profesional y moderno de la plataforma. Además, se le indicó al sistema de Inteligencia Artificial que no debe volver a usar diseños oscuros en el futuro.
+
+### ¿Qué significa para el proyecto?
+
+- **Presentación Impecable:** El escaparate principal de nuestro proyecto ahora refleja el estado actual del producto con su estética más reciente.
+- **Control de Calidad (IA):** Ahora el sistema "sabe" por sus propias reglas que el modo blanco/claro es el estándar del proyecto, previniendo así errores de diseño en futuras modificaciones.
+
+### ¿Qué va a notar el usuario/cliente?
+
+Al leer la portada principal del código, verás dos espectaculares imágenes nuevas donde la plataforma se luce por completo, mostrando su interfaz gris clara, blanca y con datos reales simulando un análisis en los pits.
+
+---
+
 ## ✅ Implementación de Modo Diurno y mejora de visibilidad
 
 | Campo | Detalle |
