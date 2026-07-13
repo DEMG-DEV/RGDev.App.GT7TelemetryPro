@@ -109,4 +109,6 @@ Si deseas generar una aplicación empaquetada (`GT7TelemetryPro.app`) para ejecu
    ```bash
    ./build_macos.sh
    ```
-3. ¡Listo! Tu app nativa aparecerá en la carpeta `dist/`. Al iniciarla, la aplicación aislará tu base de datos y tus registros en una carpeta segura (`~/Documents/GT7TelemetryPro/`) para proteger el sistema de archivos de tu Mac.
+3. ¡Listo! Tu app nativa aparecerá en la carpeta `dist/`. Al iniciarla, la aplicación aislará tu base de datos y tus registros de forma cruzada para proteger tu sistema:
+   * **macOS:** `~/Library/Application Support/GT7TelemetryPro/`
+   * **Windows:** `%APPDATA%\GT7TelemetryPro\`

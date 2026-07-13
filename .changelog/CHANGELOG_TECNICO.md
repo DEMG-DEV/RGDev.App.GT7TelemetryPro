@@ -1,5 +1,22 @@
 # 📋 Registro Técnico de Cambios
 
+## Migración a Directorios de Datos del Sistema (Cross-Platform)
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-13 14:11:00 |
+| **Autor** | Antigravity AI |
+| **Componentes** | `main.py`, `README.md`, `AGENTS.md` |
+| **Tipo** | Arquitectura / Sistema |
+
+### Descripción Técnica
+- **Resolución Dinámica de Rutas:** Se reemplazó el directorio duro `~/Documents/GT7TelemetryPro` por una función cruzada `get_app_data_dir()` en `main.py`.
+- **macOS:** El CWD ahora se inyecta en `~/Library/Application Support/GT7TelemetryPro`, que es la ruta nativa obligatoria de Apple para bases de datos locales, perfiles de usuario y cachés de aplicaciones que no deben mezclarse con los archivos visibles del usuario.
+- **Windows:** El CWD ahora resuelve la variable de entorno `%APPDATA%`, derivando típicamente en `C:\Users\Usuario\AppData\Roaming\GT7TelemetryPro`.
+- **Linux:** Implementado el estándar XDG base (`~/.local/share/GT7TelemetryPro`) como método de "fallback".
+- Documentación de instalación y reglas de agentes (`AGENTS.md`) actualizadas acorde a esta nueva convención estricta.
+
+
 ## Refactorización Visual de Documentación
 
 | Campo | Detalle |

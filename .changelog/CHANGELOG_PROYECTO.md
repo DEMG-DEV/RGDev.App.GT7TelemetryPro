@@ -1,5 +1,21 @@
 # 📊 Registro de Avances del Proyecto
 
+## Guardado de Datos Automático a Nivel Sistema
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-13 14:11:00 |
+| **Autor** | Antigravity AI |
+| **Fase** | Arquitectura |
+
+### Resumen Ejecutivo
+Para evitar que la carpeta de "Documentos" se llene de archivos técnicos del sistema, hemos actualizado la forma en que la aplicación guarda la información por detrás:
+- Ahora, si usas Windows, el sistema buscará inteligentemente tu carpeta de datos de programa oculta (`AppData`).
+- Si usas Mac, guardará toda la información en la bóveda de sistema que Apple destina para esto (`Library/Application Support`).
+
+Esto hace que la aplicación se comporte exactamente igual que aplicaciones súper profesionales como Spotify, Discord o Chrome, guardando tus telemetrías y historiales de manera transparente y segura, sin estorbar entre tus fotos o documentos personales.
+
+
 ## Renovación del Manual de Usuario y Presentación
 
 | Campo | Detalle |

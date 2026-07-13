@@ -33,9 +33,9 @@
    - **Nunca asumas un Frame Rate fijo (60Hz / 0.016s)** al calcular distancias, ya que el *jitter* de red acumula errores kilométricos a lo largo de una vuelta. Siempre debes calcular el `dt` real iterando sobre el arreglo de `timestamps` (`dt = np.diff(lap_time)` en segundos).
    - Para evitar envenenar los promedios heurísticos, **DEBES excluir siempre las vueltas incompletas** (Out-lap y In-lap) al procesar métricas como la Mediana de Distancia para la detección automática de pistas contra `tracks.json`.
 
-8. **Empaquetado y Compatibilidad macOS (App Bundles)**:
-   - Al compilar para macOS mediante PyInstaller o cx_Freeze, **NUNCA** asumas que `os.getcwd()` es el directorio de la aplicación. Cuando el usuario da doble clic a un `.app` bundle, macOS establece el directorio de trabajo en la raíz del disco duro `/` (Read-Only). 
-   - Siempre cambia el directorio de trabajo dinámicamente a una ubicación de usuario segura como `~/Documents/[NombreApp]` en la primera línea de `main.py` antes de inicializar bases de datos SQLite o sistemas de *Logging*.
+8. **Empaquetado y Compatibilidad macOS/Windows (App Bundles)**:
+   - Al compilar mediante PyInstaller o cx_Freeze, **NUNCA** asumas que `os.getcwd()` es el directorio de la aplicación. 
+   - Siempre cambia el directorio de trabajo dinámicamente a una ubicación de datos del sistema estándar (Ej: `~/Library/Application Support/GT7TelemetryPro` en Mac, o `%APPDATA%\\GT7TelemetryPro` en Windows) en la primera línea de `main.py` antes de inicializar bases de datos SQLite o sistemas de *Logging*.
    - Los iconos en `BUNDLE` de macOS exigen formato Apple Icon Image `.icns`. No usar `.png` directo en la definición de la especificación de PyInstaller.
 
 9. **Estilos de Botones (Cirugía PyQt6 en macOS)**:
