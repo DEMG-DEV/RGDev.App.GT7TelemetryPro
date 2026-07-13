@@ -30,6 +30,27 @@ El pipeline `.github/workflows/release.yml` se engancha al evento `release`, ini
 
 ---
 
+## Bug Fix: Freeze during Replay session load
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-12 22:21:00 |
+| **Autor** | David Mendez (demg@outlook.com) |
+| **Branch** | master |
+| **Tipo** | Bug Fix |
+
+### Archivos Modificados
+
+| Archivo | Estado | Descripción del Cambio |
+|---------|--------|----------------------|
+| `ui/widgets/advanced_analysis_dialog.py` | Modificado | Se eliminaron referencias obsoletas a `table_corners`. |
+
+### Detalle Técnico
+
+Tras reemplazar `table_corners` con `LiveTelemetryWidget` en el layout, el método `_load_data` todavía intentaba invocar `self.table_corners.setColumnCount(1)`. Dado que esta llamada se encontraba fuera del bloque `try-except`, se lanzaba un `AttributeError` sin control que congelaba el flujo de carga antes de renderizar la UI de repetición. Se limpiaron las referencias a dicho objeto para restaurar el flujo.
+
+---
+
 ## Feature: Dashboard de Telemetría en Vivo (Análisis Avanzado)
 
 | Campo | Detalle |

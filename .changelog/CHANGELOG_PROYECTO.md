@@ -26,6 +26,27 @@ Los usuarios finalmente podrán entrar a la sección de "Releases" (Lanzamientos
 
 ---
 
+## ✅ Corrección de Error de Carga en Replay
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-12 22:21:00 |
+| **Responsable** | David Mendez |
+
+### ¿Qué se realizó?
+
+Se corrigió un error interno que dejaba la pantalla de "Análisis Avanzado" trabada en "Cargando Sesión #...". 
+
+### ¿Qué significa para el proyecto?
+
+- **Estabilidad:** La carga de repeticiones e historial vuelve a funcionar perfectamente.
+
+### ¿Qué va a notar el usuario/cliente?
+
+Al momento de abrir una repetición histórica, los gráficos y el mapa cargarán inmediatamente sin dejar la ventana bloqueada, y podrás disfrutar de tu nuevo panel de telemetría de muro de boxes sin problemas.
+
+---
+
 ## ✅ Nuevo Tablero de Telemetría en Vivo (Muro de Boxes)
 
 | Campo | Detalle |

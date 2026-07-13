@@ -223,7 +223,6 @@ class AdvancedAnalysisDialog(QDialog):
         self.list_laps.clear()
         self.p_speed.clear()
         self.table_summary.setColumnCount(1)
-        self.table_corners.setColumnCount(1)
         self.map_widget.clear()
         self.best_lap = None
         self.active_lap_data = None
@@ -739,35 +738,7 @@ class AdvancedAnalysisDialog(QDialog):
                 self.table_summary.setItem(row, col, it)
                 
         if not checked_data:
-            self.table_corners.setRowCount(0)
             return
-            
-        all_corners = [self._detect_corners(d) for d, _ in checked_data]
-        max_corners = max([len(c) for c in all_corners]) if all_corners else 0
-        
-        self.table_corners.setColumnCount(1 + len(checked_data))
-        headers_corners = ["Curva"] + [f"V. {d.lap_number} (In / Ápice / Freno)" for d, _ in checked_data]
-        self.table_corners.setHorizontalHeaderLabels(headers_corners)
-        self.table_corners.setRowCount(max_corners)
-        
-        for row in range(max_corners):
-            c_item = QTableWidgetItem(f"Curva {row+1}")
-            c_item.setFont(QFont("Arial", 11, QFont.Weight.Bold))
-            self.table_corners.setItem(row, 0, c_item)
-            
-            for col_idx, (corners, (_, color_str)) in enumerate(zip(all_corners, checked_data)):
-                col = col_idx + 1
-                if row < len(corners):
-                    c = corners[row]
-                    txt = f"{c['entry_speed']:.0f} / {c['apex_speed']:.0f} / {c['max_brake']:.0f}%"
-                    it = QTableWidgetItem(txt)
-                    it.setForeground(QColor(color_str))
-                    it.setFont(QFont("Arial", 11, QFont.Weight.Bold))
-                else:
-                    it = QTableWidgetItem("-")
-                    it.setForeground(QColor(color_str))
-                it.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
-                self.table_corners.setItem(row, col, it)
 
     def _detect_corners(self, data):
         corners = []
