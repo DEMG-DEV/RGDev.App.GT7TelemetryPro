@@ -14,6 +14,7 @@
 3. **Arquitectura SQLite**:
    - Este proyecto utiliza *Write-Ahead Logging* (WAL) y *Autocommit* para optimizar la escritura en ráfagas de alta densidad de datos. 
    - Se utiliza una **Base de Datos Maestra Única** (`telemetry_master.sqlite`) en lugar de múltiples archivos. Esta base de datos agrupa el historial en la tabla `sessions` vinculándola con la telemetría a través de la llave foránea `session_id`.
+   - **Rutas de Base de Datos:** El archivo maestro `telemetry_master.sqlite` SIEMPRE debe buscarse y escribirse en el directorio raíz de la aplicación (el CWD), **JAMÁS** debes crear o requerir subcarpetas adicionales como `Sessions/`.
    - **Identidad del Auto Dinámica**: El sistema de escritura de la base de datos de sesión (`SessionDatabaseWriter`) NUNCA debe confiar ciegamente en el ID del primer paquete recibido, dado que GT7 en la parrilla de salida emite telemetría de los oponentes IA. Debe monitorear las frecuencias del ID durante toda la carrera y reescribir la fila de la sesión con el ID más prevalente al detenerse.
    - Al ejecutar `VACUUM` u operaciones globales de BD, nunca lo hagas dentro de una transacción `WITH` iniciada por `sqlite3`.
    - El esquema usa una columna `is_locked` en la tabla `sessions` para la protección anti-borrado.

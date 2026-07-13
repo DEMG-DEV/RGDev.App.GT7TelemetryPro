@@ -238,7 +238,7 @@ Create a **PyQt6 Desktop Application**. Use `pyqtgraph` for a beautiful, clean d
 - A `MainWindow` layout with an IP configuration panel.
 - Real-time widgets for telemetry parameters (Vehicle velocity, Gear state, RPM, throttle/brake, Delta times).
 - A Track Map (`MapWidget`) drawn as a scatter-plot heatmap of racing lines.
-- Automatic SQLite database logging (`Sessions/` directory) for Replay/Post-Session analysis via an `AdvancedAnalysisDialog`.
+- Automatic SQLite database logging (in the AppData directory) for Replay/Post-Session analysis via an `AdvancedAnalysisDialog`.
 
 Make the generated system resilient and easy to start!
 
