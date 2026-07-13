@@ -1,5 +1,20 @@
 # 📊 Registro de Avances del Proyecto
 
+## Sistema de Versiones y Actualizaciones Automáticas
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-13 14:38:00 |
+| **Autor** | Antigravity AI |
+| **Fase** | Distribución y Escalabilidad |
+
+### Resumen Ejecutivo
+Para evitar que tengas que contactar a tus usuarios cada vez que hay una mejora, hemos dotado a la aplicación de su propio sistema nervioso para actualizarse sola:
+- **Bienvenido a la Versión 1.0.0:** El programa ahora exhibe orgullosamente su número de versión en la barra de título principal.
+- **Escáner de Nube:** Cada vez que el programa se abre, interroga silenciosamente a GitHub buscando si publicaste un *Release* más nuevo.
+- **Autoinstalador Invisible:** Si el usuario acepta la actualización, el programa descargará los archivos correspondientes a su sistema operativo (Mac o Windows), se apagará por un segundo, intercambiará su "cerebro" por el nuevo, y volverá a encenderse mágicamente actualizado, sin que el usuario tenga que lidiar con desinstalaciones, carpetas o archivos comprimidos.
+
+
 ## Corrección en la Carga de Sesiones Anteriores
 
 | Campo | Detalle |

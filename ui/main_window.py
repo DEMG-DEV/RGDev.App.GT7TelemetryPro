@@ -2,7 +2,7 @@ import os
 import datetime
 from PyQt6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, 
                              QLabel, QLineEdit, QPushButton, QGridLayout, 
-                             QGroupBox, QFileDialog, QMessageBox)
+                             QGroupBox, QFileDialog, QMessageBox, QProgressDialog)
 from PyQt6.QtCore import Qt, pyqtSlot, QTimer
 from PyQt6.QtGui import QFont
 
@@ -16,13 +16,15 @@ from ui.widgets.map_widget import MapWidget
 from ui.widgets.gforce_widget import GForceWidget
 from ui.widgets.telemetry_graphs import TelemetryGraphsWidget
 from ui.widgets.delta_widget import DeltaWidget
+from core.config import APP_VERSION
 from ui.widgets.alert_widget import AlertWidget
 from ui.workspace import ProfessionalWorkspace
+from services.updater import UpdateChecker, UpdateDownloader, apply_update_and_restart
 
 class TelemetryMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("GT7 Telemetry Pro - Native Interface")
+        self.setWindowTitle(f"GT7 Telemetry Pro - Native Interface v{APP_VERSION}")
         from PyQt6.QtGui import QIcon
         import os
         icon_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'app_icon.png')
@@ -51,7 +53,49 @@ class TelemetryMainWindow(QMainWindow):
         self.ui_timer.start(33) 
         
         self.init_ui()
+        self.check_for_updates()
         
+    def check_for_updates(self):
+        self.updater = UpdateChecker()
+        self.updater.update_available.connect(self.on_update_available)
+        self.updater.error_occurred.connect(lambda e: print(f"Update Check Error: {e}"))
+        self.updater.start()
+
+    def on_update_available(self, version, download_url):
+        msg = QMessageBox()
+        msg.setWindowTitle("¡Actualización Disponible!")
+        msg.setText(f"Una nueva versión (v{version}) de GT7 Telemetry Pro está disponible.")
+        msg.setInformativeText("¿Deseas descargar e instalar la actualización ahora? El programa se reiniciará automáticamente.")
+        msg.setStandardButtons(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+        msg.setDefaultButton(QMessageBox.StandardButton.Yes)
+        
+        if msg.exec() == QMessageBox.StandardButton.Yes:
+            self.start_download(download_url)
+
+    def start_download(self, url):
+        self.progress_dialog = QProgressDialog("Descargando actualización...", "Cancelar", 0, 100, self)
+        self.progress_dialog.setWindowTitle("Descargando")
+        self.progress_dialog.setWindowModality(Qt.WindowModality.WindowModal)
+        self.progress_dialog.setMinimumDuration(0)
+        self.progress_dialog.setValue(0)
+        
+        self.downloader = UpdateDownloader(url)
+        self.downloader.progress_update.connect(self.progress_dialog.setValue)
+        self.downloader.download_complete.connect(self.on_download_complete)
+        self.downloader.error_occurred.connect(self.on_update_error)
+        
+        self.progress_dialog.canceled.connect(self.downloader.terminate)
+        self.downloader.start()
+
+    def on_download_complete(self, extract_dir):
+        self.progress_dialog.setValue(100)
+        QMessageBox.information(self, "Actualización Lista", "La actualización se ha descargado. El programa se cerrará para aplicarla y luego se reiniciará.")
+        apply_update_and_restart(extract_dir)
+
+    def on_update_error(self, err_msg):
+        self.progress_dialog.close()
+        QMessageBox.warning(self, "Error de Actualización", f"Hubo un problema al descargar la actualización:\\n{err_msg}")
+
     def load_styles(self):
         style_path = os.path.join(os.path.dirname(__file__), 'styles', 'dark_theme.qss')
         if os.path.exists(style_path):

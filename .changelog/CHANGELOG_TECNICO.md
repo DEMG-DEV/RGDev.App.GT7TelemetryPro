@@ -1,5 +1,22 @@
 # 📋 Registro Técnico de Cambios
 
+## Sistema de Actualización Automática (GitHub Releases) y Versionado
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-13 14:38:00 |
+| **Autor** | Antigravity AI |
+| **Componentes** | `core/config.py`, `services/updater.py`, `ui/main_window.py` |
+| **Tipo** | Feature / Updater |
+
+### Descripción Técnica
+- **Control de Versiones:** Implementado archivo constante `config.py` inyectando `APP_VERSION = "1.0.0"` al título principal de PyQt6.
+- **Auto-Updater Engine:** Se construyó `services/updater.py` con dos hilos (`QThread`):
+  1. `UpdateChecker`: Interroga de forma asíncrona a `api.github.com/.../releases/latest`, compara el Semantic Versioning local vs el tag y emite señales UI si hay versión superior.
+  2. `UpdateDownloader`: Descarga de forma asíncrona los *Assets* de GitHub según el OS detectado (`macOS` o `Windows`) y extrae el ZIP en los directorios temporales de AppData.
+- **Script de Relevo (Hot-Swapping):** El mayor reto técnico resuelto. Al descargar la actualización, la app compila un script temporal `updater.sh` (macOS) o `updater.bat` (Windows), lo ejecuta como un proceso huérfano (`start_new_session`), e inmediatamente detiene la aplicación principal (`sys.exit`). El script huérfano espera 2 segundos, sobreescribe los archivos viejos por los nuevos descomprimidos, y vuelve a iniciar la aplicación principal sin intervención del usuario.
+
+
 ## Corrección de Ruta de Base de Datos Maestra
 
 | Campo | Detalle |
