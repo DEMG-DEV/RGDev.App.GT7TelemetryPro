@@ -89,11 +89,11 @@ class TelemetryMainWindow(QMainWindow):
         
         self.btn_analysis = QPushButton("Historial y Análisis")
         self.btn_analysis.clicked.connect(self.open_analysis)
-        self.btn_analysis.setStyleSheet("padding: 8px; font-weight: bold; background-color: #E0E0E0;")
+        self.btn_analysis.setStyleSheet("padding: 8px 16px; font-weight: bold; background-color: #E0E0E0; border: 1px solid #CCCCCC; border-radius: 6px; color: #1A1A1A;")
         
         self.btn_pro_analysis = QPushButton("Pro Analysis")
         self.btn_pro_analysis.clicked.connect(self.open_pro_analysis)
-        self.btn_pro_analysis.setStyleSheet("padding: 8px; font-weight: bold; background-color: #5555FF; color: white;")
+        self.btn_pro_analysis.setStyleSheet("padding: 8px 16px; font-weight: bold; background-color: #007AFF; border: none; border-radius: 6px; color: white;")
         
         header_layout.addWidget(self.lbl_status)
         header_layout.addWidget(self.btn_record)

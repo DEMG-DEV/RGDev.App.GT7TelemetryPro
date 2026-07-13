@@ -161,11 +161,11 @@ class AdvancedAnalysisDialog(QDialog):
         if is_locked:
             self.btn_delete.setEnabled(False)
             self.btn_lock.setText("🔓 Desbloquear")
-            self.btn_lock.setStyleSheet("background-color: #f44336; color: white; font-weight: bold; border-radius: 5px;")
+            self.btn_lock.setStyleSheet("background-color: #f44336; color: white; font-weight: bold; border: 1px solid #d32f2f; border-radius: 6px; padding: 10px;")
         else:
             self.btn_delete.setEnabled(True)
             self.btn_lock.setText("🔒 Bloquear")
-            self.btn_lock.setStyleSheet("background-color: #f6a623; color: black; font-weight: bold; border-radius: 5px;")
+            self.btn_lock.setStyleSheet("background-color: #f6a623; color: black; font-weight: bold; border: 1px solid #d48b1c; border-radius: 6px; padding: 10px;")
             
     def toggle_lock_session(self):
         items = self.table_sessions.selectedItems()
@@ -451,12 +451,12 @@ class AdvancedAnalysisDialog(QDialog):
         btn_action_layout = QHBoxLayout()
         
         self.btn_lock = QPushButton("🔒 Bloquear")
-        self.btn_lock.setStyleSheet("background-color: #f6a623; color: black; font-weight: bold; border-radius: 5px; padding: 10px;")
+        self.btn_lock.setStyleSheet("background-color: #f6a623; color: black; font-weight: bold; border: 1px solid #d48b1c; border-radius: 6px; padding: 10px;")
         self.btn_lock.setEnabled(False)
         self.btn_lock.clicked.connect(self.toggle_lock_session)
         
         self.btn_delete = QPushButton("🗑️ Eliminar")
-        self.btn_delete.setStyleSheet("background-color: #c5c6c7; color: black; font-weight: bold; border-radius: 5px; padding: 10px;")
+        self.btn_delete.setStyleSheet("background-color: #E0E0E0; color: #1A1A1A; font-weight: bold; border: 1px solid #CCCCCC; border-radius: 6px; padding: 10px;")
         self.btn_delete.setEnabled(False)
         self.btn_delete.clicked.connect(self.delete_session)
         
@@ -465,7 +465,7 @@ class AdvancedAnalysisDialog(QDialog):
         
         playback_layout = QVBoxLayout()
         self.btn_play_pause = QPushButton("▶ Reproducir Sesión")
-        self.btn_play_pause.setStyleSheet("background-color: #CCCCCC; color: #000000; font-weight: bold; padding: 12px; border-radius: 5px;")
+        self.btn_play_pause.setStyleSheet("background-color: #E0E0E0; color: #1A1A1A; font-weight: bold; padding: 12px; border: 1px solid #CCCCCC; border-radius: 6px;")
         self.btn_play_pause.setEnabled(False)
         self.btn_play_pause.clicked.connect(self.toggle_playback)
         

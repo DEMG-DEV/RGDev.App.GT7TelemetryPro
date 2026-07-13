@@ -1,5 +1,21 @@
 # 📊 Registro de Avances del Proyecto
 
+## Mejoras de Interfaz Nativa y Soporte Oficial para Mac
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-13 13:55:00 |
+| **Autor** | Antigravity AI |
+| **Fase** | Pulido Visual y Distribución |
+
+### Resumen Ejecutivoc
+En este bloque de trabajo nos aseguramos de que GT7 Telemetry Pro no solo funcione increíble, sino que se sienta como un producto *Premium* nativo de Apple:
+- **Botones Estilizados:** Todos los botones de la aplicación fueron rediseñados para tener contornos suaves, bordes redondeados e integrarse perfectamente con el estilo visual moderno de macOS.
+- **Distribución de Un Solo Clic:** Se implementó un empaquetador automático que convierte el código en una verdadera "App de Mac" (`.app`). Ahora el usuario puede darle doble clic al ícono del programa para arrancar sin usar la consola.
+- **Seguridad de Archivos:** Las telemetrías y historiales ahora se guardan ordenadamente en la carpeta de *Documentos* del usuario, garantizando que no se pierda información ni existan bloqueos de seguridad del sistema operativo.
+- **Manual Actualizado:** El manual de usuario (README) ahora cuenta con capturas de pantalla reales y de alta resolución mostrando los gráficos de Fórmula 1 y las nuevas interfaces de análisis.
+
+
 > Este documento contiene un resumen claro y sencillo de cada avance realizado en el proyecto.
 > Está diseñado para que cualquier persona pueda entender el progreso sin necesidad de conocimientos técnicos.
 

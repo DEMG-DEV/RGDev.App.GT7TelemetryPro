@@ -72,6 +72,7 @@ class ProfessionalWorkspace(QMainWindow):
         trace_toolbar = QHBoxLayout()
         self.combo_add_trace = QComboBox()
         btn_add_trace = QPushButton("Add Trace")
+        btn_add_trace.setStyleSheet("padding: 4px 10px; font-weight: bold; background-color: #E0E0E0; border: 1px solid #CCCCCC; border-radius: 4px; color: #1A1A1A;")
         btn_add_trace.clicked.connect(self.add_custom_trace)
         trace_toolbar.addWidget(QLabel("Channel:"))
         trace_toolbar.addWidget(self.combo_add_trace)
@@ -159,6 +160,7 @@ class ProfessionalWorkspace(QMainWindow):
         self.load_session_list()
         
         btn_load_sess = QPushButton("Load Selected Laps")
+        btn_load_sess.setStyleSheet("padding: 8px 16px; font-weight: bold; background-color: #E0E0E0; border: 1px solid #CCCCCC; border-radius: 6px; color: #1A1A1A;")
         btn_load_sess.clicked.connect(self.on_load_session_clicked)
         sess_h.addWidget(QLabel("Session:"))
         sess_h.addWidget(self.combo_sessions)
@@ -179,10 +181,12 @@ class ProfessionalWorkspace(QMainWindow):
         dl.addWidget(self.table_data)
         
         btn_math = QPushButton("Open Formula Manager")
+        btn_math.setStyleSheet("padding: 8px 16px; font-weight: bold; background-color: #E0E0E0; border: 1px solid #CCCCCC; border-radius: 6px; color: #1A1A1A;")
         btn_math.clicked.connect(self.open_formula_manager)
         dl.addWidget(btn_math)
         
         btn_save_layout = QPushButton("Save Layout")
+        btn_save_layout.setStyleSheet("padding: 8px 16px; font-weight: bold; background-color: #E0E0E0; border: 1px solid #CCCCCC; border-radius: 6px; color: #1A1A1A;")
         btn_save_layout.clicked.connect(self.save_layout)
         dl.addWidget(btn_save_layout)
         

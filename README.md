@@ -122,3 +122,13 @@ El código fuente está modularizado en tres componentes críticos y fuertemente
 4. Entra a cualquier pista en GT7 y el Dashboard cobrará vida inmediatamente.
 
 > **Importante:** La telemetría solo se emite cuando estás *físicamente manejando en pista o viendo una repetición*. Los menús, boxes, y versiones limitadas como "My First Gran Turismo" no emiten el handshake UDP.
+
+### Compilación para macOS (.app)
+Si deseas generar una aplicación nativa empaquetada (`GT7TelemetryPro.app`) para ejecutar el software con un simple doble clic (sin usar la terminal), hemos preparado un script de compilación inteligente:
+
+1. Asegúrate de tener las librerías instaladas en tu entorno virtual.
+2. Ejecuta el script de compilación (automáticamente encenderá el `.venv` y empaquetará la app usando `PyInstaller` con el icono de alta resolución `.icns`):
+   ```bash
+   ./build_macos.sh
+   ```
+3. Tu aplicación empaquetada aparecerá lista para usarse dentro de la carpeta `dist/`. Al iniciarla, la aplicación aislará tu base de datos y tus registros en una carpeta segura (`~/Documents/GT7TelemetryPro/`) para proteger el sistema de archivos de macOS.
