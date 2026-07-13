@@ -1,0 +1,32 @@
+{
+    "SlipRatio_FL": {
+        "group": "Tyres",
+        "expression": "((wheelRPS_FL * tyreRadius_FL) - speed) / np.maximum(speed, 0.1)",
+        "color": "#FF5555",
+        "description": "Front Left Wheel Slip Ratio"
+    },
+    "SlipRatio_FR": {
+        "group": "Tyres",
+        "expression": "((wheelRPS_FR * tyreRadius_FR) - speed) / np.maximum(speed, 0.1)",
+        "color": "#FFaa55",
+        "description": "Front Right Wheel Slip Ratio"
+    },
+    "AeroBalance": {
+        "group": "Suspension",
+        "expression": "(suspHeight_FL + suspHeight_FR) / np.maximum((suspHeight_FL + suspHeight_FR + suspHeight_RL + suspHeight_RR), 0.001)",
+        "color": "#55FF55",
+        "description": "Front Aerodynamic Balance %"
+    },
+    "G_Total": {
+        "group": "Chassis",
+        "expression": "np.sqrt(sway**2 + surge**2 + heave**2)",
+        "color": "#5555FF",
+        "description": "Combined G-Force Vector"
+    },
+    "SteeringDelta": {
+        "group": "Driver",
+        "expression": "np.gradient(wheel_steer_angle)",
+        "color": "#FF55FF",
+        "description": "Steering Angular Velocity Delta"
+    }
+}

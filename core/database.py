@@ -187,3 +187,83 @@ class SessionDatabaseWriter:
                         batch.clear()
 
         logging.info("SessionDatabaseWriter worker thread finished cleanly.")
+
+def get_lap_data_vectorized(db_path: str, session_id: int, lap_numbers: list) -> dict:
+    """
+    Optimized SQLite query for multi-lap processing. Returns a dictionary of numpy arrays
+    representing the telemetry channels for the requested laps.
+    """
+    import numpy as np
+    from core.models import parse_telemetry_packet
+    
+    try:
+        with sqlite3.connect(db_path) as conn:
+            placeholders = ','.join('?' for _ in lap_numbers)
+            query = f"SELECT lap_count, timestamp, raw_packet FROM telemetry WHERE session_id = ? AND lap_count IN ({placeholders}) ORDER BY id"
+            cursor = conn.cursor()
+            cursor.execute(query, [session_id] + lap_numbers)
+            rows = cursor.fetchall()
+    except Exception as e:
+        import logging
+        logging.error(f"Error executing SQLite vectorization query: {e}", exc_info=True)
+        raise
+
+    data = {
+        'lap_count': [], 'timestamp': [], 'speed': [], 'throttle': [], 'brake': [],
+        'engineRPM': [], 'currentGear': [], 'suspHeight_FL': [], 'suspHeight_FR': [],
+        'suspHeight_RL': [], 'suspHeight_RR': [], 'wheelRPS_FL': [], 'wheelRPS_FR': [],
+        'wheelRPS_RL': [], 'wheelRPS_RR': [], 'tyreRadius_FL': [], 'tyreRadius_FR': [],
+        'tyreRadius_RL': [], 'tyreRadius_RR': [], 'sway': [], 'surge': [], 'heave': [],
+        'wheel_steer_angle': [], 'position_x': [], 'position_y': [], 'position_z': [],
+        'world_vel_x': [], 'world_vel_y': [], 'world_vel_z': []
+    }
+    
+    for row in rows:
+        lap = row[0]
+        ts = row[1]
+        blob = row[2]
+        
+        packet = parse_telemetry_packet(blob, 'C')
+        if not packet:
+            continue
+            
+        data['lap_count'].append(lap)
+        data['timestamp'].append(ts)
+        data['speed'].append(packet.speed_kmh)
+        data['throttle'].append(packet.throttle / 255.0)
+        data['brake'].append(packet.brake / 255.0)
+        data['engineRPM'].append(packet.engine_rpm)
+        data['currentGear'].append(packet.current_gear)
+        
+        data['suspHeight_FL'].append(packet.susp_height[0])
+        data['suspHeight_FR'].append(packet.susp_height[1])
+        data['suspHeight_RL'].append(packet.susp_height[2])
+        data['suspHeight_RR'].append(packet.susp_height[3])
+        
+        data['wheelRPS_FL'].append(packet.wheel_rps[0])
+        data['wheelRPS_FR'].append(packet.wheel_rps[1])
+        data['wheelRPS_RL'].append(packet.wheel_rps[2])
+        data['wheelRPS_RR'].append(packet.wheel_rps[3])
+        
+        data['tyreRadius_FL'].append(packet.tyre_radius[0])
+        data['tyreRadius_FR'].append(packet.tyre_radius[1])
+        data['tyreRadius_RL'].append(packet.tyre_radius[2])
+        data['tyreRadius_RR'].append(packet.tyre_radius[3])
+        
+        data['sway'].append(packet.sway or 0.0)
+        data['surge'].append(packet.surge or 0.0)
+        data['heave'].append(packet.heave or 0.0)
+        data['wheel_steer_angle'].append(packet.wheel_steer_angle or 0.0)
+        
+        data['position_x'].append(packet.position[0])
+        data['position_y'].append(packet.position[1])
+        data['position_z'].append(packet.position[2])
+        
+        data['world_vel_x'].append(packet.world_velocity[0])
+        data['world_vel_y'].append(packet.world_velocity[1])
+        data['world_vel_z'].append(packet.world_velocity[2])
+
+    for key in data:
+        data[key] = np.array(data[key], dtype=np.float32)
+        
+    return data

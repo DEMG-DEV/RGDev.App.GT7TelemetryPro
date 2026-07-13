@@ -104,8 +104,8 @@ class GT7LiveClient(TelemetryProvider):
         try:
             if hasattr(self, 'sock') and self.sock:
                 self.sock.close()
-        except Exception:
-            pass
+        except Exception as e:
+            logging.error(f"Error closing socket during stop: {e}", exc_info=True)
         
         try:
             self.raw_queue.put_nowait(None)
@@ -122,8 +122,8 @@ class GT7LiveClient(TelemetryProvider):
     def _network_capture_loop(self):
         try:
             self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 4 * 1024 * 1024)
-        except Exception:
-            pass 
+        except Exception as e:
+            logging.warning(f"Could not set SO_RCVBUF, might drop packets: {e}") 
             
         self.sock.settimeout(1.0)
         
@@ -150,12 +150,13 @@ class GT7LiveClient(TelemetryProvider):
             except Exception as e:
                 # Only log error if we are still supposed to be running (ignore closing errors)
                 if self.running and not isinstance(e, OSError):
+                    logging.error(f"Network capture error: {e}", exc_info=True)
                     self.error_occurred.emit(f"Network error: {e}")
                     
         try:
             self.sock.close()
-        except Exception:
-            pass
+        except Exception as e:
+            logging.error(f"Error closing socket at end of network loop: {e}", exc_info=True)
 
     def _parser_loop(self):
         while self.running:
@@ -192,7 +193,7 @@ class GT7LiveClient(TelemetryProvider):
                 # If a specific IP is provided, also send a unicast heartbeat to it
                 if self.console_ip and self.console_ip != '255.255.255.255':
                     self.sock.sendto(payload, (self.console_ip, self.console_port))
-            except Exception:
-                pass
+            except Exception as e:
+                logging.debug(f"Heartbeat error: {e}")
             time.sleep(1.5)
 

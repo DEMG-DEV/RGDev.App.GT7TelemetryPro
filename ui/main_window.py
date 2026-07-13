@@ -2,7 +2,7 @@ import os
 import datetime
 from PyQt6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, 
                              QLabel, QLineEdit, QPushButton, QGridLayout, 
-                             QGroupBox, QFileDialog)
+                             QGroupBox, QFileDialog, QMessageBox)
 from PyQt6.QtCore import Qt, pyqtSlot, QTimer
 from PyQt6.QtGui import QFont
 
@@ -17,11 +17,17 @@ from ui.widgets.gforce_widget import GForceWidget
 from ui.widgets.telemetry_graphs import TelemetryGraphsWidget
 from ui.widgets.delta_widget import DeltaWidget
 from ui.widgets.alert_widget import AlertWidget
+from ui.workspace import ProfessionalWorkspace
 
 class TelemetryMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("GT7 Telemetry Pro - Native Interface")
+        from PyQt6.QtGui import QIcon
+        import os
+        icon_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'app_icon.png')
+        if os.path.exists(icon_path):
+            self.setWindowIcon(QIcon(icon_path))
         self.setGeometry(50, 50, 1600, 900)
         self.load_styles()
         
@@ -83,14 +89,21 @@ class TelemetryMainWindow(QMainWindow):
         
         self.btn_analysis = QPushButton("Historial y Análisis")
         self.btn_analysis.clicked.connect(self.open_analysis)
+        self.btn_analysis.setStyleSheet("padding: 8px; font-weight: bold; background-color: #E0E0E0;")
+        
+        self.btn_pro_analysis = QPushButton("Pro Analysis")
+        self.btn_pro_analysis.clicked.connect(self.open_pro_analysis)
+        self.btn_pro_analysis.setStyleSheet("padding: 8px; font-weight: bold; background-color: #5555FF; color: white;")
         
         header_layout.addWidget(self.lbl_status)
         header_layout.addWidget(self.btn_record)
         header_layout.addWidget(self.lbl_rec_status)
         header_layout.addStretch()
+        header_layout.addWidget(QLabel("PS IP:"))
         header_layout.addWidget(self.ip_input)
         header_layout.addWidget(self.btn_connect)
         header_layout.addWidget(self.btn_analysis)
+        header_layout.addWidget(self.btn_pro_analysis)
         layout.addLayout(header_layout)
         
         # --- MAIN 3-COLUMN LAYOUT ---
@@ -302,6 +315,16 @@ class TelemetryMainWindow(QMainWindow):
             self.lbl_status.setText(f"Status: Error opening analysis ({e})")
             import logging
             logging.error(f"Failed to open analysis: {e}")
+
+    def open_pro_analysis(self):
+        db_path = os.path.join(os.getcwd(), 'Sessions', 'telemetry_master.sqlite')
+        if not os.path.exists(db_path):
+            QMessageBox.warning(self, "No Database", "No telemetry database found. Please record a session first.")
+            return
+            
+        # In this prototype, we open the pro workspace with a mock session_id=1
+        self.pro_workspace = ProfessionalWorkspace(db_path=db_path, session_id=1, live_mode=False)
+        self.pro_workspace.show()
 
     def clear_graphs(self):
         self.map_widget.clear()

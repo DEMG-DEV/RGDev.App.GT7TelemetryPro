@@ -11,8 +11,22 @@ logging.basicConfig(
 )
 
 import signal
+import traceback
+
+def global_exception_handler(exc_type, exc_value, exc_traceback):
+    """
+    Atrapa todas las excepciones no manejadas de la aplicación,
+    incluyendo las generadas por PyQt6 que normalmente fallan silenciosamente.
+    """
+    if issubclass(exc_type, KeyboardInterrupt):
+        sys.__excepthook__(exc_type, exc_value, exc_traceback)
+        return
+    logging.error("Excepción Global No Capturada:", exc_info=(exc_type, exc_value, exc_traceback))
 
 def main():
+    # Instalar hook global para errores
+    sys.excepthook = global_exception_handler
+    
     # Habilitar Ctrl+C (SIGINT) nativo en PyQt6
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     

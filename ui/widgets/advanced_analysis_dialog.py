@@ -48,6 +48,11 @@ class AdvancedAnalysisDialog(QDialog):
         self.playback_timer.timeout.connect(self.playback_tick)
         
         self.setWindowTitle(f"Análisis Avanzado & Explorador de Sesiones")
+        from PyQt6.QtGui import QIcon
+        import os
+        icon_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'app_icon.png')
+        if os.path.exists(icon_path):
+            self.setWindowIcon(QIcon(icon_path))
         self.setGeometry(50, 50, 1600, 900)
         self.setStyleSheet("background-color: #F0F0F0; color: #1A1A1A;")
         

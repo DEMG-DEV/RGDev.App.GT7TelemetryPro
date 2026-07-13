@@ -134,7 +134,8 @@ def parse_telemetry_packet(data: bytes, packet_type: str) -> Optional[GT7Telemet
     try:
         unpacked = struct.unpack(format_A, data[:size])
     except struct.error as e:
-        print(f"Struct unpack error: {e}")
+        import logging
+        logging.error(f"Struct unpack error: {e}", exc_info=True)
         return None
         
     packet = GT7TelemetryPacket(
