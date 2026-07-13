@@ -1,5 +1,19 @@
 # 📊 Registro de Avances del Proyecto
 
+## Renovación del Manual de Usuario y Presentación
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-13 13:58:00 |
+| **Autor** | Antigravity AI |
+| **Fase** | Marketing & Presentación |
+
+### Resumen Ejecutivo
+Para acompañar las nuevas interfaces profesionales que construimos, la "portada" del proyecto ha sido completamente reescrita:
+- **Diseño Impactante:** La presentación inicial ahora incluye medallas de tecnología, texto formateado elegantemente, y el nuevo icono de la aplicación bien centrado.
+- **Lectura Fácil:** Todo el manual de usuario se organizó en tablas y viñetas claras para que cualquier nuevo usuario o inversor entienda el nivel de tecnología (Zero-Stutter, SQLite) de un solo vistazo.
+
+
 ## Mejoras de Interfaz Nativa y Soporte Oficial para Mac
 
 | Campo | Detalle |

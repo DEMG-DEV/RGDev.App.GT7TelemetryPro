@@ -1,5 +1,21 @@
 # 📋 Registro Técnico de Cambios
 
+## Refactorización Visual de Documentación
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-13 13:58:00 |
+| **Autor** | Antigravity AI |
+| **Componentes** | `README.md` |
+| **Tipo** | Documentation |
+
+### Descripción Técnica
+- Refactorización completa del archivo `README.md` utilizando HTML semántico para el encabezado.
+- Inyección de Insignias (Badges) dinámicas de SVG para denotar stack tecnológico (Python, PyQt6, macOS).
+- Reestructuración de características en formato de tabla para mejorar la legibilidad y escaneabilidad.
+- Ajuste de jerarquías de encabezados y alertas de Markdown para guiar al usuario a través del manual de uso y compilación nativa.
+
+
 ## Estandarización UI macOS y Sistema de Empaquetado
 
 | Campo | Detalle |
