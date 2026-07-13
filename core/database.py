@@ -22,6 +22,7 @@ class SessionDatabaseWriter:
         # Meta-tracking during session
         self.best_laptime = -1
         self.total_laps = 0
+        self.car_id_counts = {}
         
         self._init_db()
 
@@ -69,6 +70,7 @@ class SessionDatabaseWriter:
             
         self.best_laptime = -1
         self.total_laps = 0
+        self.car_id_counts = {car_id: 1}
             
         # Crear la nueva sesión
         start_time = datetime.datetime.now().isoformat()
@@ -96,14 +98,24 @@ class SessionDatabaseWriter:
             self.worker_thread.join(timeout=2.0)
             
         # Cerrar la sesión
+        final_car_id = max(self.car_id_counts, key=self.car_id_counts.get) if self.car_id_counts else None
         end_time = datetime.datetime.now().isoformat()
         with sqlite3.connect(self.db_path) as conn:
-            conn.execute(
-                "UPDATE sessions SET end_time = ?, total_laps = ?, best_laptime = ? WHERE id = ?",
-                (end_time, self.total_laps, self.best_laptime, self.session_id)
-            )
+            if final_car_id is not None:
+                from core.car_database import CarDatabase
+                car_db = CarDatabase()
+                final_car_name = car_db.get_car_name(final_car_id)
+                conn.execute(
+                    "UPDATE sessions SET end_time = ?, total_laps = ?, best_laptime = ?, car_id = ?, car_name = ? WHERE id = ?",
+                    (end_time, self.total_laps, self.best_laptime, final_car_id, final_car_name, self.session_id)
+                )
+            else:
+                conn.execute(
+                    "UPDATE sessions SET end_time = ?, total_laps = ?, best_laptime = ? WHERE id = ?",
+                    (end_time, self.total_laps, self.best_laptime, self.session_id)
+                )
             conn.commit()
-        logging.info(f"Closed Master DB Session #{self.session_id}")
+        logging.info(f"Closed Master DB Session #{self.session_id} (Car: {final_car_name if final_car_id else 'Unknown'})")
 
     def insert_packet(self, timestamp: float, packet: GT7TelemetryPacket, raw_blob: bytes):
         """
@@ -117,6 +129,9 @@ class SessionDatabaseWriter:
             self.total_laps = packet.lap_count
         if packet.best_laptime > 0 and (self.best_laptime == -1 or packet.best_laptime < self.best_laptime):
             self.best_laptime = packet.best_laptime
+            
+        cid = packet.car_code
+        self.car_id_counts[cid] = self.car_id_counts.get(cid, 0) + 1
             
         data = (
             self.session_id,

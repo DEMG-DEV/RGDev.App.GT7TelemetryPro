@@ -51,6 +51,7 @@ El proyecto abandona las capturas crudas en favor de un enfoque *Big Data*:
 
 *   **Sin Cuellos de Botella:** Utiliza el modo `WAL` (Write-Ahead Logging) de SQLite. Procesamiento en lotes asíncronos en hilos independientes, asegurando **0 drops** durante las intensas ráfagas de telemetría a 60 Hz.
 *   **Base de Datos Maestra Única:** Adiós a la acumulación de cientos de archivos SQLite sueltos. Ahora todo el historial se guarda estructuradamente dentro de un único archivo maestro `telemetry_master.sqlite`, enlazando la telemetría a un registro centralizado de sesiones (con datos del auto, fecha, total de vueltas y récord).
+*   **Grabación Manual y Detección Dinámica de Vehículo:** Tú decides cuándo grabar la sesión gracias a los controles dedicados en la interfaz (independientes de la conexión al juego). Para prevenir falsos positivos de los autos de la IA en la parrilla de salida, el sistema analiza estadísticamente toda la sesión y auto-corrige el ID del vehículo en la base de datos al detener la grabación.
 *   **Data Structure:** Contiene tanto el Blob original de Polyphony Digital como columnas matemáticas listas (RPM, Marcha, Acelerador, Frenos, Tiempo, Vueltas) para que puedas importar la BD en Pandas, Excel o PowerBI.
 *   **Replay Inteligente:** El reproductor interroga la BD maestra y expone un menú elegante de tu historial para cargar las sesiones anteriores, recreándolas de manera nativa sin abrir exploradores de archivos complejos.
 

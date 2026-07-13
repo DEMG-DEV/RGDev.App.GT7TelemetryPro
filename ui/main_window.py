@@ -44,8 +44,6 @@ class TelemetryMainWindow(QMainWindow):
         self.ui_timer.timeout.connect(self.update_dashboard_ui)
         self.ui_timer.start(33) 
         
-        self.has_started_auto_save = False
-        
         self.init_ui()
         
     def load_styles(self):
@@ -68,8 +66,13 @@ class TelemetryMainWindow(QMainWindow):
         self.lbl_status = QLabel("Status: Disconnected")
         self.lbl_status.setStyleSheet("color: #ff003c; font-weight: bold; font-size: 14px;")
         
-        self.lbl_save_status = QLabel("Auto-Save: Off")
-        self.lbl_save_status.setStyleSheet("color: #888888; font-size: 14px;")
+        self.btn_record = QPushButton("⏺ Iniciar Grabación")
+        self.btn_record.clicked.connect(self.toggle_recording)
+        self.btn_record.setEnabled(False)
+        self.btn_record.setFixedWidth(160)
+        
+        self.lbl_rec_status = QLabel("")
+        self.lbl_rec_status.setStyleSheet("color: #888888; font-size: 14px;")
         
         self.ip_input = QLineEdit()
         self.ip_input.setPlaceholderText("Auto-detecting... or enter IP")
@@ -82,7 +85,8 @@ class TelemetryMainWindow(QMainWindow):
         self.btn_analysis.clicked.connect(self.open_analysis)
         
         header_layout.addWidget(self.lbl_status)
-        header_layout.addWidget(self.lbl_save_status)
+        header_layout.addWidget(self.btn_record)
+        header_layout.addWidget(self.lbl_rec_status)
         header_layout.addStretch()
         header_layout.addWidget(self.ip_input)
         header_layout.addWidget(self.btn_connect)
@@ -229,24 +233,33 @@ class TelemetryMainWindow(QMainWindow):
         """)
         return bar
 
-    def _auto_start_recording(self, packet: GT7TelemetryPacket):
-        if not self.has_started_auto_save and self.client.running:
-            self.has_started_auto_save = True
-            filename = "telemetry_master.sqlite"
+    def toggle_recording(self):
+        if self.client.recording:
+            self.client.stop_recording()
+            self.btn_record.setText("⏺ Iniciar Grabación")
+            self.btn_record.setStyleSheet("background-color: #004400; color: white;")
+            self.lbl_rec_status.setText("Grabación detenida")
+            self.lbl_rec_status.setStyleSheet("color: #888888; font-size: 14px;")
+        else:
+            if not self.latest_packet:
+                self.lbl_rec_status.setText("Espera a recibir telemetría...")
+                return
             
+            filename = "telemetry_master.sqlite"
             sessions_dir = os.path.join(os.getcwd(), 'Sessions')
             os.makedirs(sessions_dir, exist_ok=True)
             save_path = os.path.join(sessions_dir, filename)
             
-            car_db = CarDatabase()
-            car_name = car_db.get_car_name(packet.car_code)
+            car_name = self.car_db.get_car_name(self.latest_packet.car_code)
             
-            if self.client.start_recording(save_path, packet.car_code, car_name):
-                self.lbl_save_status.setText(f"Auto-Save: ACTIVO (Master DB)")
-                self.lbl_save_status.setStyleSheet("color: #00ff7f; font-weight: bold; font-size: 14px;")
+            if self.client.start_recording(save_path, self.latest_packet.car_code, car_name):
+                self.btn_record.setText("⏹ Detener Grabación")
+                self.btn_record.setStyleSheet("background-color: #550000; color: white;")
+                self.lbl_rec_status.setText(f"Grabando (Master DB)")
+                self.lbl_rec_status.setStyleSheet("color: #00ff7f; font-weight: bold; font-size: 14px;")
             else:
-                self.lbl_save_status.setText("Auto-Save: FALLÓ")
-                self.lbl_save_status.setStyleSheet("color: #ff003c; font-weight: bold; font-size: 14px;")
+                self.lbl_rec_status.setText("Error al grabar")
+                self.lbl_rec_status.setStyleSheet("color: #ff003c; font-weight: bold; font-size: 14px;")
 
     def toggle_connection(self):
         if self.client.running:
@@ -255,9 +268,10 @@ class TelemetryMainWindow(QMainWindow):
             self.lbl_status.setStyleSheet("color: #ff003c; font-weight: bold; font-size: 14px;")
             self.btn_connect.setText("Connect Live")
             
-            self.has_started_auto_save = False
-            self.lbl_save_status.setText("Auto-Save: Off")
-            self.lbl_save_status.setStyleSheet("color: #888888; font-size: 14px;")
+            self.btn_record.setEnabled(False)
+            self.btn_record.setText("⏺ Iniciar Grabación")
+            self.btn_record.setStyleSheet("")
+            self.lbl_rec_status.setText("")
         else:
 
             ip = self.ip_input.text().strip()
@@ -344,7 +358,9 @@ class TelemetryMainWindow(QMainWindow):
         steer_deg = (packet.wheel_steer_angle * 180.0 / 3.14159) if packet.wheel_steer_angle else 0
         self.graphs_widget.add_data(packet.speed_kmh, t_perc, b_perc, steer_deg, packet.engine_rpm)
         
-        self._auto_start_recording(packet)
+        if not self.btn_record.isEnabled():
+            self.btn_record.setEnabled(True)
+            self.btn_record.setStyleSheet("background-color: #004400; color: white;")
             
     def update_dashboard_ui(self):
         packet = self.latest_packet

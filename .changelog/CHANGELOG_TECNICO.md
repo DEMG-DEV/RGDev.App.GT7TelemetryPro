@@ -5,6 +5,57 @@
 
 ---
 
+## feat: Grabación manual de sesiones y auto-corrección dinámica del ID del vehículo
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-12 23:02:20 |
+| **Autor** | Antigravity AI |
+| **Branch** | master |
+| **Tipo** | Feature / Bug Fix |
+
+### Archivos Modificados
+
+| Archivo | Estado | Descripción del Cambio |
+|---------|--------|----------------------|
+| `ui/main_window.py` | Modificado | Se reemplazó el inicio automático de grabación por un sistema manual con botón conmutador de Iniciar/Detener. |
+| `core/database.py` | Modificado | Se implementó un algoritmo dinámico que registra la frecuencia de `car_id` durante toda la sesión y sobreescribe la metadata final de la sesión al detenerse. |
+| `.agents/AGENTS.md` | Modificado | Se añadió la regla de arquitectura sobre "Identidad del Auto Dinámica". |
+| `README.md` | Modificado | Se documentaron los nuevos controles de grabación manual y el algoritmo dinámico de identificación de vehículos. |
+
+### Detalle Técnico
+
+Anteriormente, la aplicación bloqueaba el nombre y el ID del vehículo de la sesión basado enteramente en el **primer** paquete de telemetría recibido (`packet.car_code`). Esto generaba un bug severo durante el Campeonato del Café (o cualquier carrera con IA), dado que durante la cinemática de la parrilla de salida, GT7 transmite la telemetría de los oponentes si la cámara los enfoca, corrompiendo la metadata de la sesión (ej. registrando un Honda S800 cuando el jugador conducía un Corvette C7).
+
+Para solucionarlo, se desacopló el auto-guardado:
+- Se eliminó el flujo asíncrono pasivo en favor de un sistema *Event-Driven* manual (`toggle_recording`).
+- En `SessionDatabaseWriter`, se implementó un tracking pasivo `self.car_id_counts` que cuenta estadísticamente la incidencia de todos los IDs recibidos por UDP.
+- En la función `stop()`, la BD ejecuta un `UPDATE` inteligente utilizando `max(self.car_id_counts, key=self.car_id_counts.get)` para consolidar el vehículo definitivo de la sesión.
+
+### Fragmentos de Código Relevantes
+
+```diff
+-        # Cerrar la sesión
+-        end_time = datetime.datetime.now().isoformat()
+-        with sqlite3.connect(self.db_path) as conn:
+-            conn.execute(
+-                "UPDATE sessions SET end_time = ?, total_laps = ?, best_laptime = ? WHERE id = ?",
+-                (end_time, self.total_laps, self.best_laptime, self.session_id)
+-            )
++        # Cerrar la sesión
++        final_car_id = max(self.car_id_counts, key=self.car_id_counts.get) if self.car_id_counts else None
++        end_time = datetime.datetime.now().isoformat()
++        with sqlite3.connect(self.db_path) as conn:
++            if final_car_id is not None:
++                # ... (get car_name)
++                conn.execute(
++                    "UPDATE sessions SET end_time = ?, total_laps = ?, best_laptime = ?, car_id = ?, car_name = ? WHERE id = ?",
++                    (end_time, self.total_laps, self.best_laptime, final_car_id, final_car_name, self.session_id)
++                )
+```
+
+---
+
 ## CI/CD: Pipeline de compilación multiplataforma (Release v1.0.0)
 
 | Campo | Detalle |

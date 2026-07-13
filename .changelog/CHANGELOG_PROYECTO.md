@@ -5,6 +5,28 @@
 
 ---
 
+## ✅ Sistema de grabación manual y corrección inteligente de autos rivales
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-12 23:02:20 |
+| **Responsable** | Antigravity AI |
+
+### ¿Qué se realizó?
+
+Se agregaron botones específicos en la interfaz para que ahora el piloto pueda iniciar o detener la grabación de sus datos de carrera manualmente en el momento que desee. Además, se desarrolló una nueva "inteligencia" en la aplicación que analiza todos los datos de la carrera para darse cuenta exactamente qué auto manejaste, ignorando los autos de los rivales que aparecen en pantalla antes de que arranque la carrera.
+
+### ¿Qué significa para el proyecto?
+
+Resuelve un problema muy molesto donde las carreras se guardaban con nombres de vehículos equivocados (como un Honda o un Suzuki en lugar de tu Corvette). Gran Turismo transmite datos engañosos durante la cuenta regresiva antes de largar porque la cámara enfoca a los oponentes. Al darle al piloto el control de la grabación y añadir una capa de análisis que calcula qué auto corrió durante el 99% del tiempo, garantizamos que el historial de desempeño sea 100% fiel a la realidad.
+
+### ¿Qué va a notar el usuario/cliente?
+
+- Un nuevo botón verde/rojo para "Iniciar Grabación" y "Detener Grabación" en la parte superior derecha de la aplicación.
+- Ya no se guardarán sesiones con nombres de vehículos incorrectos o de los rivales que estaban compitiendo contra ti en el modo campaña.
+
+---
+
 ## ✅ Preparación para Lanzamiento Oficial v1.0.0 (Windows, Mac y Linux)
 
 | Campo | Detalle |
