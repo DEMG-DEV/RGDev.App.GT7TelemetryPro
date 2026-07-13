@@ -99,7 +99,14 @@ class UpdateDownloader(QThread):
             os.makedirs(extract_dir, exist_ok=True)
             
             with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-                zip_ref.extractall(extract_dir)
+                for info in zip_ref.infolist():
+                    extracted_path = zip_ref.extract(info, extract_dir)
+                    if info.external_attr > 0:
+                        try:
+                            # Restaura los permisos originales del archivo (importante para macOS +x)
+                            os.chmod(extracted_path, info.external_attr >> 16)
+                        except Exception:
+                            pass
                 
             self.download_complete.emit(extract_dir)
             
@@ -143,6 +150,8 @@ def apply_update_and_restart(extracted_dir):
                 f.write("sleep 2\n") # Wait for app to close
                 f.write(f"rm -rf \"{current_app_path}\"\n")
                 f.write(f"mv \"{new_app_path}\" \"{current_app_path}\"\n")
+                f.write(f"xattr -cr \"{current_app_path}\" || true\n") # Eliminar modo cuarentena
+                f.write(f"chmod +x \"{current_app_path}/Contents/MacOS/\"* || true\n") # Asegurar permisos de ejecución
                 f.write(f"open \"{current_app_path}\"\n")
                 
             os.chmod(script_path, 0o755)
