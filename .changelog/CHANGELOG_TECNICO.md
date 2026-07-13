@@ -1,5 +1,23 @@
 # 📋 Registro Técnico de Cambios
 
+## Estandarización UI macOS y Sistema de Empaquetado
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-13 13:55:00 |
+| **Autor** | Antigravity AI |
+| **Componentes** | `build_macos.sh`, `main.py`, `GT7TelemetryPro.spec`, UI Widgets |
+| **Tipo** | Bugfix / UI / Build |
+
+### Descripción Técnica
+- **Empaquetado macOS**: Se resolvió un error crítico de "Aplicación Dañada" (Gatekeeper) en el bundle `.app` generado por PyInstaller al reemplazar el icono `.png` por un contenedor nativo `.icns` multilapa usando `iconutil`.
+- **Prevención de Cierres (Sandboxing)**: Al iniciar desde un bundle `.app` (vía Finder), macOS inicializa el CWD en `/`. Se modificó `main.py` para forzar `os.chdir()` hacia `~/Documents/GT7TelemetryPro/` en el arranque, evitando excepciones `PermissionDenied` fatales al intentar guardar logs o BD.
+- **Automatización**: Se creó y documentó `build_macos.sh` con auto-detección de entorno virtual (`.venv`).
+- **Cirugía CSS PyQt6**: Se estandarizó el motor de renderizado de `QPushButton` en `main_window`, `workspace` y `advanced_analysis_dialog` inyectando `border-radius: 6px`, bordes sólidos y padding simétrico, erradicando el aspecto plano de Windows heredado al sobrescribir `background-color`.
+- **Reglas IA**: Se agregaron las directivas 8 y 9 en `AGENTS.md` para blindar el empaquetado macOS y los estilos de botones futuros.
+- **Documentación**: README actualizado con capturas de pantalla reales inyectadas desde el chat y guía de compilación.
+
+
 > Documento generado automáticamente con cada commit realizado en el proyecto.
 > Contiene el detalle técnico completo de cada cambio para el equipo de desarrollo.
 

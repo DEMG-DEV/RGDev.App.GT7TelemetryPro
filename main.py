@@ -1,5 +1,13 @@
 import sys
+import os
 import logging
+
+# Cambiar el directorio de trabajo a Documentos para que los logs y BD se guarden ahí
+# en lugar de intentar escribirse dentro de la aplicación o en la raíz (/)
+app_doc_dir = os.path.join(os.path.expanduser('~'), 'Documents', 'GT7TelemetryPro')
+os.makedirs(app_doc_dir, exist_ok=True)
+os.chdir(app_doc_dir)
+
 from PyQt6.QtWidgets import QApplication
 from ui.main_window import TelemetryMainWindow
 
