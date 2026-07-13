@@ -18,7 +18,7 @@ class CarDatabase:
     """Singleton service to load and query GT7 car information."""
     _instance = None
     
-    def __new__(cls, json_path='gt7_cars.json'):
+    def __new__(cls, json_path='data/gt7_cars.json'):
         if cls._instance is None:
             cls._instance = super(CarDatabase, cls).__new__(cls)
             if not hasattr(cls._instance, 'car_db'):

@@ -5,7 +5,8 @@ import numpy as np
 import pyqtgraph as pg
 from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout, QListWidget, 
                              QTableWidget, QTableWidgetItem, QHeaderView, QLabel,
-                             QSplitter, QWidget, QListWidgetItem)
+                             QSplitter, QWidget, QListWidgetItem, QPushButton,
+                             QAbstractItemView)
 from PyQt6.QtCore import Qt
 from ui.widgets.map_widget import MapWidget
 from core.models import parse_telemetry_packet
@@ -29,7 +30,7 @@ class LapAnalysisData:
         self.is_valid = False
 
 class AdvancedAnalysisDialog(QDialog):
-    def __init__(self, db_path, session_id, parent=None):
+    def __init__(self, db_path, session_id=None, parent=None):
         super().__init__(parent)
         self.db_path = db_path
         self.session_id = session_id
@@ -38,20 +39,194 @@ class AdvancedAnalysisDialog(QDialog):
         self.laps_data = {}  
         self.best_lap = None
         self.active_lap_data = None
+        self.action_type = None  # 'PLAY' or None
+        self.selected_id = session_id
         
-        self._load_data()
-        
-        self.setWindowTitle(f"Análisis Avanzado - {self.track_name} (Sesión #{session_id})")
+        self.setWindowTitle(f"Análisis Avanzado & Explorador de Sesiones")
         self.setGeometry(50, 50, 1600, 900)
         self.setStyleSheet("background-color: #0b0c10; color: #c5c6c7;")
         
         self.init_ui()
+        self._load_sessions()
         
-    def _load_data(self):
+        if self.session_id:
+            self._load_data(self.session_id)
+        
+    def _load_sessions(self):
         try:
             with sqlite3.connect(self.db_path) as conn:
                 cursor = conn.cursor()
-                cursor.execute("SELECT raw_packet FROM telemetry WHERE session_id = ? ORDER BY id ASC", (self.session_id,))
+                cursor.execute("SELECT id, start_time, car_name, total_laps, best_laptime, is_locked FROM sessions ORDER BY id DESC")
+                sessions = cursor.fetchall()
+                
+            self.table_sessions.setRowCount(0)
+            for row_idx, row_data in enumerate(sessions):
+                self.table_sessions.insertRow(row_idx)
+                
+                # ID and Lock status
+                is_locked = row_data[5]
+                lock_str = " 🔒" if is_locked else ""
+                id_item = QTableWidgetItem(f"#{row_data[0]}{lock_str}")
+                id_item.setData(Qt.ItemDataRole.UserRole, row_data[0])
+                id_item.setData(Qt.ItemDataRole.UserRole + 1, is_locked)
+                id_item.setFont(QFont("Arial", 10, QFont.Weight.Bold))
+                id_item.setForeground(QColor('#66fcf1') if not is_locked else QColor('#f44336'))
+                self.table_sessions.setItem(row_idx, 0, id_item)
+                
+                # Fecha
+                dt_str = row_data[1][:16] if row_data[1] else "---"
+                self.table_sessions.setItem(row_idx, 1, QTableWidgetItem(dt_str))
+                
+                # Auto
+                self.table_sessions.setItem(row_idx, 2, QTableWidgetItem(str(row_data[2])))
+                
+                # Vueltas
+                laps_item = QTableWidgetItem(str(row_data[3]))
+                laps_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+                self.table_sessions.setItem(row_idx, 3, laps_item)
+                
+                # Mejor Vuelta
+                best_lap = row_data[4]
+                if best_lap and best_lap > 0:
+                    mins = int(best_lap // 60000)
+                    secs = (best_lap % 60000) / 1000.0
+                    bl_str = f"{mins:02d}:{secs:06.3f}"
+                    bl_item = QTableWidgetItem(bl_str)
+                    bl_item.setForeground(QColor('#45a29e'))
+                else:
+                    bl_item = QTableWidgetItem("N/A")
+                    bl_item.setForeground(QColor('gray'))
+                bl_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+                self.table_sessions.setItem(row_idx, 4, bl_item)
+                
+            # If we had a session_id, select it
+            if self.session_id:
+                for i in range(self.table_sessions.rowCount()):
+                    item = self.table_sessions.item(i, 0)
+                    if item.data(Qt.ItemDataRole.UserRole) == self.session_id:
+                        self.table_sessions.selectRow(i)
+                        break
+                        
+            self._update_action_buttons()
+            
+        except Exception as e:
+            import logging
+            logging.error(f"Error loading sessions: {e}")
+
+    def on_session_selected(self):
+        items = self.table_sessions.selectedItems()
+        if not items:
+            self._update_action_buttons()
+            return
+            
+        row = items[0].row()
+        id_item = self.table_sessions.item(row, 0)
+        session_id = id_item.data(Qt.ItemDataRole.UserRole)
+        
+        self.btn_play.setEnabled(True)
+        self._update_action_buttons()
+        
+        if session_id != self.session_id:
+            self.session_id = session_id
+            self.selected_id = session_id
+            self._load_data(self.session_id)
+            
+    def _update_action_buttons(self):
+        if not hasattr(self, 'btn_delete'):
+            return
+            
+        items = self.table_sessions.selectedItems()
+        if not items:
+            self.btn_delete.setEnabled(False)
+            self.btn_lock.setEnabled(False)
+            self.btn_lock.setText("🔒 Bloquear")
+            return
+            
+        row = items[0].row()
+        id_item = self.table_sessions.item(row, 0)
+        is_locked = id_item.data(Qt.ItemDataRole.UserRole + 1)
+        
+        self.btn_lock.setEnabled(True)
+        if is_locked:
+            self.btn_delete.setEnabled(False)
+            self.btn_lock.setText("🔓 Desbloquear")
+            self.btn_lock.setStyleSheet("background-color: #f44336; color: white; font-weight: bold; border-radius: 5px;")
+        else:
+            self.btn_delete.setEnabled(True)
+            self.btn_lock.setText("🔒 Bloquear")
+            self.btn_lock.setStyleSheet("background-color: #f6a623; color: black; font-weight: bold; border-radius: 5px;")
+            
+    def toggle_lock_session(self):
+        items = self.table_sessions.selectedItems()
+        if not items: return
+        row = items[0].row()
+        id_item = self.table_sessions.item(row, 0)
+        session_id = id_item.data(Qt.ItemDataRole.UserRole)
+        is_locked = id_item.data(Qt.ItemDataRole.UserRole + 1)
+        
+        new_status = 0 if is_locked else 1
+        
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                cursor.execute("UPDATE sessions SET is_locked = ? WHERE id = ?", (new_status, session_id))
+            self._load_sessions()
+        except Exception as e:
+            from PyQt6.QtWidgets import QMessageBox
+            QMessageBox.critical(self, "Error", f"Fallo al actualizar estado de bloqueo: {e}")
+            
+    def delete_session(self):
+        items = self.table_sessions.selectedItems()
+        if not items: return
+        row = items[0].row()
+        id_item = self.table_sessions.item(row, 0)
+        session_id = id_item.data(Qt.ItemDataRole.UserRole)
+        is_locked = id_item.data(Qt.ItemDataRole.UserRole + 1)
+        
+        if is_locked: return
+        
+        from PyQt6.QtWidgets import QMessageBox
+        reply = QMessageBox.question(self, "Eliminar Sesión", 
+                                     f"¿Estás seguro que deseas eliminar permanentemente la sesión #{session_id}?\n\nEsto borrará todos sus datos de telemetría y reducirá el tamaño del archivo de la base de datos.",
+                                     QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No, QMessageBox.StandardButton.No)
+                                     
+        if reply == QMessageBox.StandardButton.Yes:
+            try:
+                with sqlite3.connect(self.db_path) as conn:
+                    cursor = conn.cursor()
+                    cursor.execute("DELETE FROM telemetry WHERE session_id = ?", (session_id,))
+                    cursor.execute("DELETE FROM sessions WHERE id = ?", (session_id,))
+                
+                # Vacuum cannot run within a transaction, so we run it separately in autocommit mode
+                with sqlite3.connect(self.db_path) as conn:
+                    conn.isolation_level = None 
+                    conn.execute("VACUUM")
+                
+                self.session_id = None
+                self._load_sessions()
+                self.laps_data.clear()
+                self.list_laps.clear()
+                self.p_speed.clear()
+                self.map_widget.clear()
+            except Exception as e:
+                QMessageBox.critical(self, "Error", f"Fallo al eliminar sesión: {e}")
+        
+    def _load_data(self, session_id):
+        self.setWindowTitle(f"Análisis Avanzado - Cargando Sesión #{session_id}...")
+        self.laps_data.clear()
+        self.list_laps.clear()
+        self.p_speed.clear()
+        self.table_summary.setColumnCount(1)
+        self.table_corners.setColumnCount(1)
+        self.map_widget.clear()
+        self.best_lap = None
+        self.active_lap_data = None
+        self.track_name = "Pista Desconocida"
+        
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                cursor.execute("SELECT raw_packet FROM telemetry WHERE session_id = ? ORDER BY id ASC", (session_id,))
                 rows = cursor.fetchall()
                 
                 for row in rows:
@@ -173,16 +348,17 @@ class AdvancedAnalysisDialog(QDialog):
                             highest_score = score
                             best_match = t
                             
-                    import logging
-                    logging.info(f"Track Detection: dist={total_dist:.1f} elev={elev_diff:.1f} corners={num_corners}. Best Match: {best_match['name'] if best_match else 'None'} (score: {highest_score})")
-                    
                     if best_match and highest_score > 0:
                         self.track_name = best_match['name']
-                
+            
+            self.setWindowTitle(f"Análisis Avanzado - {self.track_name} (Sesión #{session_id})")
+            self._populate_laps_list()
+            
         except Exception as e:
             import logging
             logging.error(f"Error loading telemetry for analysis: {e}")
-            
+            self.setWindowTitle(f"Análisis Avanzado - Error (Sesión #{session_id})")
+
     def init_ui(self):
         layout = QHBoxLayout(self)
         layout.setContentsMargins(5, 5, 5, 5)
@@ -191,8 +367,52 @@ class AdvancedAnalysisDialog(QDialog):
         left_layout = QVBoxLayout(left_panel)
         left_layout.setContentsMargins(0, 0, 0, 0)
         
+        lbl_sessions_title = QLabel("Historial de Sesiones")
+        lbl_sessions_title.setStyleSheet("font-weight: bold; font-size: 16px; color: #66fcf1;")
+        
+        self.table_sessions = QTableWidget()
+        self.table_sessions.setColumnCount(5)
+        self.table_sessions.setHorizontalHeaderLabels(["ID", "Fecha / Hora", "Auto", "Vueltas", "Mejor Vuelta"])
+        
+        header = self.table_sessions.horizontalHeader()
+        header.setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
+        header.setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)
+        header.setSectionResizeMode(3, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(4, QHeaderView.ResizeMode.ResizeToContents)
+        
+        self.table_sessions.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
+        self.table_sessions.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
+        self.table_sessions.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
+        self.table_sessions.setStyleSheet("""
+            QTableWidget { background-color: #1f2833; color: white; border: 1px solid #45a29e; font-size: 13px; }
+            QHeaderView::section { background-color: #0b0c10; color: #66fcf1; font-weight: bold; }
+            QTableWidget::item:selected { background-color: #66fcf1; color: black; }
+        """)
+        self.table_sessions.itemSelectionChanged.connect(self.on_session_selected)
+        
+        btn_action_layout = QHBoxLayout()
+        
+        self.btn_lock = QPushButton("🔒 Bloquear")
+        self.btn_lock.setStyleSheet("background-color: #f6a623; color: black; font-weight: bold; border-radius: 5px; padding: 10px;")
+        self.btn_lock.setEnabled(False)
+        self.btn_lock.clicked.connect(self.toggle_lock_session)
+        
+        self.btn_delete = QPushButton("🗑️ Eliminar")
+        self.btn_delete.setStyleSheet("background-color: #c5c6c7; color: black; font-weight: bold; border-radius: 5px; padding: 10px;")
+        self.btn_delete.setEnabled(False)
+        self.btn_delete.clicked.connect(self.delete_session)
+        
+        btn_action_layout.addWidget(self.btn_lock)
+        btn_action_layout.addWidget(self.btn_delete)
+        
+        self.btn_play = QPushButton("▶ Reproducir Telemetría")
+        self.btn_play.setStyleSheet("background-color: #45a29e; color: white; font-weight: bold; padding: 12px; border-radius: 5px;")
+        self.btn_play.setEnabled(False)
+        self.btn_play.clicked.connect(self.on_play_clicked)
+        
         lbl_list_title = QLabel("Vueltas (Multiselección)")
-        lbl_list_title.setStyleSheet("font-weight: bold; font-size: 16px; color: #66fcf1;")
+        lbl_list_title.setStyleSheet("font-weight: bold; font-size: 16px; color: #66fcf1; padding-top: 15px;")
         
         self.list_laps = QListWidget()
         self.list_laps.setStyleSheet("background-color: #1f2833; color: white; font-size: 14px; border: 1px solid #45a29e;")
@@ -201,18 +421,22 @@ class AdvancedAnalysisDialog(QDialog):
         
         self.colors = ['#00ffff', '#ff00ff', '#ffff00', '#00ff00', '#ff0000', '#ffffff', '#0000ff']
         
-        for lap in sorted(self.laps_data.keys()):
-            data = self.laps_data[lap]
-            t_str = f"{int(data.lap_time // 60000):02d}:{((data.lap_time % 60000) / 1000):06.3f}"
-            marker = "★ " if lap == self.best_lap else ""
-            item = QListWidgetItem(f"{marker}Vuelta {lap} ({t_str})")
-            item.setData(Qt.ItemDataRole.UserRole, lap)
-            item.setFlags(item.flags() | Qt.ItemFlag.ItemIsUserCheckable)
-            item.setCheckState(Qt.CheckState.Checked if lap == self.best_lap else Qt.CheckState.Unchecked)
-            self.list_laps.addItem(item)
-            
-        left_layout.addWidget(lbl_list_title)
-        left_layout.addWidget(self.list_laps)
+        sessions_container = QWidget()
+        s_layout = QVBoxLayout(sessions_container)
+        s_layout.setContentsMargins(0,0,0,10)
+        s_layout.addWidget(lbl_sessions_title)
+        s_layout.addWidget(self.table_sessions)
+        s_layout.addLayout(btn_action_layout)
+        s_layout.addWidget(self.btn_play)
+        
+        laps_container = QWidget()
+        l_layout = QVBoxLayout(laps_container)
+        l_layout.setContentsMargins(0,0,0,0)
+        l_layout.addWidget(lbl_list_title)
+        l_layout.addWidget(self.list_laps)
+        
+        left_layout.addWidget(sessions_container, stretch=6)
+        left_layout.addWidget(laps_container, stretch=4)
         
         self.map_widget = MapWidget("Mapa Interactivo")
         
@@ -231,10 +455,9 @@ class AdvancedAnalysisDialog(QDialog):
         self.p_speed.setLabel('bottom', "Distancia de la vuelta (Metros)")
         
         self.vline = pg.InfiniteLine(angle=90, movable=False, pen=pg.mkPen('w', width=1, style=Qt.PenStyle.DashLine))
-        self.p_speed.addItem(self.vline)
         
         self.table_summary = QTableWidget()
-        self.table_summary.setColumnCount(2)
+        self.table_summary.setColumnCount(1)
         self.table_summary.setRowCount(4)
         self.table_summary.horizontalHeader().setVisible(True)
         self.table_summary.verticalHeader().setVisible(False)
@@ -251,32 +474,30 @@ class AdvancedAnalysisDialog(QDialog):
         self.proxy = pg.SignalProxy(self.p_speed.scene().sigMouseMoved, rateLimit=60, slot=self.mouseMoved)
         
         self.table_corners = QTableWidget()
-        self.table_corners.setColumnCount(4)
-        self.table_corners.setHorizontalHeaderLabels(["Curva", "Vel. Entrada", "Vel. Ápice", "Freno Max"])
+        self.table_corners.setColumnCount(1)
+        self.table_corners.setHorizontalHeaderLabels(["Curva"])
         header = self.table_corners.horizontalHeader()
         header.setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.table_corners.setStyleSheet("QTableWidget { color: white; background-color: #1f2833; border: 1px solid #45a29e; } QHeaderView::section { background-color: #0b0c10; color: #66fcf1; font-weight: bold; }")
         
-        right_sub_splitter = QSplitter(Qt.Orientation.Vertical)
-        right_sub_splitter.addWidget(self.map_widget)
-        right_sub_splitter.addWidget(self.table_corners)
-        right_sub_splitter.setStretchFactor(0, 3)
-        right_sub_splitter.setStretchFactor(1, 2)
+        right_layout.addWidget(self.map_widget, stretch=6)
+        right_layout.addWidget(self.table_corners, stretch=4)
         
-        right_layout.addWidget(right_sub_splitter)
+        layout.addWidget(left_panel, stretch=25)
+        layout.addWidget(graphs_widget, stretch=50)
+        layout.addWidget(right_panel, stretch=25)
         
-        splitter = QSplitter(Qt.Orientation.Horizontal)
-        splitter.addWidget(left_panel)
-        splitter.addWidget(graphs_widget)
-        splitter.addWidget(right_panel)
-        
-        splitter.setStretchFactor(0, 1)
-        splitter.setStretchFactor(1, 4)
-        splitter.setStretchFactor(2, 3)
-        
-        layout.addWidget(splitter)
-        
-        # Auto select best lap
+    def _populate_laps_list(self):
+        for lap in sorted(self.laps_data.keys()):
+            data = self.laps_data[lap]
+            t_str = f"{int(data.lap_time // 60000):02d}:{((data.lap_time % 60000) / 1000):06.3f}"
+            marker = "★ " if lap == self.best_lap else ""
+            item = QListWidgetItem(f"{marker}Vuelta {lap} ({t_str})")
+            item.setData(Qt.ItemDataRole.UserRole, lap)
+            item.setFlags(item.flags() | Qt.ItemFlag.ItemIsUserCheckable)
+            item.setCheckState(Qt.CheckState.Checked if lap == self.best_lap else Qt.CheckState.Unchecked)
+            self.list_laps.addItem(item)
+            
         if self.list_laps.count() > 0:
             items = self.list_laps.findItems("★", Qt.MatchFlag.MatchContains)
             if items:
@@ -284,7 +505,11 @@ class AdvancedAnalysisDialog(QDialog):
             else:
                 self.list_laps.item(0).setSelected(True)
             
-            self.refresh_plot()
+        self.refresh_plot()
+        
+    def on_play_clicked(self):
+        self.action_type = "PLAY"
+        self.accept()
         
     def mouseMoved(self, evt):
         pos = evt[0]
@@ -311,7 +536,6 @@ class AdvancedAnalysisDialog(QDialog):
         if not data: return
         self.active_lap_data = data
         
-        # Only update the map. Tables are updated via refresh_plot (checked laps)
         self.map_widget.clear()
         for p in data.packets:
             self.map_widget.add_point(p.position[0], p.position[2], p.throttle, p.brake)
@@ -345,7 +569,6 @@ class AdvancedAnalysisDialog(QDialog):
     def _update_tables(self, checked_data):
         import numpy as np
         
-        # 1. Update Summary Table
         self.table_summary.setColumnCount(1 + len(checked_data))
         headers = ["Métrica"] + [f"Vuelta {d.lap_number}" for d, _ in checked_data]
         self.table_summary.setHorizontalHeaderLabels(headers)
@@ -384,7 +607,6 @@ class AdvancedAnalysisDialog(QDialog):
                 it.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
                 self.table_summary.setItem(row, col, it)
                 
-        # 2. Update Corners Table
         if not checked_data:
             self.table_corners.setRowCount(0)
             return

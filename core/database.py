@@ -41,7 +41,8 @@ class SessionDatabaseWriter:
                     car_id INTEGER,
                     car_name TEXT,
                     total_laps INTEGER,
-                    best_laptime INTEGER
+                    best_laptime INTEGER,
+                    is_locked INTEGER DEFAULT 0
                 )
             """)
             

@@ -219,7 +219,9 @@ Generate a modular, production-ready, fully commented Python codebase. Organize 
 #### File: `requirements.txt`
 ```text
 pycryptodome>=3.15.0
-colorama>=0.4.6
+PyQt6>=6.5.0
+pyqtgraph>=0.13.0
+numpy>=1.24.0
 ```
 
 #### File: `models.py`
@@ -228,14 +230,15 @@ Provide Python classes mapping the complete layouts using `struct.unpack` or `ct
 #### File: `crypto.py`
 Implement high-performance Salsa20 decryption. Leverage `Crypto.Cipher.Salsa20` from `pycryptodome` for hardware-accelerated performance. Do not use unoptimized pure Python loops unless absolutely necessary as a fallback.
 
-#### File: `client.py`
+#### File: `client.py` (or `services/`)
 Implement the multi-threaded consumer-producer pattern. Maintain strict exception handling (e.g., handling dropped packets, timeout reconnections, network buffer resizing).
 
-#### File: `main.py`
-Create a CLI application. Use `colorama` for a beautiful, clean dashboard terminal interface that updates in place without flickering. Implement:
-- Clear step-by-step setup guides (PlayStation IP config, firewall ports).
-- Real-time terminal reporting of parameters (Vehicle velocity, Gear state, RPM, throttle/brake, high-resolution lap times, tire surface types).
-- Automatic lap logging, saving telemetry outputs as clean CSV/JSON arrays on completed laps.
+#### File: `main.py` & `ui/`
+Create a **PyQt6 Desktop Application**. Use `pyqtgraph` for a beautiful, clean dashboard that updates in real-time at 60 FPS without flickering. Implement:
+- A `MainWindow` layout with an IP configuration panel.
+- Real-time widgets for telemetry parameters (Vehicle velocity, Gear state, RPM, throttle/brake, Delta times).
+- A Track Map (`MapWidget`) drawn as a scatter-plot heatmap of racing lines.
+- Automatic SQLite database logging (`Sessions/` directory) for Replay/Post-Session analysis via an `AdvancedAnalysisDialog`.
 
 Make the generated system resilient and easy to start!
 
