@@ -5,6 +5,23 @@
 
 ---
 
+## 📝 Fotografías de sistema funcionando con datos reales
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-13 08:54:52 |
+| **Responsable** | Antigravity AI |
+
+### ¿Qué se realizó?
+
+Se corrigieron las capturas de pantalla del proyecto. Las imágenes anteriores mostraban el programa "vacío", pero ahora se ha simulado a un usuario cargando su historial de carreras y seleccionando sus mejores vueltas para comparar, de forma que las imágenes en el manual muestran las gráficas, el mapa y los tableros de pits completamente llenos de datos y cobrando vida.
+
+### ¿Qué significa para el proyecto?
+
+Demuestra visualmente al cliente o usuario nuevo que la aplicación es totalmente funcional, en vez de parecer un bosquejo sin usar.
+
+---
+
 ## 📝 Actualización del manual y capturas oficiales
 
 | Campo | Detalle |

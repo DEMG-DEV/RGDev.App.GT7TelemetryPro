@@ -5,6 +5,28 @@
 
 ---
 
+## Docs: Regenerate screenshots with populated telemetry data
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-13 08:54:52 |
+| **Autor** | David Mendez (demg@outlook.com) |
+| **Branch** | master |
+| **Tipo** | Docs |
+
+### Archivos Modificados
+
+| Archivo | Estado | Descripción del Cambio |
+|---------|--------|----------------------|
+| `docs/main_window.png` | Modificado | Captura actualizada del dashboard principal. |
+| `docs/analysis_mode.png` | Modificado | Captura actualizada con gráficas, mapas y tablas completamente pobladas con datos de sesión reales. |
+
+### Detalle Técnico
+
+Se re-escribió y ejecutó el script de captura *headless* (`capture.py`) agregándole llamadas a la lógica de inicialización profunda: `_load_data(1)` y `setCheckState(Checked)` para simular interacciones de usuario (selección de múltiples vueltas) dentro de la interfaz de Análisis Avanzado, permitiendo así que `pyqtgraph` renderizara exitosamente los *Speed Traces*, el *Heatmap* de trazado y las tablas de sesiones generadas bajo el nuevo entorno Diurno.
+
+---
+
 ## Docs: Actualización de screenshots y especificaciones de IA (Light Mode)
 
 | Campo | Detalle |
