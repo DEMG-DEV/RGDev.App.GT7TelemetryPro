@@ -88,6 +88,45 @@
 
 ---
 
+## Implementar exportador nativo a MoTeC i2 Pro (v1.0.1)
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-13 17:58:00 |
+| **Autor** | Antigravity AI |
+| **Branch** | master |
+| **Tipo** | Feature |
+
+### Archivos Modificados
+
+| Archivo | Estado | Descripción del Cambio |
+|---------|--------|----------------------|
+| `services/motec_exporter.py` | Agregado | Nuevo módulo para escribir archivos binarios `.ld` y XML `.ldx` compatibles con MoTeC i2 Pro. |
+| `ui/workspace.py` | Modificado | Inyección del botón "Export to MoTeC" y del hilo `MotecExportThread` para exportación asíncrona. Se corrigió un bug en `on_export_motec_clicked(*args)` para absorber señales booleanas de PyQt6. |
+| `core/config.py` | Modificado | Actualización de `APP_VERSION` a `1.0.1`. |
+
+### Detalle Técnico
+
+Se desarrolló una integración completa y nativa para exportar la telemetría almacenada en memoria (proveniente de SQLite) hacia los formatos propietarios de MoTeC i2 Pro.
+- **Formato Binario**: Se utilizó `struct` para ensamblar un archivo binario `.ld` que cumple estrictamente con los offsets de memoria de MoTeC, garantizando la escritura a 60 Hz sin *jitter*. Se implementaron conversiones físicas automáticas (ej. fuerza G calculada sobre `9.80665`, suspensión mapeada a milímetros, ángulo de dirección convertido de radianes a grados).
+- **Metadatos XML**: Se incluyó la clase `MotecLdxWriter` basada en `xml.etree.ElementTree` para generar el archivo de índice `.ldx` de modo que MoTeC i2 reconozca los cortes de vuelta, tiempos de inicio relativos de cada bloque y la mejor vuelta automáticamente.
+- **UX Asíncrona**: El volcado binario de una sesión masiva no bloquea el hilo principal; el proceso ocurre dentro de una instancia de `QThread`, generando un paquete `.zip` final listo para compartir. 
+
+### Fragmentos de Código Relevantes
+
+```diff
++class MotecExportThread(QThread):
++    export_finished = pyqtSignal(int, str)
++    export_error = pyqtSignal(str)
++
++    def run(self):
++        exporter = MotecExporter(self.data, self.session_info, self.export_path, zip_output=True)
++        num_laps = exporter.export()
++        self.export_finished.emit(num_laps, self.export_path)
+```
+
+---
+
 ## Docs: Actualización de documentación y reglas arquitecturales de IA
 
 | Campo | Detalle |

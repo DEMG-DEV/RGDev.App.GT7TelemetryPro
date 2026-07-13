@@ -1,4 +1,4 @@
 # core/config.py
 
-APP_VERSION = "1.0.0"
+APP_VERSION = "1.0.1"
 GITHUB_REPO = "DEMG-DEV/RGDev.App.GT7TelemetryPro"

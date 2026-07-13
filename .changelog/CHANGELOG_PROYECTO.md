@@ -79,6 +79,27 @@ En este bloque de trabajo nos aseguramos de que GT7 Telemetry Pro no solo funcio
 
 ---
 
+## ✅ Integración oficial con MoTeC y liberación de versión 1.0.1
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-13 17:58:00 |
+| **Responsable** | Antigravity AI |
+
+### ¿Qué se realizó?
+
+Se implementó una nueva herramienta que permite al usuario seleccionar cualquier sesión de práctica o carrera y exportarla en formato comprimido directamente hacia MoTeC i2 Pro, el programa estándar global de la industria del automovilismo para análisis de telemetría. Además, se actualizó la versión general del sistema a la 1.0.1.
+
+### ¿Qué significa para el proyecto?
+
+Esta característica eleva el nivel del proyecto de una herramienta interna a un ecosistema profesional. Ahora los pilotos y equipos pueden capturar telemetría con nuestro sistema de cero latencia, pero usar el programa avanzado al que los ingenieros de pista ya están acostumbrados (MoTeC) para revisar las curvas, frenadas y suspensiones en profundidad.
+
+### ¿Qué va a notar el usuario/cliente?
+
+Los usuarios ahora verán un nuevo botón visible que dice "Export to MoTeC" en el panel inferior de la vista de análisis profesional. Al hacer clic, se generará y guardará rápidamente un archivo `.zip` con todos sus datos de carrera de forma transparente y sin que la aplicación se congele durante la carga.
+
+---
+
 ## ✅ Documentación oficial del Entorno Pro y Lecciones Aprendidas
 
 | Campo | Detalle |

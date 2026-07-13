@@ -12,6 +12,27 @@ from core.dynamic_math import DynamicMathEngine
 from core.database import get_lap_data_vectorized
 from core.utils import safe_slot
 from ui.formula_manager import FormulaManagerWidget
+from services.motec_exporter import MotecExporter
+
+class MotecExportThread(QThread):
+    export_finished = pyqtSignal(int, str)
+    export_error = pyqtSignal(str)
+
+    def __init__(self, data, session_info, export_path):
+        super().__init__()
+        self.data = data
+        self.session_info = session_info
+        self.export_path = export_path
+
+    def run(self):
+        try:
+            exporter = MotecExporter(self.data, self.session_info, self.export_path, zip_output=True)
+            num_laps = exporter.export()
+            self.export_finished.emit(num_laps, self.export_path)
+        except Exception as e:
+            import traceback
+            logging.error(f"MoTeC Export failed: {traceback.format_exc()}")
+            self.export_error.emit(str(e))
 
 class DataLoaderThread(QThread):
     data_ready = pyqtSignal(dict)
@@ -184,6 +205,11 @@ class ProfessionalWorkspace(QMainWindow):
         btn_math.setStyleSheet("padding: 8px 16px; font-weight: bold; background-color: #E0E0E0; border: 1px solid #CCCCCC; border-radius: 6px; color: #1A1A1A;")
         btn_math.clicked.connect(self.open_formula_manager)
         dl.addWidget(btn_math)
+        
+        self.btn_export = QPushButton("Export to MoTeC")
+        self.btn_export.setStyleSheet("padding: 8px 16px; font-weight: bold; background-color: #E0E0E0; border: 1px solid #CCCCCC; border-radius: 6px; color: #1A1A1A;")
+        self.btn_export.clicked.connect(self.on_export_motec_clicked)
+        dl.addWidget(self.btn_export)
         
         btn_save_layout = QPushButton("Save Layout")
         btn_save_layout.setStyleSheet("padding: 8px 16px; font-weight: bold; background-color: #E0E0E0; border: 1px solid #CCCCCC; border-radius: 6px; color: #1A1A1A;")
@@ -407,6 +433,54 @@ class ProfessionalWorkspace(QMainWindow):
         self.refresh_combos()
         if self.vectorized_data:
             self.update_plots()
+
+    @safe_slot
+    def on_export_motec_clicked(self, *args):
+        if not self.vectorized_data or len(self.vectorized_data['speed']) == 0:
+            from PyQt6.QtWidgets import QMessageBox
+            QMessageBox.warning(self, "Export Error", "No data loaded to export.")
+            return
+
+        from PyQt6.QtWidgets import QFileDialog
+        default_name = f"GT7_Session_{self.session_id}_MoTeC"
+        filepath, _ = QFileDialog.getSaveFileName(self, "Save MoTeC Telemetry", default_name, "ZIP Files (*.zip);;All Files (*)")
+        if not filepath:
+            return
+
+        self.btn_export.setEnabled(False)
+        self.btn_export.setText("Exporting...")
+
+        # Extracción de info de pista del título si es posible
+        title = self.windowTitle()
+        track_name = "Unknown Track"
+        if " - " in title:
+            track_name = title.split(" - ")[-1].split(" (")[0]
+
+        session_info = {
+            "Driver": "GT7 Telemetry Pro Driver",
+            "Vehicle": "GT7 Car",
+            "Venue": track_name,
+            "Date": ""
+        }
+
+        self.motec_thread = MotecExportThread(self.vectorized_data, session_info, filepath)
+        self.motec_thread.export_finished.connect(self.on_motec_export_finished)
+        self.motec_thread.export_error.connect(self.on_motec_export_error)
+        self.motec_thread.start()
+
+    @safe_slot
+    def on_motec_export_finished(self, laps, filepath):
+        self.btn_export.setEnabled(True)
+        self.btn_export.setText("Export to MoTeC")
+        from PyQt6.QtWidgets import QMessageBox
+        QMessageBox.information(self, "MoTeC Export", f"Telemetry successfully exported! {laps} laps written to {filepath}")
+
+    @safe_slot
+    def on_motec_export_error(self, err_msg):
+        self.btn_export.setEnabled(True)
+        self.btn_export.setText("Export to MoTeC")
+        from PyQt6.QtWidgets import QMessageBox
+        QMessageBox.critical(self, "MoTeC Export Error", f"Failed to export telemetry:\n{err_msg}")
 
     def refresh_combos(self):
         if not self.vectorized_data:
