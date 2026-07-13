@@ -259,9 +259,7 @@ class TelemetryMainWindow(QMainWindow):
                 return
             
             filename = "telemetry_master.sqlite"
-            sessions_dir = os.path.join(os.getcwd(), 'Sessions')
-            os.makedirs(sessions_dir, exist_ok=True)
-            save_path = os.path.join(sessions_dir, filename)
+            save_path = os.path.join(os.getcwd(), filename)
             
             car_name = self.car_db.get_car_name(self.latest_packet.car_code)
             
@@ -299,8 +297,7 @@ class TelemetryMainWindow(QMainWindow):
             self.clear_graphs()
 
     def open_analysis(self):
-        sessions_dir = os.path.join(os.getcwd(), 'Sessions')
-        master_db = os.path.join(sessions_dir, 'telemetry_master.sqlite')
+        master_db = os.path.join(os.getcwd(), 'telemetry_master.sqlite')
         
         if not os.path.exists(master_db):
             self.lbl_status.setText("Status: No Master DB found")
@@ -317,7 +314,7 @@ class TelemetryMainWindow(QMainWindow):
             logging.error(f"Failed to open analysis: {e}")
 
     def open_pro_analysis(self):
-        db_path = os.path.join(os.getcwd(), 'Sessions', 'telemetry_master.sqlite')
+        db_path = os.path.join(os.getcwd(), 'telemetry_master.sqlite')
         if not os.path.exists(db_path):
             QMessageBox.warning(self, "No Database", "No telemetry database found. Please record a session first.")
             return

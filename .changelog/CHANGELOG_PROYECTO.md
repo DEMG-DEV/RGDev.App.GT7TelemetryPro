@@ -1,5 +1,18 @@
 # 📊 Registro de Avances del Proyecto
 
+## Corrección en la Carga de Sesiones Anteriores
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-13 14:15:00 |
+| **Autor** | Antigravity AI |
+| **Fase** | Soporte y Correcciones |
+
+### Resumen Ejecutivo
+Corregimos un pequeño fallo de comunicación entre la interfaz y el disco duro. Al cambiar la carpeta de guardado por la del sistema operativo en el paso anterior, el programa seguía buscando una subcarpeta interna llamada "Sessions" que ya no tenía sentido que existiera, provocando que no pudiera leer la base de datos a pesar de tenerla justo enfrente.
+- A partir de ahora, el programa leerá tu historial directamente de la carpeta fuerte (`GT7TelemetryPro`), sin laberintos de carpetas intermedias. ¡Tus historiales de vueltas pasadas volverán a aparecer instantáneamente!
+
+
 ## Guardado de Datos Automático a Nivel Sistema
 
 | Campo | Detalle |

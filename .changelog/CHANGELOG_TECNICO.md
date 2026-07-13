@@ -1,5 +1,20 @@
 # 📋 Registro Técnico de Cambios
 
+## Corrección de Ruta de Base de Datos Maestra
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-13 14:15:00 |
+| **Autor** | Antigravity AI |
+| **Componentes** | `ui/main_window.py` |
+| **Tipo** | Bugfix / IO |
+
+### Descripción Técnica
+- Se eliminó la dependencia estructural de la subcarpeta `Sessions/` en la resolución de rutas de `telemetry_master.sqlite`.
+- **Razón:** Tras la migración al directorio de sistema cruzado (`Application Support` / `%APPDATA%`), ya existe un aislamiento natural de archivos. El uso de la subcarpeta `Sessions` causaba errores de "No Master DB found" si el usuario migraba sus bases de datos previas dejándolas en la raíz de la carpeta de la aplicación.
+- El sistema de grabación y carga ahora lee y escribe `telemetry_master.sqlite` directamente en el `cwd` (raíz del directorio de datos de la app).
+
+
 ## Migración a Directorios de Datos del Sistema (Cross-Platform)
 
 | Campo | Detalle |
