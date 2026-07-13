@@ -37,11 +37,11 @@ Este no es un simple visor de números; es un motor matemático y analítico en 
 Al terminar de correr o cargar una repetición SQLite, GT7 Telemetry Pro despliega su **Módulo de Análisis Avanzado**, optimizado para lectura instantánea sin gráficos abrumadores:
 
 *   **Master View Unificada (Zero-Friction UX):** Navega por el historial de sesiones sin ventanas emergentes. La interfaz principal integra la tabla de historiales, la lista de vueltas multiselección y los gráficos en un solo layout de precisión.
+*   **Live Telemetry Dashboard:** Un panel de instrumentos inspirado en los muros de boxes de F1 incorporado directamente bajo el mapa interactivo. Al reproducir una sesión, este panel revive la actuación del piloto mostrando acelerador, freno, RPM y marcha en vivo a 60 FPS (*Zero-stutter*).
 *   **Gestión Segura de Datos (Lock & Delete):** Protege tus mejores carreras con el sistema de enclavamiento (`is_locked`), el cual bloquea visualmente y funcionalmente la sesión contra eliminaciones accidentales. Usa el botón de borrado masivo para purgar miles de paquetes y recuperar espacio en disco automáticamente (`VACUUM`).
 *   **Identificación Topográfica Automática (Hard Filter):** Incorpora un Integrador Matemático a 60 Hz que calcula tu distancia y aplica un filtro físico estricto (tolerancia de 200m) contra una base de datos de **122 trazados oficiales** para detectar exactamente en qué pista corriste (¡incluso diferencia entre Fuji y Willow Springs!).
 *   **Comparación de Múltiples Vueltas (Multi-Lap Overlay):** Selecciona múltiples vueltas al mismo tiempo (Checkboxes) y compáralas instantáneamente. La gráfica principal de Velocidad (Speed Trace) dibujará los trazados encimados con colores distintivos.
-*   **Tablas de Datos Dinámicas (Multi-Columna):** ¡Adiós al ruido visual! Todos los datos complejos (RPM, Acelerador, Frenos) se resumen en **Data Grids**. Al comparar múltiples vueltas, las tablas generan columnas nuevas dinámicamente y el texto adopta el color de su respectiva gráfica para facilitar la lectura.
-*   **Segmentación Automática de Curvas:** Un algoritmo escanea la telemetría reconociendo caídas de velocidad para autodetectar tus curvas y listar tus velocidades de Entrada, Ápice y % Freno Máximo.
+*   **Tablas de Datos Dinámicas (Multi-Columna):** ¡Adiós al ruido visual! Todos los datos complejos se resumen en **Data Grids**. Al comparar múltiples vueltas, las tablas generan columnas nuevas dinámicamente y el texto adopta el color de su respectiva gráfica para facilitar la lectura.
 
 ---
 
@@ -50,9 +50,9 @@ Al terminar de correr o cargar una repetición SQLite, GT7 Telemetry Pro desplie
 El proyecto abandona las capturas crudas en favor de un enfoque *Big Data*:
 
 *   **Sin Cuellos de Botella:** Utiliza el modo `WAL` (Write-Ahead Logging) de SQLite. Procesamiento en lotes asíncronos en hilos independientes, asegurando **0 drops** durante las intensas ráfagas de telemetría a 60 Hz.
-*   **Archivos Modulares:** Al salir a pista, se autogenera de manera transparente una base de datos local `GT7Session_..._db.sqlite`.
+*   **Base de Datos Maestra Única:** Adiós a la acumulación de cientos de archivos SQLite sueltos. Ahora todo el historial se guarda estructuradamente dentro de un único archivo maestro `telemetry_master.sqlite`, enlazando la telemetría a un registro centralizado de sesiones (con datos del auto, fecha, total de vueltas y récord).
 *   **Data Structure:** Contiene tanto el Blob original de Polyphony Digital como columnas matemáticas listas (RPM, Marcha, Acelerador, Frenos, Tiempo, Vueltas) para que puedas importar la BD en Pandas, Excel o PowerBI.
-*   **Replay Player Integrado:** Carga tus bases de datos SQLite anteriores y relanza una sesión histórica completa dentro de las gráficas de interfaz, permitiéndote estudiar tus derrapes y vueltas mágicas en frio.
+*   **Replay Inteligente:** El reproductor interroga la BD maestra y expone un menú elegante de tu historial para cargar las sesiones anteriores, recreándolas de manera nativa sin abrir exploradores de archivos complejos.
 
 ---
 

@@ -30,6 +30,28 @@ El pipeline `.github/workflows/release.yml` se engancha al evento `release`, ini
 
 ---
 
+## Docs: Actualización de Documentación (Readme & AGENTS)
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-12 22:25:00 |
+| **Autor** | David Mendez (demg@outlook.com) |
+| **Branch** | master |
+| **Tipo** | Docs |
+
+### Archivos Modificados
+
+| Archivo | Estado | Descripción del Cambio |
+|---------|--------|----------------------|
+| `README.md` | Modificado | Se actualizaron las secciones sobre SQLite para reflejar la DB Maestra, y se documentó el nuevo componente `Live Telemetry Dashboard`. |
+| `.agents/AGENTS.md` | Modificado | Se actualizó la regla inquebrantable de la base de datos para referenciar al nuevo esquema SQLite de tabla unificada y llave foránea. |
+
+### Detalle Técnico
+
+Se actualizó la documentación estática y las directrices IA (reglas inquebrantables) para alinear el comportamiento del sistema con la reciente refactorización arquitectónica, garantizando que el agente IA mantenga el contexto en futuras sesiones de codificación.
+
+---
+
 ## Bug Fix: Freeze during Replay session load
 
 | Campo | Detalle |

@@ -26,6 +26,28 @@ Los usuarios finalmente podrán entrar a la sección de "Releases" (Lanzamientos
 
 ---
 
+## 📝 Actualización del Manual de Arquitectura
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-12 22:25:00 |
+| **Responsable** | David Mendez |
+
+### ¿Qué se realizó?
+
+Se revisaron y actualizaron el manual del proyecto (`README.md`) y las reglas para la Inteligencia Artificial (`AGENTS.md`).
+
+### ¿Qué significa para el proyecto?
+
+- **Mantenibilidad:** Mantiene la guía del proyecto al día con las nuevas super-funcionalidades que hemos añadido (Tablero en vivo, Base de datos unificada).
+- **Seguridad y Reglas:** El "cerebro" IA (tu asistente) tiene nuevas pautas estrictas sobre cómo debe escribir código cuando toquemos la nueva base de datos.
+
+### ¿Qué va a notar el usuario/cliente?
+
+Si otro desarrollador, o tú mismo en el futuro, leen la portada del proyecto, tendrán una descripción certera y actualizada de lo poderoso que es el software hoy.
+
+---
+
 ## ✅ Corrección de Error de Carga en Replay
 
 | Campo | Detalle |
