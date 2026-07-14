@@ -1,5 +1,54 @@
 # 📊 Registro de Avances del Proyecto
 
+## ✅ Nuevo Layout de Análisis y Lanzamiento v1.0.2
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-14 09:35:00 |
+| **Responsable** | Antigravity AI |
+
+### ¿Qué se realizó?
+
+Se ajustó la disposición de los paneles en el área de trabajo profesional. Ahora la pantalla se divide en tres columnas verticales del mismo tamaño. Además, se actualizó la versión oficial del sistema a la 1.0.2 para reflejar las mejoras visuales recientes y se corrigió una incompatibilidad de tipografía en sistemas Mac.
+
+### ¿Qué significa para el proyecto?
+
+El nuevo diseño aprovecha mucho mejor las pantallas anchas (widescreen). Al dividir el espacio en 3 columnas iguales, las gráficas centrales de telemetría tienen mucho más espacio horizontal para mostrar detalles precisos. 
+
+### ¿Qué va a notar el usuario/cliente?
+
+- **Espacio más amplio:** El mapa de la pista y el medidor de Fuerzas-G ya no aprietan a las gráficas principales; ahora están agrupados en pestañas en la esquina inferior izquierda.
+- **Sin errores de consola en Mac:** Se corrigió un error interno que causaba advertencias de fuentes perdidas ("Consolas") al abrir la app en macOS.
+- **Versión 1.0.2:** La aplicación muestra esta nueva versión en la barra de título.
+
+---
+
+## ✅ Rediseño Visual Uniforme de Toda la Aplicación
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-14 08:53:00 |
+| **Responsable** | Antigravity AI |
+
+### ¿Qué se realizó?
+
+Se realizó un rediseño completo de la apariencia visual de GT7 Telemetry Pro. Todos los botones, tablas, barras de progreso, menús desplegables y paneles ahora siguen un estilo uniforme y profesional. Se eliminaron más de 100 inconsistencias de diseño que causaban que algunos elementos se vieran diferentes entre sí o se deformaran en ciertos sistemas operativos.
+
+### ¿Qué significa para el proyecto?
+
+La aplicación ahora tiene un aspecto profesional y cohesivo sin importar si se ejecuta en Mac o Windows. Esto fortalece la imagen de marca del producto y genera mayor confianza en los usuarios. Además, los nombres de las secciones fueron traducidos al español para una mejor experiencia del público hispanohablante.
+
+### ¿Qué va a notar el usuario/cliente?
+
+- **Todos los botones** ahora tienen esquinas redondeadas uniformes y reaccionan visualmente al pasar el cursor.
+- **Las barras de combustible** cambian de color progresivamente (azul → amarillo → rojo) según el nivel restante.
+- **Los paneles de datos** tienen tablas con filas de colores alternados para facilitar la lectura.
+- **Los botones de acción** tienen colores distintivos según su función (verde para cargar, naranja para exportar, azul para guardar).
+- **Los nombres de las secciones** ahora están en español: "Información de Vuelta", "Instrumentación en Tiempo Real", "Gestor de Datos y Fórmulas", "Análisis Avanzado de Sesión".
+- **Nuevas capturas de pantalla** en la documentación reflejan el aspecto actual del programa.
+
+---
+
 ## Sistema de Versiones y Actualizaciones Automáticas
 
 | Campo | Detalle |

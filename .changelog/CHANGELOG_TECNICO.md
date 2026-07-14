@@ -1,5 +1,88 @@
 # 📋 Registro Técnico de Cambios
 
+## 3-Column Layout & v1.0.2 Bump
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-14 09:35:00 |
+| **Autor** | Antigravity AI |
+| **Componentes** | `ui/workspace.py`, `ui/theme.py`, `ui/styles/daylight_theme.qss`, `core/config.py` |
+| **Tipo** | Feature / Fix / Release |
+
+### Archivos Modificados
+
+| Archivo | Estado | Descripción del Cambio |
+|---------|--------|----------------------|
+| `core/config.py` | Modificado | Version bump a 1.0.2 |
+| `ui/workspace.py` | Modificado | Refactorización de layout de docks para usar 3 columnas verticales (`splitDockWidget` y tabificación en `LeftDockWidgetArea`) |
+| `ui/theme.py` | Modificado | `FONT_MONO` fallback de "Consolas" a "Menlo" para evitar warnings de CoreText en macOS |
+| `ui/styles/daylight_theme.qss` | Modificado | `font-family` corregido a "Menlo" |
+| `ui/widgets/circular_gauge.py` | Modificado | `font_val` corregido a "Menlo" |
+
+### Detalle Técnico
+
+Se reestructuró el área de `QDockWidget` en el `ProfessionalWorkspace` para crear exactamente 3 columnas equitativas y mejorar la visibilidad de los widgets de pyqtgraph en displays panorámicos.
+- Columna 1 (Izquierda): Tabificación de `dock_map`, `dock_gforce`, `dock_data` en el `LeftDockWidgetArea` con tabs posicionados al sur (`QTabWidget.TabPosition.South`).
+- Columna 2 (Centro): `CentralWidget` con las gráficas primarias.
+- Columna 3 (Derecha): Docks de análisis residuales (`dock_scatter`, `dock_hist`, etc).
+- Se forzaron anchos simétricos invocando `resizeDocks([self.dock_map, self.dock_scatter], [400, 400], Qt.Orientation.Horizontal)`.
+- Se mitigó un bottleneck de 32ms en instanciación de UI en macOS cambiando la tipografía `Consolas` a `Menlo`, evitando el warning de Qt CoreText de fuentes no encontradas.
+
+---
+
+## Unificación de Diseño Cross-Platform y Sistema de Tokens de Tema
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-14 08:53:00 |
+| **Autor** | Antigravity AI |
+| **Componentes** | `ui/theme.py`, `ui/styles/daylight_theme.qss`, `ui/main_window.py`, `ui/workspace.py`, `ui/formula_manager.py`, `ui/widgets/*.py`, `README.md` |
+| **Tipo** | Refactor / Style / Feature |
+
+### Archivos Modificados
+
+| Archivo | Estado | Descripción del Cambio |
+|---------|--------|----------------------|
+| `ui/theme.py` | Agregado | Sistema centralizado de tokens de diseño con helpers `btn_style()`, `progress_style()`, `table_style()`, `combo_style()` |
+| `ui/styles/daylight_theme.qss` | Agregado | QSS global reescrito cubriendo QPushButton, QComboBox, QTableWidget, QProgressBar, QSlider, QScrollBar, QDockWidget |
+| `ui/styles/dark_theme.qss` | Obsoleto | Reemplazado por `daylight_theme.qss` |
+| `ui/main_window.py` | Modificado | 30+ inline styles reemplazados con `Theme.*` constants, botones `btn_record` corregidos para macOS |
+| `ui/workspace.py` | Modificado | 12 inline styles migrados a `Theme.btn_style()`, dock renombrado a "Gestor de Datos y Fórmulas" |
+| `ui/formula_manager.py` | Modificado | Status labels y QTextEdit migrados a Theme, título renombrado a "Gestor de Fórmulas" |
+| `ui/widgets/advanced_analysis_dialog.py` | Modificado | Tablas, botones, sliders, listas, fonts migrados a Theme, título renombrado |
+| `ui/widgets/alert_widget.py` | Modificado | `border-radius: 5px` → `6px`, título label `white` → `#1A1A1A` |
+| `ui/widgets/live_telemetry_widget.py` | Modificado | QFrame `10px` → `6px`, barras `2px solid #333` → `1px solid #CCCCCC` |
+| `ui/widgets/delta_widget.py` | Modificado | Título `white` → `#1A1A1A`, fondo `transparent` → `#FAFAFA` |
+| `ui/widgets/map_widget.py` | Modificado | Fondo `transparent` → `#FAFAFA` |
+| `tools/screenshot_generator.py` | Agregado | Genera capturas programáticas con datos sintéticos (live) y reales (análisis) |
+| `README.md` | Modificado | Nuevas capturas, secciones de features actualizadas, referencia rota corregida |
+
+### Detalle Técnico
+
+**Problema principal:** El proyecto tenía 3 capas de estilo en conflicto (QPalette global, QSS global, ~100 inline styles) con 7 valores de `border-radius` diferentes (2px a 10px), 7 tonalidades de texto oscuro, y 3 botones completamente rotos en macOS por falta de `border-radius`/`border`/`padding`.
+
+**Solución implementada:**
+1. **`ui/theme.py`** — Clase `Theme` con ~40 constantes de diseño (colores, tipografía, bordes) y 4 métodos estáticos que generan stylesheets completos y seguros para macOS.
+2. **`daylight_theme.qss`** — QSS global reescrito desde cero cubriendo 12 tipos de widget con `border-radius: 6px` universal.
+3. **Migración masiva** — ~100 inline `setStyleSheet()` calls migrados a usar `Theme.*` en 8 archivos.
+
+### Fragmentos de Código Relevantes
+
+```diff
+- btn_record.setStyleSheet("background-color: #004400; color: white;")
++ btn_record.setStyleSheet(Theme.btn_style('#004400', '#FFFFFF', border_color='#003300', hover_bg='#005500'))
+```
+
+```diff
+- self.fuel_bar.setStyleSheet("""
+-     QProgressBar { border: 1px solid #CCCCCC; ... }
+-     QProgressBar::chunk { background-color: #3498DB; }
+- """)
++ self.fuel_bar.setStyleSheet(Theme.progress_style(Theme.FUEL_NORMAL))
+```
+
+---
+
 ## Sistema de Actualización Automática (GitHub Releases) y Versionado
 
 | Campo | Detalle |

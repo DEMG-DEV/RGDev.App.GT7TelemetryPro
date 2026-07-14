@@ -10,6 +10,7 @@
   <p>
     <img src="https://img.shields.io/badge/Python-3.10+-blue.svg" alt="Python Version">
     <img src="https://img.shields.io/badge/GUI-PyQt6-green.svg" alt="PyQt6">
+    <img src="https://img.shields.io/badge/Version-1.0.2-purple.svg" alt="Version">
     <img src="https://img.shields.io/badge/macOS-Native%20Support-lightgrey.svg" alt="macOS Support">
     <img src="https://img.shields.io/badge/Status-Pro%20Analysis%20Ready-orange.svg" alt="Status">
   </p>
@@ -19,7 +20,7 @@
 
 Una plataforma analítica de código abierto diseñada para extraer y transformar los datos crudos del **Gran Turismo 7** (PS4/PS5) en una consola de ingeniería virtual del más alto nivel. 
 
-> 💡 **Nota de diseño:** La aplicación cuenta con un esquema de colores "Modo Diurno" (Daylight Mode) de alto contraste, diseñado específicamente para ser visible bajo luz natural brillante, típico en muros de boxes y *paddocks* profesionales.
+> 💡 **Nota de diseño:** La aplicación cuenta con un esquema de colores "Modo Diurno" (Daylight Mode) de alto contraste, diseñado específicamente para ser visible bajo luz natural brillante, típico en muros de boxes y *paddocks* profesionales. Todos los componentes utilizan un sistema de tokens de diseño centralizado (`ui/theme.py`) para garantizar uniformidad visual en cualquier plataforma (macOS, Windows, Linux).
 
 ---
 
@@ -28,9 +29,13 @@ Una plataforma analítica de código abierto diseñada para extraer y transforma
 | Funcionalidad | Descripción |
 | :--- | :--- |
 | **Telemetry Dashboard** | Visualiza a 60 FPS la telemetría en tiempo real: pedales, marchas, volante y g-forces sin interrupciones (*Zero-stutter*). |
+| **Instrumentación Circular** | Cluster de 4 medidores circulares (Velocidad, RPM, Turbo/Boost, Temp. Agua) dibujados nativamente con QPainter. |
+| **Consumo por Vuelta** | Medición automática del consumo de combustible por vuelta con alertas visuales progresivas (Normal → Advertencia → Crítico). |
 | **Topografía Automática** | Un motor heurístico cruza tus datos contra **122 pistas oficiales**, detectando automáticamente si estás en *Fuji* o *Le Mans*. |
 | **Mapa Termodinámico** | Traza la pista procedimentalmente. **Rojo** = Frenadas fuertes, **Verde** = Acelerador a fondo (*WOT*). |
 | **Base de Datos SQLite** | Historial ilimitado en modo `WAL`. Guarda cada sesión y organízala por auto y tiempos de vuelta en un archivo maestro. |
+| **Alertas Inteligentes** | Sistema de alertas en tiempo real con tono profesional sintetizado (1800 Hz, estilo MoTeC) para temperaturas peligrosas y eventos críticos. |
+| **Auto-Actualización** | Verificación automática de nuevas versiones desde GitHub Releases con descarga y aplicación en caliente. |
 
 ---
 
@@ -47,13 +52,9 @@ Accesible desde el menú principal, el **Pro Analysis Workspace** transforma la 
 
 ---
 
-## 🧮 Canales Matemáticos (Formula Manager)
+## 🧮 Canales Matemáticos (Gestor de Fórmulas)
 
 Los datos crudos no siempre dicen toda la verdad. GT7 Telemetry Pro integra un **motor seguro de canales matemáticos (Math Channels)** para proteger tu sistema mientras experimentas.
-
-<div align="center">
-  <img src="docs/formula_manager.png" alt="Formula Manager" width="800">
-</div>
 
 *   **Editor Visual Integrado:** Crea y guarda tus propias fórmulas (ej: *Rueda Delantera Derrape*, *Aerobalance*) sin tocar una sola línea de código fuente.
 *   **Parsing Seguro Vectorizado:** Escribe fórmulas complejas usando el arreglo de datos crudos (ej: `speed / 3.6`) y el motor calculará arreglos enteros de miles de puntos instantáneamente mediante NumPy.
@@ -61,11 +62,11 @@ Los datos crudos no siempre dicen toda la verdad. GT7 Telemetry Pro integra un *
 
 ---
 
-## 🏁 Análisis Avanzado Post-Sesión
+## 🏁 Análisis Avanzado de Sesión
 
 Al terminar de correr o cargar una repetición, GT7 Telemetry Pro despliega su **Módulo de Análisis Avanzado**, optimizado para lectura instantánea sin gráficos abrumadores.
 
-![Advanced Analysis Mode](docs/analysis_mode.png)
+![Análisis Avanzado de Sesión](docs/analysis_mode.png)
 
 *   **Zero-Friction UX:** Navega por el historial de sesiones sin ventanas emergentes. La interfaz principal integra la tabla de historiales, las vueltas y los gráficos.
 *   **Gestión Segura de Datos (Lock & Delete):** Protege tus mejores carreras bloqueándolas (`is_locked`). Usa el borrado masivo para purgar bases de datos y recuperar espacio en disco automáticamente (`VACUUM`).
@@ -78,7 +79,7 @@ El código fuente está modularizado en tres componentes críticos y fuertemente
 
 1.  📡 **`services/` (Capa de Ingestión):** Controla el Socket UDP, desencriptación nativa Salsa20 y reproducción de BD.
 2.  🧠 **`core/` (Capa de Dominio):** `LapManager`, `MathEngine` analizando matrices numéricas a la velocidad del rayo en hilos asíncronos.
-3.  🖥️ **`ui/` (Capa Gráfica):** Implementación robusta en **PyQt6** y gráficos hiperrápidos acelerados mediante **PyQtGraph**.
+3.  🖥️ **`ui/` (Capa Gráfica):** Implementación robusta en **PyQt6** con sistema de tokens de diseño (`Theme`) y gráficos hiperrápidos acelerados mediante **PyQtGraph**.
 
 ---
 

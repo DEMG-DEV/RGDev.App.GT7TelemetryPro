@@ -12,6 +12,7 @@ from ui.widgets.map_widget import MapWidget
 from ui.widgets.live_telemetry_widget import LiveTelemetryWidget
 from core.models import parse_telemetry_packet
 from PyQt6.QtGui import QFont, QColor
+from ui.theme import Theme
 
 class LapAnalysisData:
     def __init__(self, lap_number):
@@ -47,14 +48,14 @@ class AdvancedAnalysisDialog(QDialog):
         self.playback_timer = QTimer(self)
         self.playback_timer.timeout.connect(self.playback_tick)
         
-        self.setWindowTitle(f"Análisis Avanzado & Explorador de Sesiones")
+        self.setWindowTitle("Análisis Avanzado de Sesión")
         from PyQt6.QtGui import QIcon
         import os
         icon_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'app_icon.png')
         if os.path.exists(icon_path):
             self.setWindowIcon(QIcon(icon_path))
         self.setGeometry(50, 50, 1600, 900)
-        self.setStyleSheet("background-color: #F0F0F0; color: #1A1A1A;")
+        self.setStyleSheet(f"background-color: {Theme.BG_WINDOW}; color: {Theme.TEXT_PRIMARY};")
         
         self.init_ui()
         self._load_sessions()
@@ -79,7 +80,7 @@ class AdvancedAnalysisDialog(QDialog):
                 id_item = QTableWidgetItem(f"#{row_data[0]}{lock_str}")
                 id_item.setData(Qt.ItemDataRole.UserRole, row_data[0])
                 id_item.setData(Qt.ItemDataRole.UserRole + 1, is_locked)
-                id_item.setFont(QFont("Arial", 10, QFont.Weight.Bold))
+                id_item.setFont(QFont(Theme.FONT_SANS, 10, QFont.Weight.Bold))
                 id_item.setForeground(QColor('#0000FF') if not is_locked else QColor('#CC0000'))
                 self.table_sessions.setItem(row_idx, 0, id_item)
                 
@@ -161,11 +162,11 @@ class AdvancedAnalysisDialog(QDialog):
         if is_locked:
             self.btn_delete.setEnabled(False)
             self.btn_lock.setText("🔓 Desbloquear")
-            self.btn_lock.setStyleSheet("background-color: #f44336; color: white; font-weight: bold; border: 1px solid #d32f2f; border-radius: 6px; padding: 10px;")
+            self.btn_lock.setStyleSheet(Theme.btn_style(bg="#f44336", text="#FFFFFF", border_color="#d32f2f", padding="10px"))
         else:
             self.btn_delete.setEnabled(True)
             self.btn_lock.setText("🔒 Bloquear")
-            self.btn_lock.setStyleSheet("background-color: #f6a623; color: black; font-weight: bold; border: 1px solid #d48b1c; border-radius: 6px; padding: 10px;")
+            self.btn_lock.setStyleSheet(Theme.btn_style(bg="#f6a623", text="#000000", border_color="#d48b1c", padding="10px"))
             
     def toggle_lock_session(self):
         items = self.table_sessions.selectedItems()
@@ -223,7 +224,7 @@ class AdvancedAnalysisDialog(QDialog):
                 QMessageBox.critical(self, "Error", f"Fallo al eliminar sesión: {e}")
         
     def _load_data(self, session_id):
-        self.setWindowTitle(f"Análisis Avanzado - Cargando Sesión #{session_id}...")
+        self.setWindowTitle(f"Análisis Avanzado de Sesión - Cargando #{session_id}...")
         self.laps_data.clear()
         self.list_laps.clear()
         self.p_speed.clear()
@@ -239,7 +240,7 @@ class AdvancedAnalysisDialog(QDialog):
         progress = QProgressDialog("Cargando y procesando telemetría...", "Cancelar", 0, 100, self)
         progress.setWindowModality(Qt.WindowModality.WindowModal)
         progress.setWindowTitle("Cargando Sesión")
-        progress.setStyleSheet("QProgressDialog { background-color: #F0F0F0; color: #1A1A1A; } QLabel { color: #1A1A1A; }")
+        progress.setStyleSheet(f"QProgressDialog {{ background-color: {Theme.BG_WINDOW}; color: {Theme.TEXT_PRIMARY}; }} QLabel {{ color: {Theme.TEXT_PRIMARY}; }}")
         progress.show()
         QApplication.processEvents()
         
@@ -391,7 +392,7 @@ class AdvancedAnalysisDialog(QDialog):
                     if best_match and highest_score > 0:
                         self.track_name = best_match['name']
             
-            self.setWindowTitle(f"Análisis Avanzado - {self.track_name} (Sesión #{session_id})")
+            self.setWindowTitle(f"Análisis Avanzado de Sesión - {self.track_name} (#{session_id})")
             self._populate_laps_list()
             
             if self.all_packets:
@@ -414,7 +415,7 @@ class AdvancedAnalysisDialog(QDialog):
         except Exception as e:
             import logging
             logging.error(f"Error loading telemetry for analysis: {e}")
-            self.setWindowTitle(f"Análisis Avanzado - Error (Sesión #{session_id})")
+            self.setWindowTitle(f"Análisis Avanzado de Sesión - Error (#{session_id})")
 
     def init_ui(self):
         layout = QHBoxLayout(self)
@@ -425,7 +426,7 @@ class AdvancedAnalysisDialog(QDialog):
         left_layout.setContentsMargins(0, 0, 0, 0)
         
         lbl_sessions_title = QLabel("Historial de Sesiones")
-        lbl_sessions_title.setStyleSheet("font-weight: bold; font-size: 16px; color: #1A1A1A;")
+        lbl_sessions_title.setStyleSheet(f"font-weight: bold; font-size: 16px; color: {Theme.TEXT_PRIMARY};")
         
         self.table_sessions = QTableWidget()
         self.table_sessions.setColumnCount(5)
@@ -441,22 +442,18 @@ class AdvancedAnalysisDialog(QDialog):
         self.table_sessions.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
         self.table_sessions.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
         self.table_sessions.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
-        self.table_sessions.setStyleSheet("""
-            QTableWidget { background-color: #FFFFFF; color: #000000; border: 1px solid #CCCCCC; font-size: 13px; }
-            QHeaderView::section { background-color: #E0E0E0; color: #1A1A1A; font-weight: bold; }
-            QTableWidget::item:selected { background-color: #007ACC; color: white; }
-        """)
+        self.table_sessions.setStyleSheet(Theme.table_style())
         self.table_sessions.itemSelectionChanged.connect(self.on_session_selected)
         
         btn_action_layout = QHBoxLayout()
         
         self.btn_lock = QPushButton("🔒 Bloquear")
-        self.btn_lock.setStyleSheet("background-color: #f6a623; color: black; font-weight: bold; border: 1px solid #d48b1c; border-radius: 6px; padding: 10px;")
+        self.btn_lock.setStyleSheet(Theme.btn_style(bg="#f6a623", text="#000000", border_color="#d48b1c", padding="10px"))
         self.btn_lock.setEnabled(False)
         self.btn_lock.clicked.connect(self.toggle_lock_session)
         
         self.btn_delete = QPushButton("🗑️ Eliminar")
-        self.btn_delete.setStyleSheet("background-color: #E0E0E0; color: #1A1A1A; font-weight: bold; border: 1px solid #CCCCCC; border-radius: 6px; padding: 10px;")
+        self.btn_delete.setStyleSheet(Theme.btn_style(bg=Theme.BG_PANEL, text=Theme.TEXT_PRIMARY, padding="10px"))
         self.btn_delete.setEnabled(False)
         self.btn_delete.clicked.connect(self.delete_session)
         
@@ -465,21 +462,21 @@ class AdvancedAnalysisDialog(QDialog):
         
         playback_layout = QVBoxLayout()
         self.btn_play_pause = QPushButton("▶ Reproducir Sesión")
-        self.btn_play_pause.setStyleSheet("background-color: #E0E0E0; color: #1A1A1A; font-weight: bold; padding: 12px; border: 1px solid #CCCCCC; border-radius: 6px;")
+        self.btn_play_pause.setStyleSheet(Theme.btn_style(bg=Theme.BG_PANEL, text=Theme.TEXT_PRIMARY, padding="12px"))
         self.btn_play_pause.setEnabled(False)
         self.btn_play_pause.clicked.connect(self.toggle_playback)
         
         slider_layout = QHBoxLayout()
         self.lbl_playback_time = QLabel("00:00.000")
-        self.lbl_playback_time.setStyleSheet("color: #1A1A1A; font-weight: bold; font-family: Consolas;")
+        self.lbl_playback_time.setStyleSheet(f"color: {Theme.TEXT_PRIMARY}; font-weight: bold; font-family: {Theme.FONT_MONO};")
         
         self.playback_slider = QSlider(Qt.Orientation.Horizontal)
         self.playback_slider.setEnabled(False)
         self.playback_slider.valueChanged.connect(self.on_slider_moved)
-        self.playback_slider.setStyleSheet("QSlider::handle:horizontal { background-color: #1A1A1A; width: 12px; margin: -4px 0; border-radius: 6px; } QSlider::groove:horizontal { background: #CCCCCC; height: 4px; }")
+        self.playback_slider.setStyleSheet(f"QSlider::handle:horizontal {{ background-color: {Theme.TEXT_PRIMARY}; width: 12px; margin: -4px 0; border-radius: 6px; }} QSlider::groove:horizontal {{ background: {Theme.BORDER}; height: 4px; }}")
         
         self.lbl_playback_best = QLabel("Best: --:--.---")
-        self.lbl_playback_best.setStyleSheet("color: #FF8C00; font-weight: bold; font-family: Consolas;")
+        self.lbl_playback_best.setStyleSheet(f"color: {Theme.ACCENT_ORANGE}; font-weight: bold; font-family: {Theme.FONT_MONO};")
         
         slider_layout.addWidget(self.lbl_playback_time)
         slider_layout.addWidget(self.playback_slider)
@@ -489,10 +486,10 @@ class AdvancedAnalysisDialog(QDialog):
         playback_layout.addLayout(slider_layout)
         
         lbl_list_title = QLabel("Vueltas (Multiselección)")
-        lbl_list_title.setStyleSheet("font-weight: bold; font-size: 16px; color: #1A1A1A; padding-top: 15px;")
+        lbl_list_title.setStyleSheet(f"font-weight: bold; font-size: 16px; color: {Theme.TEXT_PRIMARY}; padding-top: 15px;")
         
         self.list_laps = QListWidget()
-        self.list_laps.setStyleSheet("background-color: #FFFFFF; color: #1A1A1A; font-size: 14px; border: 1px solid #CCCCCC;")
+        self.list_laps.setStyleSheet(f"background-color: {Theme.BG_CARD}; color: {Theme.TEXT_PRIMARY}; font-size: 14px; border: 1px solid {Theme.BORDER};")
         self.list_laps.itemSelectionChanged.connect(self.on_lap_selected)
         self.list_laps.itemChanged.connect(self.refresh_plot)
         
@@ -539,12 +536,12 @@ class AdvancedAnalysisDialog(QDialog):
         self.table_summary.horizontalHeader().setVisible(True)
         self.table_summary.verticalHeader().setVisible(False)
         self.table_summary.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
-        self.table_summary.setStyleSheet("QTableWidget { background-color: #FFFFFF; color: #1A1A1A; font-size: 14px; } QHeaderView::section { background-color: #E0E0E0; color: #1A1A1A; }")
+        self.table_summary.setStyleSheet(Theme.table_style())
         
         graphs_layout.addWidget(self.p_speed, stretch=2)
         
         lbl_res = QLabel("📋 Resumen de Vueltas (Overlay)")
-        lbl_res.setStyleSheet("font-size: 16px; font-weight: bold; color: #1A1A1A; padding-top: 10px;")
+        lbl_res.setStyleSheet(f"font-size: 16px; font-weight: bold; color: {Theme.TEXT_PRIMARY}; padding-top: 10px;")
         graphs_layout.addWidget(lbl_res)
         graphs_layout.addWidget(self.table_summary, stretch=1)
         
@@ -722,7 +719,7 @@ class AdvancedAnalysisDialog(QDialog):
         for row in range(4):
             item0 = self.table_summary.item(row, 0)
             if item0:
-                item0.setFont(QFont("Arial", 12, QFont.Weight.Bold))
+                item0.setFont(QFont(Theme.FONT_SANS, 12, QFont.Weight.Bold))
         
         for col_idx, (data, color_str) in enumerate(checked_data):
             col = col_idx + 1
@@ -743,7 +740,7 @@ class AdvancedAnalysisDialog(QDialog):
             ]
             
             for row, it in enumerate(items):
-                it.setFont(QFont("Arial", 13, QFont.Weight.Bold))
+                it.setFont(QFont(Theme.FONT_SANS, 13, QFont.Weight.Bold))
                 it.setForeground(QColor(color_str))
                 it.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
                 self.table_summary.setItem(row, col, it)

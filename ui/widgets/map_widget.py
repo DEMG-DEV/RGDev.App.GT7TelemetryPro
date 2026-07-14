@@ -15,7 +15,7 @@ class MapWidget(QGroupBox):
         
         layout = QVBoxLayout()
         self.plot_widget = pg.PlotWidget()
-        self.plot_widget.setBackground('transparent')
+        self.plot_widget.setBackground('#FAFAFA')
         self.plot_widget.hideAxis('bottom')
         self.plot_widget.hideAxis('left')
         self.plot_widget.setAspectLocked(True)

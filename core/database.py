@@ -215,7 +215,8 @@ def get_lap_data_vectorized(db_path: str, session_id: int, lap_numbers: list) ->
         'wheelRPS_RL': [], 'wheelRPS_RR': [], 'tyreRadius_FL': [], 'tyreRadius_FR': [],
         'tyreRadius_RL': [], 'tyreRadius_RR': [], 'sway': [], 'surge': [], 'heave': [],
         'wheel_steer_angle': [], 'position_x': [], 'position_y': [], 'position_z': [],
-        'world_vel_x': [], 'world_vel_y': [], 'world_vel_z': []
+        'world_vel_x': [], 'world_vel_y': [], 'world_vel_z': [],
+        'tyreTemp_FL': [], 'tyreTemp_FR': [], 'tyreTemp_RL': [], 'tyreTemp_RR': []
     }
     
     for row in rows:
@@ -249,6 +250,11 @@ def get_lap_data_vectorized(db_path: str, session_id: int, lap_numbers: list) ->
         data['tyreRadius_FR'].append(packet.tyre_radius[1])
         data['tyreRadius_RL'].append(packet.tyre_radius[2])
         data['tyreRadius_RR'].append(packet.tyre_radius[3])
+        
+        data['tyreTemp_FL'].append(packet.tyre_temp[0])
+        data['tyreTemp_FR'].append(packet.tyre_temp[1])
+        data['tyreTemp_RL'].append(packet.tyre_temp[2])
+        data['tyreTemp_RR'].append(packet.tyre_temp[3])
         
         data['sway'].append(packet.sway or 0.0)
         data['surge'].append(packet.surge or 0.0)

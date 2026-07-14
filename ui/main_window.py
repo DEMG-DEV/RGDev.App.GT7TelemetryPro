@@ -2,7 +2,7 @@ import os
 import datetime
 from PyQt6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, 
                              QLabel, QLineEdit, QPushButton, QGridLayout, 
-                             QGroupBox, QFileDialog, QMessageBox, QProgressDialog)
+                             QGroupBox, QFileDialog, QMessageBox, QProgressDialog, QProgressBar)
 from PyQt6.QtCore import Qt, pyqtSlot, QTimer
 from PyQt6.QtGui import QFont
 
@@ -19,7 +19,10 @@ from ui.widgets.delta_widget import DeltaWidget
 from core.config import APP_VERSION
 from ui.widgets.alert_widget import AlertWidget
 from ui.workspace import ProfessionalWorkspace
+from ui.widgets.circular_gauge import CircularGaugeWidget
+from ui.theme import Theme
 from services.updater import UpdateChecker, UpdateDownloader, apply_update_and_restart
+import math
 
 class TelemetryMainWindow(QMainWindow):
     def __init__(self):
@@ -40,6 +43,11 @@ class TelemetryMainWindow(QMainWindow):
         self.alert_engine = AlertEngine()
         
         self.latest_delta_ms = None
+        self.latest_packet = None
+        self.current_lap = -1
+        self.laps_measured = 0
+        self.fuel_at_lap_start = -1.0
+        self.last_fuel_consumed = 0.0
         
         self.client = GT7LiveClient()
         self.client.packet_signal.connect(self._cache_packet)
@@ -97,7 +105,7 @@ class TelemetryMainWindow(QMainWindow):
         QMessageBox.warning(self, "Error de Actualización", f"Hubo un problema al descargar la actualización:\\n{err_msg}")
 
     def load_styles(self):
-        style_path = os.path.join(os.path.dirname(__file__), 'styles', 'dark_theme.qss')
+        style_path = os.path.join(os.path.dirname(__file__), 'styles', 'daylight_theme.qss')
         if os.path.exists(style_path):
             with open(style_path, 'r') as f:
                 self.setStyleSheet(f.read())
@@ -114,7 +122,7 @@ class TelemetryMainWindow(QMainWindow):
         # --- HEADER ---
         header_layout = QHBoxLayout()
         self.lbl_status = QLabel("Status: Disconnected")
-        self.lbl_status.setStyleSheet("color: #ff003c; font-weight: bold; font-size: 14px;")
+        self.lbl_status.setStyleSheet(f"color: {Theme.STATUS_ERROR}; font-weight: bold; font-size: 14px;")
         
         self.btn_record = QPushButton("⏺ Iniciar Grabación")
         self.btn_record.clicked.connect(self.toggle_recording)
@@ -122,7 +130,7 @@ class TelemetryMainWindow(QMainWindow):
         self.btn_record.setFixedWidth(160)
         
         self.lbl_rec_status = QLabel("")
-        self.lbl_rec_status.setStyleSheet("color: #888888; font-size: 14px;")
+        self.lbl_rec_status.setStyleSheet(f"color: {Theme.TEXT_MUTED}; font-size: 14px;")
         
         self.ip_input = QLineEdit()
         self.ip_input.setPlaceholderText("Auto-detecting... or enter IP")
@@ -133,11 +141,12 @@ class TelemetryMainWindow(QMainWindow):
         
         self.btn_analysis = QPushButton("Historial y Análisis")
         self.btn_analysis.clicked.connect(self.open_analysis)
-        self.btn_analysis.setStyleSheet("padding: 8px 16px; font-weight: bold; background-color: #E0E0E0; border: 1px solid #CCCCCC; border-radius: 6px; color: #1A1A1A;")
         
         self.btn_pro_analysis = QPushButton("Pro Analysis")
         self.btn_pro_analysis.clicked.connect(self.open_pro_analysis)
-        self.btn_pro_analysis.setStyleSheet("padding: 8px 16px; font-weight: bold; background-color: #007AFF; border: none; border-radius: 6px; color: white;")
+        self.btn_pro_analysis.setStyleSheet(Theme.btn_style(
+            Theme.ACCENT_BLUE, '#FFFFFF', border_color='#2471A3', hover_bg='#3498DB'
+        ))
         
         header_layout.addWidget(self.lbl_status)
         header_layout.addWidget(self.btn_record)
@@ -156,24 +165,37 @@ class TelemetryMainWindow(QMainWindow):
         # LEFT COLUMN (20%): Map & G-Force
         left_layout = QVBoxLayout()
         
-        info_panel = QGroupBox("Info de Vuelta")
+        info_panel = QGroupBox("Información de Vuelta")
         info_l = QVBoxLayout()
         self.lbl_car_id = QLabel("Auto: ---")
         self.lbl_car_id.setStyleSheet("color: #1A1A1A; font-weight: bold;")
         self.lbl_lap = QLabel("Vuelta: -/-")
-        self.lbl_lap.setStyleSheet("background-color: #E0E0E0; color: #1A1A1A; padding: 4px; font-weight: bold;")
+        self.lbl_lap.setStyleSheet(f"background-color: #E0E0E0; color: {Theme.TEXT_PRIMARY}; padding: 4px; font-weight: bold; border-radius: 4px;")
         self.lbl_time = QLabel("0:00.000")
-        self.lbl_time.setFont(QFont("Consolas", 18, QFont.Weight.Bold))
-        self.lbl_time.setStyleSheet("color: #1A1A1A;")
-        self.lbl_fuel_est = QLabel("Laps Restantes: ---")
-        self.lbl_fuel_est.setStyleSheet("color: #FFA500; font-weight: bold;")
+        self.lbl_time.setFont(QFont(Theme.FONT_MONO, 18, QFont.Weight.Bold))
+        self.lbl_time.setStyleSheet(f"color: {Theme.TEXT_PRIMARY};")
+        self.lbl_fuel_est = QLabel("Vueltas Restantes: ---")
+        self.lbl_fuel_est.setStyleSheet(f"color: {Theme.ACCENT_ORANGE}; font-weight: bold;")
+        
+        self.fuel_bar = QProgressBar()
+        self.fuel_bar.setRange(0, 100)
+        self.fuel_bar.setValue(100)
+        self.fuel_bar.setTextVisible(True)
+        self.fuel_bar.setFormat("Combustible: %v%")
+        self.fuel_bar.setStyleSheet(Theme.progress_style(Theme.FUEL_NORMAL))
+        
+        self.lbl_fuel_usage = QLabel("Consumo/Vuelta: ---")
+        self.lbl_fuel_usage.setStyleSheet(f"color: {Theme.ACCENT_RED}; font-weight: bold;")
+        
         self.lbl_wot = QLabel("WOT: NO")
-        self.lbl_wot.setStyleSheet("color: gray;")
+        self.lbl_wot.setStyleSheet(f"color: {Theme.TEXT_MUTED};")
         
         info_l.addWidget(self.lbl_car_id)
         info_l.addWidget(self.lbl_lap)
         info_l.addWidget(self.lbl_time)
         info_l.addWidget(self.lbl_fuel_est)
+        info_l.addWidget(self.fuel_bar)
+        info_l.addWidget(self.lbl_fuel_usage)
         info_l.addWidget(self.lbl_wot)
         info_panel.setLayout(info_l)
         left_layout.addWidget(info_panel, 1)
@@ -197,36 +219,23 @@ class TelemetryMainWindow(QMainWindow):
         
         content_layout.addLayout(mid_layout, 4)
         
-        # RIGHT COLUMN (40%): Analyzer & Alerts
-        right_panel = QGroupBox("Analizador de Derrape")
+        # RIGHT COLUMN (40%): Instrumentación y Alertas
+        right_panel = QGroupBox("Instrumentación en Tiempo Real")
         r_layout = QVBoxLayout()
         r_layout.setContentsMargins(10, 20, 10, 10)
         
-        ind_layout = QHBoxLayout()
+        # Grid para relojes circulares
+        gauges_grid = QGridLayout()
+        self.gauge_speed = CircularGaugeWidget("Velocidad", "km/h", 0, 350, Theme.ACCENT_BLUE)
+        self.gauge_rpm = CircularGaugeWidget("RPM", "rpm", 0, 10000, Theme.ACCENT_ORANGE)
+        self.gauge_boost = CircularGaugeWidget("Turbo/Boost", "bar", 0, 2.0, Theme.ACCENT_RED)
+        self.gauge_water_temp = CircularGaugeWidget("Temp. Agua", "°C", 50, 130, Theme.ACCENT_GREEN)
         
-        v_box = QVBoxLayout()
-        lbl_v_title = QLabel("Velocidad")
-        lbl_v_title.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.lbl_v_val = QLabel("0")
-        self.lbl_v_val.setFont(QFont("Consolas", 48, QFont.Weight.Bold))
-        self.lbl_v_val.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.lbl_v_val.setStyleSheet("color: #0000FF;")
-        v_box.addWidget(lbl_v_title)
-        v_box.addWidget(self.lbl_v_val)
-        
-        r_box = QVBoxLayout()
-        lbl_r_title = QLabel("RPM")
-        lbl_r_title.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.lbl_r_val = QLabel("0")
-        self.lbl_r_val.setFont(QFont("Consolas", 48, QFont.Weight.Bold))
-        self.lbl_r_val.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.lbl_r_val.setStyleSheet("color: #FF8C00;")
-        r_box.addWidget(lbl_r_title)
-        r_box.addWidget(self.lbl_r_val)
-        
-        ind_layout.addLayout(v_box)
-        ind_layout.addLayout(r_box)
-        r_layout.addLayout(ind_layout)
+        gauges_grid.addWidget(self.gauge_speed, 0, 0)
+        gauges_grid.addWidget(self.gauge_rpm, 0, 1)
+        gauges_grid.addWidget(self.gauge_boost, 1, 0)
+        gauges_grid.addWidget(self.gauge_water_temp, 1, 1)
+        r_layout.addLayout(gauges_grid)
         
         bars_layout = QHBoxLayout()
         bars_layout.setContentsMargins(0, 30, 0, 30)
@@ -245,11 +254,11 @@ class TelemetryMainWindow(QMainWindow):
         
         self.lbl_thr_txt = QLabel("Acelerador\n0%")
         self.lbl_thr_txt.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.lbl_thr_txt.setStyleSheet("color: #008000; font-weight: bold;")
+        self.lbl_thr_txt.setStyleSheet(f"color: {Theme.ACCENT_GREEN}; font-weight: bold;")
         
         self.lbl_brk_txt = QLabel("Freno\n0%")
         self.lbl_brk_txt.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.lbl_brk_txt.setStyleSheet("color: #FF0000; font-weight: bold;")
+        self.lbl_brk_txt.setStyleSheet(f"color: {Theme.ACCENT_RED}; font-weight: bold;")
         
         pedals_grid.addWidget(self.lbl_thr_txt, 0, 0)
         pedals_grid.addWidget(self.bar_thr, 1, 0, alignment=Qt.AlignmentFlag.AlignHCenter)
@@ -260,8 +269,8 @@ class TelemetryMainWindow(QMainWindow):
         r_tires = QVBoxLayout()
         self.lbl_tr = QLabel("TR: 0°C")
         self.lbl_br = QLabel("RR: 0°C")
-        self.lbl_gear = QLabel("Gear: N")
-        self.lbl_gear.setFont(QFont("Consolas", 24, QFont.Weight.Bold))
+        self.lbl_gear = QLabel("Marcha: N")
+        self.lbl_gear.setFont(QFont(Theme.FONT_MONO, 24, QFont.Weight.Bold))
         r_tires.addWidget(self.lbl_tr)
         r_tires.addStretch()
         r_tires.addWidget(self.lbl_br)
@@ -285,8 +294,8 @@ class TelemetryMainWindow(QMainWindow):
         bar.setFixedSize(40, 300)
         bar.setTextVisible(False)
         bar.setStyleSheet(f"""
-            QProgressBar {{ border: 2px solid #CCCCCC; border-radius: 4px; background-color: #E0E0E0; }}
-            QProgressBar::chunk {{ background-color: {color}; border-radius: 2px; }}
+            QProgressBar {{ border: 1px solid {Theme.BORDER}; border-radius: 4px; background-color: #E0E0E0; }}
+            QProgressBar::chunk {{ background-color: {color}; border-radius: 3px; }}
         """)
         return bar
 
@@ -294,9 +303,9 @@ class TelemetryMainWindow(QMainWindow):
         if self.client.recording:
             self.client.stop_recording()
             self.btn_record.setText("⏺ Iniciar Grabación")
-            self.btn_record.setStyleSheet("background-color: #004400; color: white;")
+            self.btn_record.setStyleSheet(Theme.btn_style('#004400', '#FFFFFF', border_color='#003300', hover_bg='#005500'))
             self.lbl_rec_status.setText("Grabación detenida")
-            self.lbl_rec_status.setStyleSheet("color: #888888; font-size: 14px;")
+            self.lbl_rec_status.setStyleSheet(f"color: {Theme.TEXT_MUTED}; font-size: 14px;")
         else:
             if not self.latest_packet:
                 self.lbl_rec_status.setText("Espera a recibir telemetría...")
@@ -309,18 +318,18 @@ class TelemetryMainWindow(QMainWindow):
             
             if self.client.start_recording(save_path, self.latest_packet.car_code, car_name):
                 self.btn_record.setText("⏹ Detener Grabación")
-                self.btn_record.setStyleSheet("background-color: #550000; color: white;")
+                self.btn_record.setStyleSheet(Theme.btn_style('#550000', '#FFFFFF', border_color='#440000', hover_bg='#660000'))
                 self.lbl_rec_status.setText(f"Grabando (Master DB)")
-                self.lbl_rec_status.setStyleSheet("color: #00ff7f; font-weight: bold; font-size: 14px;")
+                self.lbl_rec_status.setStyleSheet(f"color: {Theme.STATUS_CONNECTED}; font-weight: bold; font-size: 14px;")
             else:
                 self.lbl_rec_status.setText("Error al grabar")
-                self.lbl_rec_status.setStyleSheet("color: #ff003c; font-weight: bold; font-size: 14px;")
+                self.lbl_rec_status.setStyleSheet(f"color: {Theme.STATUS_ERROR}; font-weight: bold; font-size: 14px;")
 
     def toggle_connection(self):
         if self.client.running:
             self.client.stop()
             self.lbl_status.setText("Status: Disconnected")
-            self.lbl_status.setStyleSheet("color: #ff003c; font-weight: bold; font-size: 14px;")
+            self.lbl_status.setStyleSheet(f"color: {Theme.STATUS_ERROR}; font-weight: bold; font-size: 14px;")
             self.btn_connect.setText("Connect Live")
             
             self.btn_record.setEnabled(False)
@@ -336,7 +345,7 @@ class TelemetryMainWindow(QMainWindow):
                 self.lbl_status.setText(f"Status: Esperando telemetría de {ip} (Entra a pista)...")
             else:
                 self.lbl_status.setText("Status: Buscando consola (Entra a pista)...")
-            self.lbl_status.setStyleSheet("color: #f2a900; font-weight: bold; font-size: 14px;")
+            self.lbl_status.setStyleSheet(f"color: {Theme.STATUS_SEARCHING}; font-weight: bold; font-size: 14px;")
             self.btn_connect.setText("Disconnect")
             self.clear_graphs()
 
@@ -381,19 +390,19 @@ class TelemetryMainWindow(QMainWindow):
     @pyqtSlot(str)
     def on_connected(self, ip):
         self.lbl_status.setText(f"Status: Connected to {ip}")
-        self.lbl_status.setStyleSheet("color: #00ff7f; font-weight: bold; font-size: 14px;")
+        self.lbl_status.setStyleSheet(f"color: {Theme.STATUS_CONNECTED}; font-weight: bold; font-size: 14px;")
         if not self.ip_input.text():
             self.ip_input.setText(ip)
             
     @pyqtSlot()
     def on_disconnected(self):
         self.lbl_status.setText("Status: Connection Lost")
-        self.lbl_status.setStyleSheet("color: #ff003c; font-weight: bold; font-size: 14px;")
+        self.lbl_status.setStyleSheet(f"color: {Theme.STATUS_ERROR}; font-weight: bold; font-size: 14px;")
 
     @pyqtSlot(str)
     def on_client_error(self, err_msg):
         self.lbl_status.setText(f"Error: {err_msg}")
-        self.lbl_status.setStyleSheet("color: #ff003c; font-weight: bold; font-size: 12px;")
+        self.lbl_status.setStyleSheet(f"color: {Theme.STATUS_ERROR}; font-weight: bold; font-size: 14px;")
             
     @pyqtSlot(GT7TelemetryPacket)
     def _cache_packet(self, packet: GT7TelemetryPacket):
@@ -412,19 +421,24 @@ class TelemetryMainWindow(QMainWindow):
         # We must add to deques/arrays at 60Hz to not miss points
         if packet.position:
             self.map_widget.add_point(packet.position[0], packet.position[2], packet.throttle, packet.brake)
-            
         lat_g = packet.angular_velocity[1] * 2 if packet.angular_velocity else 0
         lon_g = packet.angular_velocity[0] * 2 if packet.angular_velocity else 0
         self.gforce_widget.add_point(lat_g, lon_g)
         
         t_perc = (packet.throttle / 255.0) * 100.0
         b_perc = (packet.brake / 255.0) * 100.0
-        steer_deg = (packet.wheel_steer_angle * 180.0 / 3.14159) if packet.wheel_steer_angle else 0
-        self.graphs_widget.add_data(packet.speed_kmh, t_perc, b_perc, steer_deg, packet.engine_rpm)
+        
+        # El ángulo de dirección extraído de packet.wheel_steer_angle está en radianes, y puede ser 0.0 o NaN
+        if packet.wheel_steer_angle is not None and not math.isnan(packet.wheel_steer_angle):
+            steer_deg = (packet.wheel_steer_angle * 180.0 / math.pi)
+        else:
+            steer_deg = 0
+            
+        self.graphs_widget.add_data(packet.speed_kmh, t_perc, b_perc, packet.engine_rpm)
         
         if not self.btn_record.isEnabled():
             self.btn_record.setEnabled(True)
-            self.btn_record.setStyleSheet("background-color: #004400; color: white;")
+            self.btn_record.setStyleSheet(Theme.btn_style('#004400', '#FFFFFF', border_color='#003300', hover_bg='#005500'))
             
     def update_dashboard_ui(self):
         packet = self.latest_packet
@@ -441,14 +455,14 @@ class TelemetryMainWindow(QMainWindow):
         metrics = self.math_engine.process_packet(packet)
         est = metrics.get('estimated_laps_remaining', 999.0)
         est_str = "999+" if est >= 999.0 else f"{est:.1f}"
-        self.lbl_fuel_est.setText(f"Laps Restantes: {est_str}")
+        self.lbl_fuel_est.setText(f"Vueltas Restantes: {est_str}")
         
         if metrics.get('is_wot', False):
             self.lbl_wot.setText("WOT: YES")
-            self.lbl_wot.setStyleSheet("color: #FFFFFF; font-weight: bold; background-color: #008000; padding: 2px;")
+            self.lbl_wot.setStyleSheet(f"color: #FFFFFF; font-weight: bold; background-color: {Theme.WOT_ACTIVE}; padding: 2px; border-radius: 4px;")
         else:
             self.lbl_wot.setText("WOT: NO")
-            self.lbl_wot.setStyleSheet("color: gray; padding: 2px;")
+            self.lbl_wot.setStyleSheet(f"color: {Theme.TEXT_MUTED}; padding: 2px;")
         
         car_name = self.car_db.get_car_name(packet.car_code)
         self.lbl_car_id.setText(f"Auto: {car_name}")
@@ -467,8 +481,48 @@ class TelemetryMainWindow(QMainWindow):
         t_perc = (packet.throttle / 255.0) * 100.0
         b_perc = (packet.brake / 255.0) * 100.0
         
-        self.lbl_v_val.setText(str(int(packet.speed_kmh)))
-        self.lbl_r_val.setText(str(int(packet.engine_rpm)))
+        self.gauge_speed.set_value(packet.speed_kmh)
+        
+        # Fuel usage per lap logic
+        if hasattr(packet, 'lap_count') and packet.lap_count != -1:
+            if self.current_lap == -1:
+                self.current_lap = packet.lap_count
+                if hasattr(packet, 'fuel_level'):
+                    self.fuel_at_lap_start = packet.fuel_level
+            elif packet.lap_count != self.current_lap:
+                if self.fuel_at_lap_start > 0 and hasattr(packet, 'fuel_level'):
+                    self.last_fuel_consumed = max(0.0, self.fuel_at_lap_start - packet.fuel_level)
+                    self.fuel_at_lap_start = packet.fuel_level
+                self.current_lap = packet.lap_count
+                self.laps_measured += 1
+                
+            if self.laps_measured > 0 and hasattr(packet, 'fuel_capacity') and packet.fuel_capacity > 0:
+                usage_perc = (self.last_fuel_consumed / packet.fuel_capacity) * 100.0
+                self.lbl_fuel_usage.setText(f"Consumo/Vuelta: {usage_perc:.1f}%")
+            else:
+                self.lbl_fuel_usage.setText("Consumo/Vuelta: Midiendo...")
+
+        # Fuel bar
+        if hasattr(packet, 'fuel_capacity') and hasattr(packet, 'fuel_level') and packet.fuel_capacity > 0:
+            fuel_perc = (packet.fuel_level / packet.fuel_capacity) * 100.0
+            self.fuel_bar.setValue(int(fuel_perc))
+            if fuel_perc < 10.0:
+                self.fuel_bar.setStyleSheet(Theme.progress_style(Theme.FUEL_CRITICAL, 'white'))
+            elif fuel_perc < 30.0:
+                self.fuel_bar.setStyleSheet(Theme.progress_style(Theme.FUEL_WARNING, Theme.TEXT_PRIMARY))
+            else:
+                self.fuel_bar.setStyleSheet(Theme.progress_style(Theme.FUEL_NORMAL, 'white'))
+        
+        # Ajuste dinámico de RPM max
+        if packet.engine_rpm > self.gauge_rpm.max_val:
+            self.gauge_rpm.set_max(packet.engine_rpm + 500)
+        self.gauge_rpm.set_value(packet.engine_rpm)
+        
+        self.gauge_boost.set_value(packet.boost - 1.0) # Convertir de absolutos a relativos (bar aprox)
+        
+        # Temp. de Agua
+        water_t = packet.water_temp if hasattr(packet, 'water_temp') else 0
+        self.gauge_water_temp.set_value(water_t)
         
         self.bar_thr.setValue(int(t_perc))
         self.lbl_thr_txt.setText(f"Acelerador\n{int(t_perc)}%")

@@ -42,3 +42,11 @@
 9. **Estilos de Botones (Cirugía PyQt6 en macOS)**:
    - Cuando se sobrescribe el color de fondo de un `QPushButton` mediante `setStyleSheet` en macOS, el motor de dibujado nativo de Apple se rompe y el botón se vuelve un cuadrado plano obsoleto.
    - Todo botón personalizado **DEBE** incluir forzosamente `border-radius: 6px;`, bordes explícitos (ej. `border: 1px solid #CCCCCC;`) y un `padding` holgado (ej. `padding: 8px 16px;`) para recuperar una apariencia moderna (Pill Button).
+
+10. **Sistema Centralizado de Tokens de Diseño (UI Theme)**:
+   - Está prohibido hardcodear colores (ej. `#FFFFFF`), tamaños de fuente o bordes directamente con strings mágicos en las clases de UI.
+   - Todos los estilos deben construirse obligatoriamente importando la clase `Theme` desde `ui.theme`. Usa constantes como `Theme.BG_PANEL`, `Theme.TEXT_PRIMARY`, o helpers como `Theme.btn_style()` y `Theme.table_style()` para inyectar estilos seguros y uniformes a lo largo de todo el proyecto.
+
+11. **Tipografía Monoespaciada Segura**:
+   - Para fuentes monoespaciadas (`QFont`), **nunca asumas** que `Consolas` está disponible, ya que romperá el log de consola en macOS.
+   - Utiliza exclusivamente `Theme.FONT_MONO` (el cual resuelve a `Menlo` o `Courier New` como fallback multiplataforma seguro).

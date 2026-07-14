@@ -1,7 +1,7 @@
 import os
 from PyQt6.QtWidgets import (QMainWindow, QDockWidget, QWidget, QVBoxLayout, 
                              QHBoxLayout, QComboBox, QLabel, QPushButton, QTableWidget, 
-                             QTableWidgetItem, QHeaderView, QInputDialog)
+                             QTableWidgetItem, QHeaderView, QInputDialog, QTabWidget)
 import sqlite3
 from PyQt6.QtCore import Qt, QSettings, QThread, pyqtSignal
 import pyqtgraph as pg
@@ -12,6 +12,7 @@ from core.dynamic_math import DynamicMathEngine
 from core.database import get_lap_data_vectorized
 from core.utils import safe_slot
 from ui.formula_manager import FormulaManagerWidget
+from ui.theme import Theme
 from services.motec_exporter import MotecExporter
 
 class MotecExportThread(QThread):
@@ -93,23 +94,52 @@ class ProfessionalWorkspace(QMainWindow):
         trace_toolbar = QHBoxLayout()
         self.combo_add_trace = QComboBox()
         btn_add_trace = QPushButton("Add Trace")
-        btn_add_trace.setStyleSheet("padding: 4px 10px; font-weight: bold; background-color: #E0E0E0; border: 1px solid #CCCCCC; border-radius: 4px; color: #1A1A1A;")
+        btn_add_trace.setStyleSheet(Theme.btn_style('#E0E0E0', '#1A1A1A', hover_bg='#D0D0D0', padding='6px 12px'))
         btn_add_trace.clicked.connect(self.add_custom_trace)
+
+        btn_clear_traces = QPushButton("Clear Custom Traces")
+        btn_clear_traces.setStyleSheet(Theme.btn_style('#FFCDD2', '#1A1A1A', border_color='#E57373', hover_bg='#EF9A9A', padding='6px 12px'))
+        btn_clear_traces.clicked.connect(self.clear_custom_traces)
+
+        btn_restore_panels = QPushButton("Restore Panels")
+        btn_restore_panels.setStyleSheet(Theme.btn_style('#E0E0E0', '#1A1A1A', hover_bg='#D0D0D0', padding='6px 12px'))
+        btn_restore_panels.clicked.connect(self.restore_default_layout)
+
         trace_toolbar.addWidget(QLabel("Channel:"))
         trace_toolbar.addWidget(self.combo_add_trace)
         trace_toolbar.addWidget(btn_add_trace)
+        trace_toolbar.addWidget(btn_clear_traces)
+        trace_toolbar.addWidget(btn_restore_panels)
         trace_toolbar.addStretch()
         trace_layout.addLayout(trace_toolbar)
         
         self.widget_trace = pg.GraphicsLayoutWidget()
         trace_layout.addWidget(self.widget_trace)
+        
+        from PyQt6.QtWidgets import QGraphicsProxyWidget
+        from PyQt6.QtCore import Qt
+        
+        def add_default_close_btn(plot_item):
+            close_btn = QPushButton("X")
+            close_btn.setFixedSize(20, 20)
+            close_btn.setStyleSheet(Theme.btn_style('#FFCDD2', '#1A1A1A', border_color='#E57373', padding='4px 8px'))
+            proxy = QGraphicsProxyWidget()
+            proxy.setWidget(close_btn)
+            plot_item.layout.addItem(proxy, 0, 2, alignment=Qt.AlignmentFlag.AlignRight)
+            close_btn.clicked.connect(lambda: self.widget_trace.removeItem(plot_item))
+            
         self.plot_speed = self.widget_trace.addPlot(title="Speed (km/h)")
+        add_default_close_btn(self.plot_speed)
+        
         self.widget_trace.nextRow()
         self.plot_inputs = self.widget_trace.addPlot(title="Inputs (%)")
         self.plot_inputs.setXLink(self.plot_speed)
+        add_default_close_btn(self.plot_inputs)
+        
         self.widget_trace.nextRow()
         self.plot_math = self.widget_trace.addPlot(title="Math Channel")
         self.plot_math.setXLink(self.plot_speed)
+        add_default_close_btn(self.plot_math)
         
         # Crosshair cursor for Interactive Trace
         self.cursor_line = pg.InfiniteLine(angle=90, movable=True, pen=pg.mkPen('y', width=2, style=Qt.PenStyle.DashLine))
@@ -167,24 +197,75 @@ class ProfessionalWorkspace(QMainWindow):
         self.plot_map.addItem(self.map_cursor_dot)
         self.dock_map.setWidget(self.plot_map)
         self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.dock_map)
+        # 5. G-Force Traction Circle
+        self.dock_gforce = QDockWidget("G-Force Traction Circle", self)
+        self.dock_gforce.setObjectName("dock_gforce")
+        self.plot_gforce = pg.PlotWidget()
+        self.plot_gforce.setAspectLocked(True)
+        self.plot_gforce.showGrid(x=True, y=True, alpha=0.5)
+        self.plot_gforce.setLabel('bottom', "Lateral G (Sway)")
+        self.plot_gforce.setLabel('left', "Longitudinal G (Surge)")
+        self.gforce_scatter = pg.ScatterPlotItem(size=5, pen=pg.mkPen(None), brush=pg.mkBrush(255, 0, 0, 150))
+        self.plot_gforce.addItem(self.gforce_scatter)
+        # Crosshair para G-Force (0,0)
+        self.plot_gforce.addItem(pg.InfiniteLine(pos=0, angle=90, pen=pg.mkPen('w', width=1, style=Qt.PenStyle.DashLine)))
+        self.plot_gforce.addItem(pg.InfiniteLine(pos=0, angle=0, pen=pg.mkPen('w', width=1, style=Qt.PenStyle.DashLine)))
+        self.dock_gforce.setWidget(self.plot_gforce)
+        self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.dock_gforce)
         
-        # 5. Formula Manager Toolbar / Data Grid
-        self.dock_data = QDockWidget("Data / Math Manager", self)
+        # 6. Tyre Temperatures
+        self.dock_tyre_temp = QDockWidget("Tyre Temperatures (°C)", self)
+        self.dock_tyre_temp.setObjectName("dock_tyre_temp")
+        self.widget_tyre_temp = pg.GraphicsLayoutWidget()
+        self.plot_temp_fl = self.widget_tyre_temp.addPlot(title="FL Temp")
+        self.plot_temp_fr = self.widget_tyre_temp.addPlot(title="FR Temp")
+        self.widget_tyre_temp.nextRow()
+        self.plot_temp_rl = self.widget_tyre_temp.addPlot(title="RL Temp")
+        self.plot_temp_rr = self.widget_tyre_temp.addPlot(title="RR Temp")
+        self.dock_tyre_temp.setWidget(self.widget_tyre_temp)
+        self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.dock_tyre_temp)
+        
+        # 7. Tyre Slip Ratio
+        self.dock_slip = QDockWidget("Tyre Slip Ratio (Wheel vs Chassis)", self)
+        self.dock_slip.setObjectName("dock_slip")
+        self.widget_slip = pg.GraphicsLayoutWidget()
+        self.plot_slip_fl = self.widget_slip.addPlot(title="FL Slip")
+        self.plot_slip_fr = self.widget_slip.addPlot(title="FR Slip")
+        self.widget_slip.nextRow()
+        self.plot_slip_rl = self.widget_slip.addPlot(title="RL Slip")
+        self.plot_slip_rr = self.widget_slip.addPlot(title="RR Slip")
+        
+        self.plot_slip_fl.setXLink(self.plot_speed)
+        self.plot_slip_fr.setXLink(self.plot_speed)
+        self.plot_slip_rl.setXLink(self.plot_speed)
+        self.plot_slip_rr.setXLink(self.plot_speed)
+        self.dock_slip.setWidget(self.widget_slip)
+        self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.dock_slip)
+        
+        # 8. Formula Manager Toolbar / Data Grid
+        self.dock_data = QDockWidget("Gestor de Datos y Fórmulas", self)
         self.dock_data.setObjectName("dock_data")
         data_container = QWidget()
+        data_container.setStyleSheet(f"background-color: {Theme.BG_PANEL};")
         dl = QVBoxLayout(data_container)
+        dl.setContentsMargins(15, 15, 15, 15)
+        dl.setSpacing(10)
         
         sess_h = QHBoxLayout()
         self.combo_sessions = QComboBox()
+
         self.combo_sessions.currentIndexChanged.connect(self.on_session_selected)
         
         self.load_session_list()
         
         btn_load_sess = QPushButton("Load Selected Laps")
-        btn_load_sess.setStyleSheet("padding: 8px 16px; font-weight: bold; background-color: #E0E0E0; border: 1px solid #CCCCCC; border-radius: 6px; color: #1A1A1A;")
+        btn_load_sess.setStyleSheet(Theme.btn_style(Theme.ACCENT_GREEN, '#FFFFFF', border_color='#229954', hover_bg='#2ECC71', pressed_bg='#1E8449'))
         btn_load_sess.clicked.connect(self.on_load_session_clicked)
-        sess_h.addWidget(QLabel("Session:"))
-        sess_h.addWidget(self.combo_sessions)
+        
+        lbl_sess = QLabel("Session:")
+        lbl_sess.setStyleSheet(f'font-weight: bold; color: {Theme.TEXT_PRIMARY};')
+        sess_h.addWidget(lbl_sess)
+        sess_h.addWidget(self.combo_sessions, stretch=1)
         sess_h.addWidget(btn_load_sess)
         dl.addLayout(sess_h)
         
@@ -198,26 +279,51 @@ class ProfessionalWorkspace(QMainWindow):
         self.table_data.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
         self.table_data.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self.table_data.verticalHeader().setVisible(False)
-        self.table_data.setMaximumHeight(150)
+        self.table_data.setAlternatingRowColors(True)
+        self.table_data.setStyleSheet(Theme.table_style())
+        self.table_data.setMinimumHeight(150)
         dl.addWidget(self.table_data)
         
-        btn_math = QPushButton("Open Formula Manager")
-        btn_math.setStyleSheet("padding: 8px 16px; font-weight: bold; background-color: #E0E0E0; border: 1px solid #CCCCCC; border-radius: 6px; color: #1A1A1A;")
+        btn_h = QHBoxLayout()
+        btn_h.setSpacing(15)
+        
+        btn_math = QPushButton("Formula Manager")
+        btn_math.setStyleSheet(Theme.btn_style(Theme.ACCENT_DARK, '#FFFFFF', border_color='#1A252F', hover_bg='#34495E', padding='8px 12px'))
         btn_math.clicked.connect(self.open_formula_manager)
-        dl.addWidget(btn_math)
+        btn_h.addWidget(btn_math)
         
         self.btn_export = QPushButton("Export to MoTeC")
-        self.btn_export.setStyleSheet("padding: 8px 16px; font-weight: bold; background-color: #E0E0E0; border: 1px solid #CCCCCC; border-radius: 6px; color: #1A1A1A;")
+        self.btn_export.setStyleSheet(Theme.btn_style('#D35400', '#FFFFFF', border_color='#BA4A00', hover_bg='#E67E22', padding='8px 12px'))
         self.btn_export.clicked.connect(self.on_export_motec_clicked)
-        dl.addWidget(self.btn_export)
+        btn_h.addWidget(self.btn_export)
+        
+        btn_h.addStretch(1)
         
         btn_save_layout = QPushButton("Save Layout")
-        btn_save_layout.setStyleSheet("padding: 8px 16px; font-weight: bold; background-color: #E0E0E0; border: 1px solid #CCCCCC; border-radius: 6px; color: #1A1A1A;")
+        btn_save_layout.setStyleSheet(Theme.btn_style(Theme.ACCENT_BLUE, '#FFFFFF', border_color='#2471A3', hover_bg='#3498DB', padding='8px 12px'))
         btn_save_layout.clicked.connect(self.save_layout)
-        dl.addWidget(btn_save_layout)
+        btn_h.addWidget(btn_save_layout)
+        
+        dl.addLayout(btn_h)
         
         self.dock_data.setWidget(data_container)
-        self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.dock_data)
+        self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.dock_data)
+        
+        # --- 3 columnas verticales: Izq (tabificada) | Centro (gráficas) | Der (análisis) ---
+        # Tabificar los 3 docks en la columna izquierda
+        self.tabifyDockWidget(self.dock_map, self.dock_gforce)
+        self.tabifyDockWidget(self.dock_gforce, self.dock_data)
+        self.dock_map.raise_()  # Track Map como pestaña activa
+        
+        # Pestañas en la parte inferior del dock
+        self.setTabPosition(Qt.DockWidgetArea.LeftDockWidgetArea, QTabWidget.TabPosition.South)
+        
+        # Forzar 3 columnas de mismo ancho (33% cada una)
+        self.resizeDocks(
+            [self.dock_map, self.dock_scatter],
+            [400, 400],
+            Qt.Orientation.Horizontal
+        )
 
     def load_session_list(self):
         if not self.db_path or not os.path.exists(self.db_path):
@@ -421,10 +527,40 @@ class ProfessionalWorkspace(QMainWindow):
         new_plot = self.widget_trace.addPlot(title=channel)
         new_plot.setXLink(self.plot_speed)
         
+        if not hasattr(self, 'custom_plots'):
+            self.custom_plots = []
+        self.custom_plots.append(new_plot)
+        
+        # Agregar botón de cierre individual (X)
+        from PyQt6.QtWidgets import QGraphicsProxyWidget
+        from PyQt6.QtCore import Qt
+        close_btn = QPushButton("X")
+        close_btn.setFixedSize(20, 20)
+        close_btn.setStyleSheet(Theme.btn_style('#FFCDD2', '#1A1A1A', border_color='#E57373', padding='4px 8px'))
+        
+        proxy = QGraphicsProxyWidget()
+        proxy.setWidget(close_btn)
+        # La grilla del PlotItem tiene el título en la fila 0, col 1. Colocamos el botón en col 2
+        new_plot.layout.addItem(proxy, 0, 2, alignment=Qt.AlignmentFlag.AlignRight)
+        
+        def remove_this_plot():
+            self.widget_trace.removeItem(new_plot)
+            if new_plot in getattr(self, 'custom_plots', []):
+                self.custom_plots.remove(new_plot)
+                
+        close_btn.clicked.connect(remove_this_plot)
+        
         if self.vectorized_data:
             data = self.get_channel_data(channel)
             dist = np.cumsum(self.vectorized_data['speed'] / 3.6 * 0.016)
             new_plot.plot(dist, data, pen=pg.mkPen('y', width=2))
+
+    @safe_slot
+    def clear_custom_traces(self, *args):
+        if hasattr(self, 'custom_plots'):
+            for plot in self.custom_plots:
+                self.widget_trace.removeItem(plot)
+            self.custom_plots.clear()
 
     @safe_slot
     def open_formula_manager(self, *args):
@@ -532,6 +668,16 @@ class ProfessionalWorkspace(QMainWindow):
         self.plot_inputs.clear()
         self.plot_math.clear()
         
+        self.plot_slip_fl.clear()
+        self.plot_slip_fr.clear()
+        self.plot_slip_rl.clear()
+        self.plot_slip_rr.clear()
+        
+        self.plot_temp_fl.clear()
+        self.plot_temp_fr.clear()
+        self.plot_temp_rl.clear()
+        self.plot_temp_rr.clear()
+        
         # Paleta de colores alto contraste estilo MoTeC
         colors = ['#00FFFF', '#FF00FF', '#FFFF00', '#00FF00', '#FF8000', '#FFFFFF', '#FF0000', '#0000FF']
         
@@ -572,6 +718,29 @@ class ProfessionalWorkspace(QMainWindow):
                     self.plot_math.plot(lap_dist, math_data, pen=pen)
             except Exception as e:
                 logging.error(f"Math overlay error: {e}")
+                
+            # Slip Ratio
+            wheel_rps_fl = self.vectorized_data.get('wheelRPS_FL')
+            if wheel_rps_fl is not None:
+                wheel_rps_fl = wheel_rps_fl[idx]
+                tyre_rad_fl = self.vectorized_data['tyreRadius_FL'][idx]
+                slip_fl = (wheel_rps_fl * tyre_rad_fl * 2 * np.pi) - (lap_speed / 3.6)
+                self.plot_slip_fl.plot(lap_dist, slip_fl, pen=pen)
+                
+                wheel_rps_fr = self.vectorized_data['wheelRPS_FR'][idx]
+                tyre_rad_fr = self.vectorized_data['tyreRadius_FR'][idx]
+                slip_fr = (wheel_rps_fr * tyre_rad_fr * 2 * np.pi) - (lap_speed / 3.6)
+                self.plot_slip_fr.plot(lap_dist, slip_fr, pen=pen)
+                
+                wheel_rps_rl = self.vectorized_data['wheelRPS_RL'][idx]
+                tyre_rad_rl = self.vectorized_data['tyreRadius_RL'][idx]
+                slip_rl = (wheel_rps_rl * tyre_rad_rl * 2 * np.pi) - (lap_speed / 3.6)
+                self.plot_slip_rl.plot(lap_dist, slip_rl, pen=pen)
+                
+                wheel_rps_rr = self.vectorized_data['wheelRPS_RR'][idx]
+                tyre_rad_rr = self.vectorized_data['tyreRadius_RR'][idx]
+                slip_rr = (wheel_rps_rr * tyre_rad_rr * 2 * np.pi) - (lap_speed / 3.6)
+                self.plot_slip_rr.plot(lap_dist, slip_rr, pen=pen)
 
         # 2. Scatter
         self.update_scatter()
@@ -609,6 +778,21 @@ class ProfessionalWorkspace(QMainWindow):
             
             self.map_scatter.setData(x=x_pos_f, y=-z_pos_f, brush=brushes, size=4)
             self.plot_map.autoRange()
+            
+        # 5. G-Force Traction Circle
+        sway = self.vectorized_data.get('sway')
+        surge = self.vectorized_data.get('surge')
+        if sway is not None and surge is not None:
+            self.gforce_scatter.setData(x=sway, y=surge)
+            
+        # 6. Tyre Temperatures
+        temp_fl = self.vectorized_data.get('tyreTemp_FL')
+        if temp_fl is not None:
+            ts = self.vectorized_data['timestamp']
+            self.plot_temp_fl.plot(ts, temp_fl, pen='c')
+            self.plot_temp_fr.plot(ts, self.vectorized_data['tyreTemp_FR'], pen='m')
+            self.plot_temp_rl.plot(ts, self.vectorized_data['tyreTemp_RL'], pen='y')
+            self.plot_temp_rr.plot(ts, self.vectorized_data['tyreTemp_RR'], pen='g')
 
     def on_cursor_moved(self):
         if not self.vectorized_data or not hasattr(self, 'dist_array'):
@@ -641,6 +825,45 @@ class ProfessionalWorkspace(QMainWindow):
         settings.setValue("geometry", self.saveGeometry())
         settings.setValue("windowState", self.saveState())
         logging.info("Workspace layout saved to disk.")
+
+    @safe_slot
+    def restore_default_layout(self, *args):
+        from PyQt6.QtCore import Qt
+        self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.dock_scatter)
+        self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.dock_hist)
+        self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.dock_tyre_temp)
+        self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.dock_slip)
+        self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.dock_map)
+        self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.dock_gforce)
+        self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.dock_data)
+        
+        # Tabificar los 3 docks izquierdos
+        self.tabifyDockWidget(self.dock_map, self.dock_gforce)
+        self.tabifyDockWidget(self.dock_gforce, self.dock_data)
+        self.dock_map.raise_()
+        
+        # Igualar anchos de columnas
+        self.resizeDocks(
+            [self.dock_map, self.dock_scatter],
+            [400, 400],
+            Qt.Orientation.Horizontal
+        )
+        
+        self.dock_scatter.setFloating(False)
+        self.dock_hist.setFloating(False)
+        self.dock_map.setFloating(False)
+        self.dock_data.setFloating(False)
+        self.dock_gforce.setFloating(False)
+        self.dock_tyre_temp.setFloating(False)
+        self.dock_slip.setFloating(False)
+        
+        self.dock_scatter.show()
+        self.dock_hist.show()
+        self.dock_map.show()
+        self.dock_data.show()
+        self.dock_gforce.show()
+        self.dock_tyre_temp.show()
+        self.dock_slip.show()
 
     def restore_layout(self):
         settings = QSettings("RGDev", "GT7TelemetryPro_Workspace")

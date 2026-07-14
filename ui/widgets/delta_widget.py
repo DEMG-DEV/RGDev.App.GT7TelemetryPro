@@ -14,14 +14,14 @@ class DeltaWidget(QWidget):
         self.layout.setContentsMargins(0, 0, 0, 0)
         
         self.title_label = QLabel("Delta (Current vs Best)")
-        self.title_label.setStyleSheet("color: white; font-weight: bold; font-size: 14px;")
+        self.title_label.setStyleSheet("color: #1A1A1A; font-weight: bold; font-size: 14px;")
         self.layout.addWidget(self.title_label)
         
         # Gráfica de pyqtgraph
         self.plot_widget = pg.PlotWidget()
-        self.plot_widget.setBackground('transparent')
+        self.plot_widget.setBackground('#FAFAFA')
         self.plot_widget.showGrid(x=True, y=True, alpha=0.3)
-        self.plot_widget.setYRange(-2.0, 2.0) # +/- 2 segundos de delta por defecto
+        self.plot_widget.enableAutoRange(axis='xy')
         self.plot_widget.setLabel('left', 'Delta (s)')
         
         self.layout.addWidget(self.plot_widget)

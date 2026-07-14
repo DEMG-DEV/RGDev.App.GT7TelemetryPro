@@ -48,6 +48,25 @@ def main():
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     
     app = QApplication(sys.argv)
+    app.setStyle("Fusion")
+    
+    # Forzar paleta diurna (Light Mode) para ignorar el Dark Mode del SO
+    from PyQt6.QtGui import QPalette, QColor
+    palette = QPalette()
+    palette.setColor(QPalette.ColorRole.Window, QColor(245, 245, 245))
+    palette.setColor(QPalette.ColorRole.WindowText, QColor(26, 26, 26))
+    palette.setColor(QPalette.ColorRole.Base, QColor(255, 255, 255))
+    palette.setColor(QPalette.ColorRole.AlternateBase, QColor(240, 240, 240))
+    palette.setColor(QPalette.ColorRole.ToolTipBase, QColor(255, 255, 220))
+    palette.setColor(QPalette.ColorRole.ToolTipText, QColor(26, 26, 26))
+    palette.setColor(QPalette.ColorRole.Text, QColor(26, 26, 26))
+    palette.setColor(QPalette.ColorRole.Button, QColor(240, 240, 240))
+    palette.setColor(QPalette.ColorRole.ButtonText, QColor(26, 26, 26))
+    palette.setColor(QPalette.ColorRole.BrightText, QColor(255, 0, 0))
+    palette.setColor(QPalette.ColorRole.Highlight, QColor(42, 130, 218))
+    palette.setColor(QPalette.ColorRole.HighlightedText, QColor(255, 255, 255))
+    app.setPalette(palette)
+    
     window = TelemetryMainWindow()
     window.show()
     sys.exit(app.exec())

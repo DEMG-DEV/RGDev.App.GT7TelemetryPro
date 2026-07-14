@@ -1,0 +1,186 @@
+/*
+ * GT7 Telemetry Pro — Daylight Theme (Modo Diurno)
+ * =================================================
+ * Tema claro de ingeniería para máximo contraste bajo luz natural.
+ * Todos los widgets interactivos tienen border-radius: 6px para
+ * compatibilidad con el motor de dibujado nativo de macOS (AGENTS.md §9).
+ */
+
+/* ── Ventana Principal ─────────────────────────────────────────────── */
+QMainWindow {
+    background-color: #F0F0F0;
+    color: #1A1A1A;
+}
+
+/* ── Paneles Agrupados ─────────────────────────────────────────────── */
+QGroupBox {
+    border: 1px solid #CCCCCC;
+    border-radius: 6px;
+    margin-top: 15px;
+    background-color: #FFFFFF;
+    color: #1A1A1A;
+    font-weight: bold;
+    font-size: 13px;
+}
+QGroupBox::title {
+    subcontrol-origin: margin;
+    left: 10px;
+    padding: 0 5px 0 5px;
+}
+
+/* ── Etiquetas ─────────────────────────────────────────────────────── */
+QLabel {
+    color: #1A1A1A;
+}
+
+/* ── Campos de Texto ───────────────────────────────────────────────── */
+QLineEdit {
+    background-color: #FFFFFF;
+    color: #1A1A1A;
+    border: 1px solid #CCCCCC;
+    padding: 6px;
+    border-radius: 6px;
+}
+
+/* ── Botones (macOS Pill Button Safe) ──────────────────────────────── */
+QPushButton {
+    background-color: #E0E0E0;
+    color: #1A1A1A;
+    border: 1px solid #CCCCCC;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: bold;
+}
+QPushButton:hover {
+    background-color: #D0D0D0;
+    border: 1px solid #999999;
+}
+QPushButton:pressed {
+    background-color: #C0C0C0;
+}
+QPushButton:disabled {
+    background-color: #F0F0F0;
+    color: #999999;
+    border: 1px solid #DDDDDD;
+}
+
+/* ── Combo Box ─────────────────────────────────────────────────────── */
+QComboBox {
+    border: 1px solid #CCCCCC;
+    border-radius: 6px;
+    padding: 6px 12px;
+    background-color: #FFFFFF;
+    font-size: 13px;
+    color: #1A1A1A;
+}
+QComboBox::drop-down {
+    border-left: 1px solid #CCCCCC;
+    width: 30px;
+}
+QComboBox QAbstractItemView {
+    background-color: #FFFFFF;
+    color: #1A1A1A;
+    selection-background-color: #2A82DA;
+    selection-color: white;
+}
+
+/* ── Tablas ─────────────────────────────────────────────────────────── */
+QTableWidget {
+    background-color: #FFFFFF;
+    alternate-background-color: #F8F9FA;
+    border: 1px solid #DDDDDD;
+    border-radius: 4px;
+    gridline-color: #EEEEEE;
+    color: #1A1A1A;
+}
+QHeaderView::section {
+    background-color: #FAFAFA;
+    font-weight: bold;
+    border: none;
+    border-bottom: 2px solid #DDDDDD;
+    padding: 6px;
+    color: #1A1A1A;
+}
+
+/* ── Barras de Progreso ────────────────────────────────────────────── */
+QProgressBar {
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: bold;
+    color: #1A1A1A;
+    background-color: #FFFFFF;
+}
+QProgressBar::chunk {
+    border-radius: 3px;
+}
+
+/* ── Listas ────────────────────────────────────────────────────────── */
+QListWidget {
+    background-color: #FFFFFF;
+    color: #1A1A1A;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+}
+QListWidget::item:selected {
+    background-color: #2A82DA;
+    color: white;
+}
+
+/* ── Sliders ───────────────────────────────────────────────────────── */
+QSlider::groove:horizontal {
+    background: #CCCCCC;
+    height: 4px;
+    border-radius: 2px;
+}
+QSlider::handle:horizontal {
+    background: #1A1A1A;
+    width: 14px;
+    margin: -5px 0;
+    border-radius: 7px;
+}
+
+/* ── ScrollBars ────────────────────────────────────────────────────── */
+QScrollBar:vertical {
+    background: #F0F0F0;
+    width: 10px;
+    border-radius: 5px;
+}
+QScrollBar::handle:vertical {
+    background: #CCCCCC;
+    min-height: 20px;
+    border-radius: 5px;
+}
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    height: 0px;
+}
+
+/* ── Dock Widgets ──────────────────────────────────────────────────── */
+QDockWidget {
+    color: #1A1A1A;
+    font-weight: bold;
+}
+QDockWidget::title {
+    background-color: #FAFAFA;
+    padding: 6px;
+    border-bottom: 1px solid #DDDDDD;
+}
+
+/* ── TextEdit ──────────────────────────────────────────────────────── */
+QTextEdit {
+    background-color: #FAFAFA;
+    color: #1A1A1A;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    font-family: Menlo;
+    font-size: 14px;
+}
+
+/* ── ToolTips ──────────────────────────────────────────────────────── */
+QToolTip {
+    background-color: #FFFFFF;
+    color: #1A1A1A;
+    border: 1px solid #CCCCCC;
+    padding: 4px;
+    border-radius: 4px;
+}

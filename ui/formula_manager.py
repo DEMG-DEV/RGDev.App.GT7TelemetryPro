@@ -4,13 +4,14 @@ from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QListWidget,
 from PyQt6.QtCore import Qt
 import numpy as np
 from core.dynamic_math import DynamicMathEngine
+from ui.theme import Theme
 
 class FormulaManagerWidget(QDialog):
     def __init__(self, math_engine: DynamicMathEngine, parent=None, test_context=None):
         super().__init__(parent)
         self.engine = math_engine
         self.test_context = test_context # Dict[str, np.ndarray] para pruebas dry-run
-        self.setWindowTitle("Formula Manager")
+        self.setWindowTitle("Gestor de Fórmulas")
         self.resize(800, 600)
         self.init_ui()
         self.load_formulas()
@@ -25,14 +26,14 @@ class FormulaManagerWidget(QDialog):
         
         self.list_formulas = QListWidget()
         self.list_formulas.itemSelectionChanged.connect(self.on_select_formula)
-        left_layout.addWidget(QLabel("Saved Channels:"))
+        left_layout.addWidget(QLabel("Canales Guardados:"))
         left_layout.addWidget(self.list_formulas)
         
-        btn_add = QPushButton("New Channel")
+        btn_add = QPushButton("Nuevo Canal")
         btn_add.clicked.connect(self.on_new)
         left_layout.addWidget(btn_add)
         
-        btn_del = QPushButton("Delete")
+        btn_del = QPushButton("Eliminar")
         btn_del.clicked.connect(self.on_delete)
         left_layout.addWidget(btn_del)
         
@@ -42,11 +43,11 @@ class FormulaManagerWidget(QDialog):
         right_layout.setContentsMargins(0,0,0,0)
         
         form_h1 = QHBoxLayout()
-        form_h1.addWidget(QLabel("Name:"))
+        form_h1.addWidget(QLabel("Nombre:"))
         self.in_name = QLineEdit()
         form_h1.addWidget(self.in_name)
         
-        form_h1.addWidget(QLabel("Group:"))
+        form_h1.addWidget(QLabel("Grupo:"))
         self.in_group = QComboBox()
         self.in_group.addItems(["Engine", "Suspension", "Tyres", "Driver", "Chassis", "Custom"])
         self.in_group.setEditable(True)
@@ -58,28 +59,28 @@ class FormulaManagerWidget(QDialog):
         form_h1.addWidget(self.in_color)
         right_layout.addLayout(form_h1)
         
-        right_layout.addWidget(QLabel("Description:"))
+        right_layout.addWidget(QLabel("Descripción:"))
         self.in_desc = QLineEdit()
         right_layout.addWidget(self.in_desc)
         
-        right_layout.addWidget(QLabel("Math Expression (NumPy allowed via 'np.'):"))
+        right_layout.addWidget(QLabel("Expresión Matemática (NumPy permitido vía 'np.'):"))
         self.in_expr = QTextEdit()
-        self.in_expr.setStyleSheet("font-family: monospace; font-size: 14px; background-color: #FAFAFA; color: #1A1A1A;")
+        self.in_expr.setStyleSheet(f"font-family: {Theme.FONT_MONO}; font-size: 14px; background-color: {Theme.BG_PANEL}; color: {Theme.TEXT_PRIMARY};")
         right_layout.addWidget(self.in_expr)
         
         # Action Buttons
         btn_h = QHBoxLayout()
-        btn_test = QPushButton("Dry Run (Test)")
+        btn_test = QPushButton("Prueba (Dry Run)")
         btn_test.clicked.connect(self.on_test)
-        btn_save = QPushButton("Save Channel")
+        btn_save = QPushButton("Guardar Canal")
         btn_save.clicked.connect(self.on_save)
         
         btn_h.addWidget(btn_test)
         btn_h.addWidget(btn_save)
         right_layout.addLayout(btn_h)
         
-        self.lbl_status = QLabel("Ready")
-        self.lbl_status.setStyleSheet("color: #666;")
+        self.lbl_status = QLabel("Listo")
+        self.lbl_status.setStyleSheet(f"color: {Theme.TEXT_SECONDARY};")
         right_layout.addWidget(self.lbl_status)
         
         # Splitter
@@ -110,7 +111,7 @@ class FormulaManagerWidget(QDialog):
         self.in_color.setText(ch.get("color", "#FFFFFF"))
         self.in_desc.setText(ch.get("description", ""))
         self.in_expr.setPlainText(ch.get("expression", ""))
-        self.lbl_status.setText("Loaded.")
+        self.lbl_status.setText("Cargado.")
         
     def on_new(self):
         self.list_formulas.clearSelection()
@@ -120,7 +121,7 @@ class FormulaManagerWidget(QDialog):
         self.in_color.setText("#FFFFFF")
         self.in_desc.clear()
         self.in_expr.clear()
-        self.lbl_status.setText("New channel mode.")
+        self.lbl_status.setText("Modo nuevo canal.")
         self.in_name.setFocus()
         
     def on_delete(self):
@@ -128,7 +129,7 @@ class FormulaManagerWidget(QDialog):
         if not items:
             return
         name = items[0].text()
-        reply = QMessageBox.question(self, "Confirm Delete", f"Delete channel '{name}'?", 
+        reply = QMessageBox.question(self, "Confirmar Eliminación", f"¿Eliminar el canal '{name}'?", 
                                      QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
         if reply == QMessageBox.StandardButton.Yes:
             self.engine.delete_channel(name)
@@ -138,7 +139,7 @@ class FormulaManagerWidget(QDialog):
     def on_save(self):
         name = self.in_name.text().strip()
         if not name:
-            QMessageBox.warning(self, "Error", "Name cannot be empty.")
+            QMessageBox.warning(self, "Error", "El nombre no puede estar vacío.")
             return
             
         expr = self.in_expr.toPlainText()
@@ -148,7 +149,7 @@ class FormulaManagerWidget(QDialog):
         dummy_vars = set(self.test_context.keys()) if self.test_context else {"speed", "throttle", "brake", "sway", "surge", "heave"}
         is_valid, msg = self.engine.validate_expression(expr, dummy_vars)
         if not is_valid:
-            QMessageBox.critical(self, "Syntax/Security Error", msg)
+            QMessageBox.critical(self, "Error de Sintaxis/Seguridad", msg)
             return
             
         self.engine.add_channel(
@@ -157,7 +158,7 @@ class FormulaManagerWidget(QDialog):
             color=self.in_color.text(),
             description=self.in_desc.text()
         )
-        self.lbl_status.setText("Saved successfully.")
+        self.lbl_status.setText("Guardado exitosamente.")
         
         # Reload and select
         self.load_formulas()
@@ -167,7 +168,7 @@ class FormulaManagerWidget(QDialog):
             
     def on_test(self):
         if not self.test_context:
-            self.lbl_status.setText("No test context provided (live session needed).")
+            self.lbl_status.setText("Sin contexto de prueba (se necesita sesión activa).")
             return
             
         expr = self.in_expr.toPlainText()
@@ -182,11 +183,11 @@ class FormulaManagerWidget(QDialog):
         self.engine.channels[name] = {"expression": expr}
         try:
             res = self.engine.evaluate(name, self.test_context)
-            self.lbl_status.setText(f"Success! Result Shape: {res.shape}, Min: {np.min(res):.2f}, Max: {np.max(res):.2f}")
-            self.lbl_status.setStyleSheet("color: #00AA00;")
+            self.lbl_status.setText(f"¡Éxito! Forma: {res.shape}, Mín: {np.min(res):.2f}, Máx: {np.max(res):.2f}")
+            self.lbl_status.setStyleSheet(f"color: {Theme.ACCENT_GREEN};")
         except Exception as e:
             self.lbl_status.setText(f"Error: {e}")
-            self.lbl_status.setStyleSheet("color: #AA0000;")
+            self.lbl_status.setStyleSheet(f"color: {Theme.ACCENT_RED};")
         finally:
             if existed:
                 self.engine.channels[name] = old_val

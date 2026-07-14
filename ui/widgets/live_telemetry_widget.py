@@ -12,7 +12,7 @@ class LiveTelemetryWidget(QFrame):
             QFrame {
                 background-color: #FAFAFA;
                 border: 1px solid #CCCCCC;
-                border-radius: 10px;
+                border-radius: 6px;
             }
             QLabel {
                 border: none;
@@ -77,8 +77,8 @@ class LiveTelemetryWidget(QFrame):
         self.bar_throttle.setTextVisible(False)
         self.bar_throttle.setStyleSheet("""
             QProgressBar {
-                border: 2px solid #333;
-                border-radius: 5px;
+                border: 1px solid #CCCCCC;
+                border-radius: 4px;
                 background-color: #E0E0E0;
                 width: 30px;
             }
@@ -103,8 +103,8 @@ class LiveTelemetryWidget(QFrame):
         self.bar_brake.setTextVisible(False)
         self.bar_brake.setStyleSheet("""
             QProgressBar {
-                border: 2px solid #333;
-                border-radius: 5px;
+                border: 1px solid #CCCCCC;
+                border-radius: 4px;
                 background-color: #E0E0E0;
                 width: 30px;
             }
@@ -132,15 +132,15 @@ class LiveTelemetryWidget(QFrame):
         self.bar_rpm.setTextVisible(False)
         self.bar_rpm.setStyleSheet("""
             QProgressBar {
-                border: 2px solid #333;
-                border-radius: 8px;
+                border: 1px solid #CCCCCC;
+                border-radius: 4px;
                 background-color: #E0E0E0;
                 height: 15px;
             }
             QProgressBar::chunk {
                 background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
                                             stop:0 #0000FF, stop:0.7 #FF8C00, stop:1 #FF0000);
-                border-radius: 6px;
+                border-radius: 3px;
             }
         """)
         
@@ -190,6 +190,6 @@ class LiveTelemetryWidget(QFrame):
         
         # Alerta RPM (Shift Light)
         if packet.rev_limit_alert_active:
-            self.setStyleSheet(self.styleSheet().replace("border-radius: 10px;", "border-radius: 10px; border: 2px solid #FF0000;"))
+            self.setStyleSheet(self.styleSheet().replace("border-radius: 6px;", "border-radius: 6px; border: 2px solid #FF0000;"))
         else:
             self.setStyleSheet(self.styleSheet().replace("border: 2px solid #FF0000;", "border: 1px solid #CCCCCC;"))
