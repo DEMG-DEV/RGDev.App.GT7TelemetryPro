@@ -99,14 +99,20 @@ class UpdateDownloader(QThread):
             os.makedirs(extract_dir, exist_ok=True)
             
             with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-                for info in zip_ref.infolist():
-                    extracted_path = zip_ref.extract(info, extract_dir)
-                    if info.external_attr > 0:
-                        try:
-                            # Restaura los permisos originales del archivo (importante para macOS +x)
-                            os.chmod(extracted_path, info.external_attr >> 16)
-                        except Exception:
-                            pass
+                if sys.platform == 'darwin':
+                    # Python's zipfile destroys symlinks, which corrupts macOS .app bundles (Qt frameworks).
+                    # Use native macOS unzip command to preserve symlinks and permissions.
+                    import subprocess
+                    subprocess.run(['unzip', '-q', '-o', zip_path, '-d', extract_dir], check=True)
+                else:
+                    for info in zip_ref.infolist():
+                        extracted_path = zip_ref.extract(info, extract_dir)
+                        if info.external_attr > 0:
+                            try:
+                                # Restaura los permisos originales del archivo
+                                os.chmod(extracted_path, info.external_attr >> 16)
+                            except Exception:
+                                pass
                 
             self.download_complete.emit(extract_dir)
             
@@ -133,11 +139,14 @@ def apply_update_and_restart(extracted_dir):
                 # Fallback for development: just copy over the cwd
                 current_app_path = os.getcwd()
 
-            # Find the new .app inside extracted_dir
+            # Find the new .app inside extracted_dir (might be nested)
             new_app_path = None
-            for item in os.listdir(extracted_dir):
-                if item.endswith('.app'):
-                    new_app_path = os.path.join(extracted_dir, item)
+            for root, dirs, files in os.walk(extracted_dir):
+                for d in dirs:
+                    if d.endswith('.app'):
+                        new_app_path = os.path.join(root, d)
+                        break
+                if new_app_path:
                     break
             
             if not new_app_path:
