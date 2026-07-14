@@ -1,5 +1,26 @@
 # 📊 Registro de Avances del Proyecto
 
+## ✅ Corrección de Actualizaciones Automáticas en Mac
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-14 09:50:00 |
+| **Responsable** | Antigravity AI |
+
+### ¿Qué se realizó?
+
+Se corrigió un problema crítico que causaba que la aplicación se rompiera en computadoras Mac después de intentar descargar e instalar una actualización automática. El sistema de extracción de archivos fue reemplazado por uno que respeta la estructura especial de las aplicaciones de Apple.
+
+### ¿Qué significa para el proyecto?
+
+Asegura que los usuarios de Mac no se queden con una aplicación bloqueada e inútil después de una actualización. El ciclo de vida de la aplicación vuelve a ser estable en todas las plataformas.
+
+### ¿Qué va a notar el usuario/cliente?
+
+- Las futuras actualizaciones automáticas se instalarán correctamente en Mac y la aplicación se reiniciará sola sin mostrar el error "No se puede abrir la aplicación". *(Nota: Se requiere descargar la versión manualmente una última vez para obtener este arreglo).*
+
+---
+
 ## ✅ Nuevo Layout de Análisis y Lanzamiento v1.0.2
 
 | Campo | Detalle |

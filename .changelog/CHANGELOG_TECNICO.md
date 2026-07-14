@@ -1,5 +1,26 @@
 # 📋 Registro Técnico de Cambios
 
+## Fix de Extracción de Actualizaciones en macOS
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-14 09:50:00 |
+| **Autor** | Antigravity AI |
+| **Componentes** | `services/updater.py` |
+| **Tipo** | Bug Fix |
+
+### Archivos Modificados
+
+| Archivo | Estado | Descripción del Cambio |
+|---------|--------|----------------------|
+| `services/updater.py` | Modificado | Reemplazo de `zipfile.ZipFile` por el binario nativo `unzip` en entornos Darwin y mejora en heurística de descubrimiento del .app. |
+
+### Detalle Técnico
+
+Se resolvió un bug crítico donde el actualizador automático corrompía la aplicación en macOS. El módulo `zipfile` de Python elimina por diseño todos los enlaces simbólicos (symlinks) al extraer. Como las librerías de Qt6 dentro del bundle `GT7TelemetryPro.app/Contents/Frameworks/` dependen estructurálmente de symlinks, la extracción dejaba el binario inservible, provocando bloqueos de Gatekeeper y del linker `dyld`. Se corrigió inyectando `subprocess.run(['unzip', '-q', '-o'...])` exclusivo para Mac y se usó `os.walk` para ubicar el .app independientemente del esquema de carpetas que GitHub inyecte en el ZIP.
+
+---
+
 ## 3-Column Layout & v1.0.2 Bump
 
 | Campo | Detalle |
