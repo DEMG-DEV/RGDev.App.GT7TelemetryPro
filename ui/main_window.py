@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
                              QLabel, QLineEdit, QPushButton, QGridLayout, 
                              QGroupBox, QFileDialog, QMessageBox, QProgressDialog, QProgressBar)
 from PyQt6.QtCore import Qt, pyqtSlot, QTimer
+from core.db_portability import export_database, validate_import_file, import_database_merge, import_database_replace
 from PyQt6.QtGui import QFont
 
 from core.models import GT7TelemetryPacket
@@ -152,11 +153,32 @@ class TelemetryMainWindow(QMainWindow):
         header_layout.addWidget(self.btn_record)
         header_layout.addWidget(self.lbl_rec_status)
         header_layout.addStretch()
+        self.btn_export = QPushButton("📦 Exportar BD")
+        self.btn_export.clicked.connect(self.export_database_action)
+        self.btn_export.setStyleSheet(Theme.btn_style(
+            '#E0E0E0', Theme.TEXT_PRIMARY, hover_bg='#D0D0D0'
+        ))
+
+        self.btn_import = QPushButton("📥 Importar BD")
+        self.btn_import.clicked.connect(self.import_database_action)
+        self.btn_import.setStyleSheet(Theme.btn_style(
+            '#E0E0E0', Theme.TEXT_PRIMARY, hover_bg='#D0D0D0'
+        ))
+
+        self.btn_sync = QPushButton("🔄 Sync LAN")
+        self.btn_sync.clicked.connect(self.open_sync_dialog)
+        self.btn_sync.setStyleSheet(Theme.btn_style(
+            Theme.ACCENT_DARK, '#FFFFFF', border_color='#1A252F', hover_bg='#34495E'
+        ))
+
         header_layout.addWidget(QLabel("PS IP:"))
         header_layout.addWidget(self.ip_input)
         header_layout.addWidget(self.btn_connect)
         header_layout.addWidget(self.btn_analysis)
         header_layout.addWidget(self.btn_pro_analysis)
+        header_layout.addWidget(self.btn_export)
+        header_layout.addWidget(self.btn_import)
+        header_layout.addWidget(self.btn_sync)
         layout.addLayout(header_layout)
         
         # --- MAIN 3-COLUMN LAYOUT ---
@@ -537,6 +559,91 @@ class TelemetryMainWindow(QMainWindow):
         self.lbl_tr.setText(f"TR: {packet.tyre_temp[1]:.0f}°C")
         self.lbl_bl.setText(f"RL: {packet.tyre_temp[2]:.0f}°C")
         self.lbl_br.setText(f"RR: {packet.tyre_temp[3]:.0f}°C")
+
+    def export_database_action(self):
+        """Exporta la base de datos a un archivo .gt7db portátil."""
+        master_db = os.path.join(os.getcwd(), 'telemetry_master.sqlite')
+        if not os.path.exists(master_db):
+            QMessageBox.warning(self, "Sin Datos", "No hay base de datos de telemetría para exportar.")
+            return
+
+        dest_path, _ = QFileDialog.getSaveFileName(
+            self, "Exportar Base de Datos de Telemetría",
+            os.path.expanduser("~/Desktop/telemetry_export.gt7db"),
+            "GT7 Telemetry Database (*.gt7db);;Todos los archivos (*)"
+        )
+        if not dest_path:
+            return
+
+        try:
+            count = export_database(master_db, dest_path)
+            QMessageBox.information(
+                self, "Exportación Exitosa",
+                f"Se exportaron {count} sesiones correctamente.\n\nArchivo: {dest_path}"
+            )
+        except Exception as e:
+            QMessageBox.critical(self, "Error de Exportación", f"No se pudo exportar:\n{e}")
+
+    def import_database_action(self):
+        """Importa una base de datos desde un archivo .gt7db."""
+        file_path, _ = QFileDialog.getOpenFileName(
+            self, "Importar Base de Datos de Telemetría",
+            os.path.expanduser("~/Desktop"),
+            "GT7 Telemetry Database (*.gt7db *.sqlite);;Todos los archivos (*)"
+        )
+        if not file_path:
+            return
+
+        # Validar el archivo
+        is_valid, msg = validate_import_file(file_path)
+        if not is_valid:
+            QMessageBox.warning(self, "Archivo Inválido", f"El archivo seleccionado no es válido:\n{msg}")
+            return
+
+        # Preguntar modo de importación
+        reply = QMessageBox.question(
+            self, "Modo de Importación",
+            f"{msg}\n\n¿Cómo deseas importar?\n\n"
+            "• Sí = Fusionar (agregar sesiones nuevas sin borrar las existentes)\n"
+            "• No = Reemplazar (sobrescribir toda la base de datos, se hará backup)",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No | QMessageBox.StandardButton.Cancel
+        )
+
+        if reply == QMessageBox.StandardButton.Cancel:
+            return
+
+        master_db = os.path.join(os.getcwd(), 'telemetry_master.sqlite')
+
+        try:
+            if reply == QMessageBox.StandardButton.Yes:
+                sessions, rows = import_database_merge(file_path, master_db)
+                QMessageBox.information(
+                    self, "Fusión Exitosa",
+                    f"Se importaron {sessions} sesiones nuevas ({rows:,} puntos de telemetría)."
+                )
+            else:
+                sessions, rows = import_database_replace(file_path, master_db)
+                QMessageBox.information(
+                    self, "Reemplazo Exitoso",
+                    f"Base de datos reemplazada. Contiene {sessions} sesiones ({rows:,} puntos).\n"
+                    "Se creó un backup automático de tu BD anterior."
+                )
+        except Exception as e:
+            QMessageBox.critical(self, "Error de Importación", f"No se pudo importar:\n{e}")
+
+    def open_sync_dialog(self):
+        """Abre el diálogo de sincronización LAN."""
+        master_db = os.path.join(os.getcwd(), 'telemetry_master.sqlite')
+        if not os.path.exists(master_db):
+            QMessageBox.warning(
+                self, "Sin Datos",
+                "No hay base de datos de telemetría. Graba al menos una sesión primero."
+            )
+            return
+
+        from ui.sync_dialog import SyncDialog
+        dialog = SyncDialog(db_path=master_db, parent=self)
+        dialog.exec()
 
     def closeEvent(self, event):
         self.client.stop()

@@ -1,5 +1,29 @@
 # 📊 Registro de Avances del Proyecto
 
+## ✅ Exportar, Importar y Sincronizar Datos por Red
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-16 12:15:00 |
+| **Responsable** | Antigravity AI |
+
+### ¿Qué se realizó?
+
+Se agregó una nueva funcionalidad que permite a los usuarios mover sus datos de telemetría entre diferentes computadoras de tres formas: exportando a un archivo portátil, importando desde un archivo, o sincronizando automáticamente por red local (WiFi/LAN).
+
+### ¿Qué significa para el proyecto?
+
+GT7 Telemetry Pro deja de ser una herramienta aislada a un solo equipo. Ahora los usuarios pueden compartir y consolidar datos entre múltiples dispositivos, algo que herramientas profesionales como MoTeC cobran extra por ofrecer.
+
+### ¿Qué va a notar el usuario/cliente?
+
+- **3 nuevos botones** en la barra superior: "📦 Exportar BD", "📥 Importar BD" y "🔄 Sync LAN".
+- **Exportar** genera un archivo `.gt7db` limpio que puede enviarse por correo, USB o nube.
+- **Importar** permite fusionar datos nuevos sin perder sesiones existentes, o reemplazar la base completa (con backup automático).
+- **Sync LAN** detecta automáticamente otros equipos con GT7 Telemetry Pro en la misma red WiFi y sincroniza las sesiones faltantes en ambas direcciones con un solo clic.
+
+---
+
 ## ✅ Corrección de Actualizaciones Automáticas en Mac
 
 | Campo | Detalle |
