@@ -1,5 +1,33 @@
 # 📋 Registro Técnico de Cambios
 
+## Feature: Exportar / Importar / Sincronización LAN de Base de Datos
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-16 12:15:00 |
+| **Autor** | Antigravity AI |
+| **Componentes** | `core/db_portability.py`, `services/sync_service.py`, `ui/sync_dialog.py`, `ui/main_window.py` |
+| **Tipo** | Feature |
+
+### Archivos Modificados
+
+| Archivo | Estado | Descripción del Cambio |
+|---------|--------|----------------------|
+| `core/db_portability.py` | Nuevo | Módulo de portabilidad con funciones `export_database` (VACUUM INTO), `validate_import_file`, `import_database_merge` (re-mapeo de IDs), `import_database_replace` (con backup), `export_sessions_to_buffer` (serialización zlib), `import_sessions_from_buffer`. |
+| `services/sync_service.py` | Nuevo | Servicio de red con 3 clases: `PeerDiscovery` (UDP broadcast :33741), `SyncServer` (TCP :33742), `SyncClient` (negociación bidireccional + transferencia comprimida). |
+| `ui/sync_dialog.py` | Nuevo | Diálogo modal `SyncDialog` con lista de peers descubiertos, barra de progreso, y resumen de sincronización. |
+| `ui/main_window.py` | Modificado | 3 botones nuevos en header: "📦 Exportar BD", "📥 Importar BD", "🔄 Sync LAN". Slots conectados a `db_portability` y `SyncDialog`. |
+
+### Detalle Técnico
+
+**Exportación:** Se usa `VACUUM INTO` de SQLite para generar un snapshot atómico de la BD sin WAL journal, produciendo un archivo `.gt7db` portable y compacto.
+
+**Importación:** El modo "fusionar" lee todas las sesiones del archivo fuente, filtra duplicados comparando `(start_time, car_id)` como clave natural, y re-mapea los `session_id` autoincrementales para evitar colisiones con las sesiones existentes. El modo "reemplazar" genera un backup automático con timestamp antes de sobrescribir.
+
+**Sincronización LAN:** Protocolo de 3 fases: (1) Descubrimiento por UDP broadcast en puerto 33741 con beacons JSON cada 3s, filtrando IPs propias. (2) Negociación TCP en puerto 33742: el cliente solicita `LIST_SESSIONS`, compara fingerprints, y calcula los sets de diferencia simétrica. (3) Transferencia bidireccional: `REQUEST_SESSIONS` para recibir sesiones faltantes (serializadas como JSON + BLOBs hex, comprimidas con zlib nivel 6), seguido de `PUSH_SESSIONS` para enviar las que el peer necesita.
+
+---
+
 ## Fix de Extracción de Actualizaciones en macOS
 
 | Campo | Detalle |

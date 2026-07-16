@@ -50,3 +50,22 @@
 11. **Tipografía Monoespaciada Segura**:
    - Para fuentes monoespaciadas (`QFont`), **nunca asumas** que `Consolas` está disponible, ya que romperá el log de consola en macOS.
    - Utiliza exclusivamente `Theme.FONT_MONO` (el cual resuelve a `Menlo` o `Courier New` como fallback multiplataforma seguro).
+
+12. **Portabilidad de Base de Datos (Exportar/Importar)**:
+   - La exportación de la BD **SIEMPRE** debe usar `VACUUM INTO` (nunca `shutil.copy`) para producir un archivo SQLite atómico sin archivos `-wal` ni `-shm` huérfanos.
+   - La importación en modo "fusionar" **DEBE** usar la clave natural `(start_time, car_id)` para detectar duplicados y re-mapear los `session_id` autoincrementales. **JAMÁS** confíes en los IDs del archivo importado.
+   - El modo "reemplazar" **DEBE** generar un backup automático con timestamp antes de sobrescribir (`_backup_YYYYMMDD_HHMMSS.sqlite`).
+   - Toda la lógica de portabilidad vive en `core/db_portability.py`. No mezcles esta responsabilidad con `core/database.py` (que es exclusivamente para escritura de sesiones activas).
+
+13. **Sincronización por Red Local (LAN Sync)**:
+   - El descubrimiento de peers usa **UDP broadcast** en el puerto `33741`. La transferencia de datos usa **TCP** en el puerto `33742`. Estos puertos están reservados y no deben reutilizarse.
+   - Los beacons UDP deben filtrar las IPs locales del propio dispositivo para evitar auto-descubrimiento.
+   - El protocolo TCP usa mensajes JSON delimitados por longitud (4 bytes big-endian + payload). Los BLOBs de telemetría se serializan como hex strings dentro del JSON y el paquete completo se comprime con `zlib` nivel 6.
+   - La sincronización es **bidireccional**: primero se reciben las sesiones faltantes del peer, luego se envían las que el peer necesita.
+   - Las sesiones con `is_locked = 1` se sincronizan pero **NUNCA** se sobrescriben si ya existen en el destino.
+
+14. **Canales Matemáticos y Evaluación Segura (AST Sandbox)**:
+   - El módulo `core/dynamic_math.py` implementa un evaluador basado en `ast.NodeVisitor` que solo permite expresiones matemáticas puras. **JAMÁS** uses `eval()`, `exec()`, `compile()` ni `asteval` para evaluar fórmulas del usuario.
+   - Solo se permiten funciones built-in de la whitelist: `max`, `min`, `abs`, `round`, `sum`, `len`, y funciones de `numpy` accedidas exclusivamente como `np.xxx`.
+   - Toda asignación de variables (`=`), importación (`import`), o llamada a atributos no-numpy está terminantemente prohibida y debe lanzar `MathSecurityError`.
+
