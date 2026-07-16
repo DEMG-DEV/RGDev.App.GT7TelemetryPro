@@ -7,3 +7,6 @@ Sessions/
 cars.csv
 dist/
 build/
+*.sqlite
+math_channels.json
+.DS_Store
