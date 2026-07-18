@@ -258,7 +258,7 @@ class TelemetryMainWindow(QMainWindow):
         gauges_grid.addWidget(self.gauge_rpm, 0, 1)
         gauges_grid.addWidget(self.gauge_boost, 1, 0)
         gauges_grid.addWidget(self.gauge_water_temp, 1, 1)
-        r_layout.addLayout(gauges_grid)
+        r_layout.addLayout(gauges_grid, 3)
         
         # Tyre temps + Pedals layout
         bars_layout = QHBoxLayout()
@@ -303,7 +303,7 @@ class TelemetryMainWindow(QMainWindow):
         r_tires.addWidget(self.gauge_br)
         bars_layout.addLayout(r_tires)
         
-        r_layout.addLayout(bars_layout)
+        r_layout.addLayout(bars_layout, 1)
         r_layout.addWidget(self.lbl_gear, alignment=Qt.AlignmentFlag.AlignCenter)
         
         self.alert_widget = AlertWidget()
@@ -318,7 +318,7 @@ class TelemetryMainWindow(QMainWindow):
         bar = QProgressBar()
         bar.setOrientation(Qt.Orientation.Vertical)
         bar.setRange(0, 100)
-        bar.setFixedSize(40, 300)
+        bar.setFixedSize(30, 180)
         bar.setTextVisible(False)
         bar.setStyleSheet(f"""
             QProgressBar {{ border: 1px solid {Theme.BORDER}; border-radius: 4px; background-color: #E0E0E0; }}

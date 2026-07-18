@@ -31,7 +31,7 @@ class TyreTempGauge(QWidget):
         super().__init__(parent)
         self.label = label
         self.temp = 0.0
-        self.setMinimumSize(80, 60)
+        self.setMinimumSize(60, 45)
 
     def set_temp(self, temp: float):
         """Actualiza la temperatura mostrada."""

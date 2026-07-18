@@ -17,7 +17,7 @@ class CircularGaugeWidget(QWidget):
         if max_val - min_val <= 10:
             self.decimals = 2
             
-        self.setMinimumSize(120, 120)
+        self.setMinimumSize(160, 160)
         
     def set_value(self, val):
         self.value = max(self.min_val, min(val, self.max_val))
