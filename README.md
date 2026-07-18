@@ -10,7 +10,7 @@
   <p>
     <img src="https://img.shields.io/badge/Python-3.10+-blue.svg" alt="Python Version">
     <img src="https://img.shields.io/badge/GUI-PyQt6-green.svg" alt="PyQt6">
-    <img src="https://img.shields.io/badge/Version-1.1.2-purple.svg" alt="Version">
+    <img src="https://img.shields.io/badge/Version-1.1.3-purple.svg" alt="Version">
     <img src="https://img.shields.io/badge/macOS-Native%20Support-lightgrey.svg" alt="macOS Support">
     <img src="https://img.shields.io/badge/Windows-Native%20Support-lightgrey.svg" alt="Windows Support">
     <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License">

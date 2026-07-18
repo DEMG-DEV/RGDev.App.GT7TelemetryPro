@@ -1,5 +1,28 @@
 # 📊 Registro de Avances del Proyecto
 
+## ✅ v1.1.3 — Indicadores Visuales de Temperatura de Neumáticos
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-17 23:00:00 |
+| **Responsable** | Antigravity AI |
+
+### ¿Qué se realizó?
+
+Se reemplazaron los indicadores de texto plano de temperatura de neumáticos por **semicírculos visuales con gradiente de color** que cambian dinámicamente según la temperatura del neumático.
+
+### ¿Qué va a notar el usuario/cliente?
+
+- Las 4 esquinas de la sección de instrumentación ahora muestran **arcos semicirculares** (FL, FR, RL, RR) en lugar de texto "TL: 72°C".
+- El color del arco indica el estado del neumático de un vistazo:
+  - 🔵 **Azul** = Frío (sin agarre)
+  - 🟢 **Verde** = Ventana óptima
+  - 🟠 **Naranja** = Caliente (al límite)
+  - 🔴 **Rojo** = Sobrecalentamiento
+- La lectura de temperatura es instantánea y visual, sin necesidad de leer números.
+
+---
+
 ## ✅ Exportar, Importar y Sincronizar Datos por Red
 
 | Campo | Detalle |

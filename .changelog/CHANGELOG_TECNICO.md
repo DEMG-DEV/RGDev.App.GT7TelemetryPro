@@ -1,5 +1,29 @@
 # 📋 Registro Técnico de Cambios
 
+## v1.1.3 — Semicírculos de Temperatura de Neumáticos
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-17 23:00:00 |
+| **Autor** | Antigravity AI |
+| **Componentes** | `ui/widgets/tyre_temp_gauge.py`, `ui/main_window.py` |
+| **Tipo** | UI Enhancement |
+
+### Archivos Modificados
+
+| Archivo | Estado | Descripción del Cambio |
+|---------|--------|----------------------|
+| `ui/widgets/tyre_temp_gauge.py` | Nuevo | Widget `TyreTempGauge` con semicírculo dibujado por QPainter. Gradiente de color dinámico: azul (frío <50°C) → verde (óptimo 50-80°C) → naranja (caliente 80-100°C) → rojo (sobrecalentamiento >100°C). Interpolación lineal entre colores. |
+| `ui/main_window.py` | Modificado | Reemplazados 4 `QLabel` de texto plano (TL/TR/RL/RR) por 4 instancias de `TyreTempGauge` con labels FL/FR/RL/RR. Layout reorganizado: columna izquierda (FL + RL), centro (pedales), columna derecha (FR + RR). |
+| `core/config.py` | Modificado | `APP_VERSION` → `1.1.3` |
+| `tools/test_full_ui_sim.py` | Nuevo | Script de simulación que inyecta telemetría sintética a 60fps en la UI completa para testing visual. |
+
+### Detalle Técnico
+
+El widget usa `QPainter.drawArc()` para dibujar un semicírculo de 180° (parte superior). El arco de valor crece de izquierda a derecha proporcionalmente a la temperatura dentro del rango 20°C–140°C. El color se calcula mediante interpolación lineal (`_lerp_color`) entre 4 zonas de temperatura calibradas para los neumáticos de GT7.
+
+---
+
 ## Feature: Exportar / Importar / Sincronización LAN de Base de Datos
 
 | Campo | Detalle |

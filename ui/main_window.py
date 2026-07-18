@@ -21,6 +21,7 @@ from core.config import APP_VERSION
 from ui.widgets.alert_widget import AlertWidget
 from ui.workspace import ProfessionalWorkspace
 from ui.widgets.circular_gauge import CircularGaugeWidget
+from ui.widgets.tyre_temp_gauge import TyreTempGauge
 from ui.theme import Theme
 from services.updater import UpdateChecker, UpdateDownloader, apply_update_and_restart
 import math
@@ -259,17 +260,20 @@ class TelemetryMainWindow(QMainWindow):
         gauges_grid.addWidget(self.gauge_water_temp, 1, 1)
         r_layout.addLayout(gauges_grid)
         
+        # Tyre temps + Pedals layout
         bars_layout = QHBoxLayout()
-        bars_layout.setContentsMargins(0, 30, 0, 30)
+        bars_layout.setContentsMargins(0, 15, 0, 15)
         
+        # Columna izquierda: semicírculos de temp neumáticos FL y RL
         l_tires = QVBoxLayout()
-        self.lbl_tl = QLabel("TL: 0°C")
-        self.lbl_bl = QLabel("RL: 0°C")
-        l_tires.addWidget(self.lbl_tl)
-        l_tires.addStretch()
-        l_tires.addWidget(self.lbl_bl)
+        l_tires.setSpacing(4)
+        self.gauge_tl = TyreTempGauge("FL")
+        self.gauge_bl = TyreTempGauge("RL")
+        l_tires.addWidget(self.gauge_tl)
+        l_tires.addWidget(self.gauge_bl)
         bars_layout.addLayout(l_tires)
         
+        # Columna central: pedales
         pedals_grid = QGridLayout()
         self.bar_thr = self.create_custom_bar("#00ff7f")
         self.bar_brk = self.create_custom_bar("#ff003c")
@@ -288,14 +292,15 @@ class TelemetryMainWindow(QMainWindow):
         pedals_grid.addWidget(self.bar_brk, 1, 1, alignment=Qt.AlignmentFlag.AlignHCenter)
         bars_layout.addLayout(pedals_grid)
         
+        # Columna derecha: semicírculos de temp neumáticos FR y RR
         r_tires = QVBoxLayout()
-        self.lbl_tr = QLabel("TR: 0°C")
-        self.lbl_br = QLabel("RR: 0°C")
+        r_tires.setSpacing(4)
+        self.gauge_tr = TyreTempGauge("FR")
+        self.gauge_br = TyreTempGauge("RR")
         self.lbl_gear = QLabel("Marcha: N")
         self.lbl_gear.setFont(QFont(Theme.FONT_MONO, 24, QFont.Weight.Bold))
-        r_tires.addWidget(self.lbl_tr)
-        r_tires.addStretch()
-        r_tires.addWidget(self.lbl_br)
+        r_tires.addWidget(self.gauge_tr)
+        r_tires.addWidget(self.gauge_br)
         bars_layout.addLayout(r_tires)
         
         r_layout.addLayout(bars_layout)
@@ -555,10 +560,10 @@ class TelemetryMainWindow(QMainWindow):
         gear_str = str(gear) if 0 < gear < 15 else ("R" if gear == 15 else "N")
         self.lbl_gear.setText(f"Marcha: {gear_str}")
         
-        self.lbl_tl.setText(f"TL: {packet.tyre_temp[0]:.0f}°C")
-        self.lbl_tr.setText(f"TR: {packet.tyre_temp[1]:.0f}°C")
-        self.lbl_bl.setText(f"RL: {packet.tyre_temp[2]:.0f}°C")
-        self.lbl_br.setText(f"RR: {packet.tyre_temp[3]:.0f}°C")
+        self.gauge_tl.set_temp(packet.tyre_temp[0])
+        self.gauge_tr.set_temp(packet.tyre_temp[1])
+        self.gauge_bl.set_temp(packet.tyre_temp[2])
+        self.gauge_br.set_temp(packet.tyre_temp[3])
 
     def export_database_action(self):
         """Exporta la base de datos a un archivo .gt7db portátil."""
