@@ -1,5 +1,37 @@
 # 📋 Registro Técnico de Cambios
 
+## Wiki + GitHub Community Standards — Documentación completa del proyecto
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-18 12:09:00 |
+| **Autor** | David Mendez (demg@outlook.com) |
+| **Branch** | master |
+| **Tipo** | Documentation |
+
+### Archivos Modificados
+
+| Archivo | Estado | Descripción del Cambio |
+|---------|--------|----------------------|
+| `CODE_OF_CONDUCT.md` | Agregado | Contributor Covenant 2.1 en español |
+| `CONTRIBUTING.md` | Agregado | Guía de contribución con reglas de arquitectura obligatorias |
+| `SECURITY.md` | Agregado | Política de seguridad con tabla de áreas críticas y mitigaciones |
+| `.github/PULL_REQUEST_TEMPLATE.md` | Agregado | Template de PR con checklist de arquitectura |
+| `wiki/` (14 archivos) | Agregado | Wiki completa con 12 páginas de vistas + Home + Sidebar |
+
+### Detalle Técnico
+
+**GitHub Community Standards (4 archivos):**
+- `CODE_OF_CONDUCT.md`: Adaptación del Contributor Covenant v2.1 en español internacional. Incluye 4 niveles de aplicación (corrección, advertencia, expulsión temporal, expulsión permanente). Contacto: demg@outlook.com.
+- `CONTRIBUTING.md`: Guía completa con: proceso de contribución (bug reports, features, PRs), reglas de arquitectura obligatorias (stack PyQt6, rendimiento zero-stutter, modo diurno, tokens Theme, `@safe_slot`), estructura del proyecto, setup de desarrollo y verificación con simulador.
+- `SECURITY.md`: Política de divulgación responsable. Tabla de 5 áreas críticas del proyecto con sus mitigaciones específicas: canales matemáticos (AST sandbox), Salsa20 (magic number validation), sync LAN (JSON delimitado), auto-update (GitHub-only), BD (queries parametrizadas).
+- `.github/PULL_REQUEST_TEMPLATE.md`: Template con: tipo de cambio (6 categorías), tabla de archivos, checklist de arquitectura de 8 puntos obligatorios, sección de testing con simulador.
+
+**Wiki completa (14 archivos, ~53 KB):**
+Cada página documenta exhaustivamente una vista del sistema: layout ASCII, tablas de configuración, diagramas de flujo de datos, APIs, interpretación de datos, y guías de uso. Las vistas documentadas: Dashboard Principal, Medidores Circulares, Temperatura de Neumáticos, Gráficas de Telemetría, Mapa de Pista, Fuerzas G, Delta-T, Alertas Pit-Wall, Historial y Análisis, Pro Analysis Workspace, Gestor de Fórmulas, Sincronización LAN.
+
+---
+
 ## CI/CD — GitHub Actions Release Workflow + limpieza de PyInstaller spec
 
 | Campo | Detalle |

@@ -1,5 +1,26 @@
 # 📊 Registro de Avances del Proyecto
 
+## ✅ Documentación completa del proyecto: Wiki y estándares de comunidad
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-18 12:09:00 |
+| **Responsable** | David Mendez |
+
+### ¿Qué se realizó?
+
+Se creó una documentación completa del proyecto que incluye: una wiki con 12 páginas detalladas explicando cada pantalla de la aplicación, un código de conducta para la comunidad, una guía para nuevos colaboradores, una política de seguridad, y una plantilla para solicitudes de cambios.
+
+### ¿Qué significa para el proyecto?
+
+El proyecto ahora cumple con todos los estándares de comunidad recomendados por GitHub (100% completado). Esto mejora la credibilidad y profesionalismo del proyecto ante usuarios potenciales y posibles colaboradores. La wiki sirve como manual de usuario completo para entender cada funcionalidad de la aplicación.
+
+### ¿Qué va a notar el usuario/cliente?
+
+Los usuarios podrán acceder a una wiki completa desde la pestaña "Wiki" del repositorio en GitHub, donde encontrarán explicaciones detalladas con diagramas de cada pantalla de la aplicación. Además, el perfil del proyecto mostrará una barra de estándares de comunidad completada al 100%.
+
+---
+
 ## ✅ Sistema de publicación automática para macOS y Windows
 
 | Campo | Detalle |
