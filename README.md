@@ -40,16 +40,28 @@ Una plataforma analítica de código abierto diseñada para extraer y transforma
 
 ---
 
-## 🆕 Novedades en v1.1.2
+## 🆕 Novedades
 
-### 📦 Exportar / Importar Base de Datos
+### 🌡️ v1.1.3 — Indicadores de Temperatura de Neumáticos
+Los 4 indicadores de temperatura de neumáticos ahora son **semicírculos visuales con gradiente de color** que cambian dinámicamente:
+
+| Color | Zona | Rango | Significado |
+|-------|------|-------|-------------|
+| 🔵 Azul | Frío | < 50°C | Sin agarre, neumático no activado |
+| 🟢 Verde | Óptimo | 50-80°C | Ventana de operación ideal |
+| 🟠 Naranja | Caliente | 80-100°C | Al límite, buen grip pero con riesgo |
+| 🔴 Rojo | Sobrecalentamiento | > 100°C | Degradación activa |
+
+![Dashboard con telemetría activa](docs/main_window_running.png)
+
+### 📦 v1.1.2 — Exportar / Importar Base de Datos
 Mueve tus datos de telemetría entre computadoras fácilmente:
 - **Exportar:** Genera un archivo `.gt7db` portátil y limpio (sin archivos WAL sueltos) que puedes enviar por USB, correo o nube.
 - **Importar:** Dos modos disponibles:
   - **Fusionar:** Agrega sesiones nuevas a tu base de datos existente sin perder nada. Detecta duplicados automáticamente.
   - **Reemplazar:** Sobrescribe la base de datos completa (con backup automático de seguridad).
 
-### 🔄 Sincronización por Red Local (LAN Sync)
+### 🔄 v1.1.2 — Sincronización por Red Local (LAN Sync)
 Si tienes GT7 Telemetry Pro abierto en **dos o más computadoras** conectadas a la misma red WiFi/LAN:
 1. Haz clic en **"🔄 Sync LAN"** en la barra superior.
 2. La app detecta automáticamente los otros dispositivos en tu red.

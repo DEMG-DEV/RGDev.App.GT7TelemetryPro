@@ -69,3 +69,12 @@
    - Solo se permiten funciones built-in de la whitelist: `max`, `min`, `abs`, `round`, `sum`, `len`, y funciones de `numpy` accedidas exclusivamente como `np.xxx`.
    - Toda asignación de variables (`=`), importación (`import`), o llamada a atributos no-numpy está terminantemente prohibida y debe lanzar `MathSecurityError`.
 
+15. **Visualización de Temperatura de Neumáticos (Semicírculos)**:
+   - Las temperaturas de los 4 neumáticos se visualizan con widgets `TyreTempGauge` (semicírculos dibujados con `QPainter.drawArc`), **NUNCA** con labels de texto plano.
+   - El color del arco **DEBE** interpolarse dinámicamente entre 4 zonas calibradas para GT7: Azul (<50°C, frío), Verde (50-80°C, óptimo), Naranja (80-100°C, caliente), Rojo (>100°C, sobrecalentamiento).
+   - El rango del gauge es 20°C–140°C. Los labels usan la nomenclatura de Fórmula 1: **FL** (Front Left), **FR** (Front Right), **RL** (Rear Left), **RR** (Rear Right).
+   - La disposición en el dashboard es: columna izquierda (FL + RL), centro (pedales Acelerador/Freno), columna derecha (FR + RR).
+
+16. **Testing Visual con Simulación (tools/)**:
+   - Todo cambio visual en el dashboard **DEBE** poder verificarse sin una consola PS4/PS5 real mediante el script `tools/test_full_ui_sim.py`, que inyecta paquetes `GT7TelemetryPacket` sintéticos a 60fps directamente a `win.latest_packet` y a los sub-widgets (`map_widget.add_point`, `graphs_widget.add_data`, etc.).
+   - El timer de UI del `TelemetryMainWindow` (`ui_timer`, 33ms) se encarga de leer `latest_packet` y actualizar los widgets visuales. **NUNCA** llames a `update_dashboard_ui()` directamente desde el inyector.
