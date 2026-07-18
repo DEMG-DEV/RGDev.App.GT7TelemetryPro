@@ -17,7 +17,7 @@
   </p>
 </div>
 
-![GT7 Telemetry Pro Dashboard](docs/main_window.png)
+![GT7 Telemetry Pro](docs/social_preview.jpg)
 
 Una plataforma analítica de código abierto diseñada para extraer y transformar los datos crudos del **Gran Turismo 7** (PS4/PS5) en una consola de ingeniería virtual del más alto nivel. 
 
