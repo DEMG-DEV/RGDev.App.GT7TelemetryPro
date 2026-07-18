@@ -1,5 +1,26 @@
 # 📊 Registro de Avances del Proyecto
 
+## ✅ Sistema de publicación automática para macOS y Windows
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-18 11:01:00 |
+| **Responsable** | David Mendez |
+
+### ¿Qué se realizó?
+
+Se creó un sistema automatizado que compila la aplicación para macOS y Windows cada vez que se publica una nueva versión. El proceso genera los archivos listos para descargar y los publica automáticamente en la página de GitHub del proyecto.
+
+### ¿Qué significa para el proyecto?
+
+Ya no es necesario compilar manualmente la aplicación en cada computadora por separado. Con un solo comando, el sistema genera ambas versiones (macOS y Windows) en la nube y las deja disponibles para descarga. Esto reduce el tiempo de publicación de ~30 minutos manuales a un proceso completamente automático.
+
+### ¿Qué va a notar el usuario/cliente?
+
+Los usuarios podrán descargar versiones siempre actualizadas directamente desde la página de GitHub del proyecto, con archivos ZIP listos para usar tanto en Mac como en Windows.
+
+---
+
 ## ✅ Actualización de documentación interna del proyecto
 
 | Campo | Detalle |

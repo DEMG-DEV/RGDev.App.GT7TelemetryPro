@@ -1,0 +1,119 @@
+name: 🏁 Build & Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build macOS app
+        run: pyinstaller GT7TelemetryPro.spec --noconfirm
+
+      - name: Create macOS ZIP
+        run: |
+          cd dist
+          zip -r -y ../GT7TelemetryPro-macOS.zip GT7TelemetryPro.app
+
+      - name: Upload macOS artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-build
+          path: GT7TelemetryPro-macOS.zip
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build Windows exe
+        run: python -m PyInstaller GT7TelemetryPro.spec --noconfirm
+
+      - name: Create Windows ZIP
+        run: Compress-Archive -Path "dist\GT7TelemetryPro" -DestinationPath "GT7TelemetryPro-Windows.zip"
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-build
+          path: GT7TelemetryPro-Windows.zip
+
+  release:
+    needs: [build-macos, build-windows]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download macOS artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: macos-build
+
+      - name: Download Windows artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-build
+
+      - name: Extract version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "GT7 Telemetry Pro v${{ steps.version.outputs.VERSION }}"
+          body: |
+            ## 🏁 GT7 Telemetry Pro v${{ steps.version.outputs.VERSION }}
+
+            ### Descargas
+
+            | Plataforma | Archivo |
+            |------------|---------|
+            | 🍎 **macOS** | `GT7TelemetryPro-macOS.zip` — Descomprime y arrastra a Aplicaciones |
+            | 🪟 **Windows** | `GT7TelemetryPro-Windows.zip` — Descomprime y ejecuta `GT7TelemetryPro.exe` |
+
+            ### Requisitos
+            - **macOS**: macOS 12+ (Monterey o superior)
+            - **Windows**: Windows 10/11 (64-bit)
+            - **Red**: PS4/PS5 conectada a la misma red local WiFi/Ethernet
+
+            ---
+            > Consulta el [CHANGELOG](https://github.com/${{ github.repository }}/blob/master/.changelog/CHANGELOG_PROYECTO.md) para ver los detalles de esta versión.
+          files: |
+            GT7TelemetryPro-macOS.zip
+            GT7TelemetryPro-Windows.zip
+          draft: false
+          prerelease: false
+          generate_release_notes: false

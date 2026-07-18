@@ -12,7 +12,7 @@ a = Analysis(
         ('app_icon.ico', '.')
     ],
     hiddenimports=[
-        'asteval', 'pyqtgraph', 'numpy', 'scipy', 'PyQt6'
+        'pyqtgraph', 'numpy', 'PyQt6'
     ],
     hookspath=[],
     hooksconfig={},

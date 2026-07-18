@@ -1,5 +1,37 @@
 # 📋 Registro Técnico de Cambios
 
+## CI/CD — GitHub Actions Release Workflow + limpieza de PyInstaller spec
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-18 11:01:00 |
+| **Autor** | David Mendez (demg@outlook.com) |
+| **Branch** | master |
+| **Tipo** | Configuration / CI-CD |
+
+### Archivos Modificados
+
+| Archivo | Estado | Descripción del Cambio |
+|---------|--------|----------------------|
+| `.github/workflows/release.yml` | Agregado | Workflow de GitHub Actions para compilar y publicar releases automáticos en macOS y Windows |
+| `GT7TelemetryPro.spec` | Modificado | Eliminados `asteval` y `scipy` de `hiddenimports` (no están en requirements.txt) |
+
+### Detalle Técnico
+
+**Nuevo workflow `release.yml`:**
+- Se activa con push de tags `v*` (ej: `git tag v1.1.3 && git push origin v1.1.3`).
+- 3 jobs: `build-macos` (macos-latest), `build-windows` (windows-latest), `release` (ubuntu-latest).
+- macOS: instala dependencias + PyInstaller → ejecuta spec → empaqueta `.app` en ZIP con `zip -r -y` (preserva symlinks de Qt6 frameworks).
+- Windows: instala dependencias + PyInstaller → ejecuta spec → empaqueta carpeta con `Compress-Archive`.
+- Release: descarga ambos ZIPs vía `actions/download-artifact@v4`, crea GitHub Release con `softprops/action-gh-release@v2` incluyendo tabla de descargas y requisitos en el body.
+- Python 3.12, `permissions: contents: write` para crear releases.
+
+**Limpieza de `GT7TelemetryPro.spec`:**
+- Eliminado `asteval` de `hiddenimports`: esta librería dejó de usarse cuando se implementó el sistema propio `SafeMathVisitor` en `core/dynamic_math.py`. Su presencia en hiddenimports causaría `ModuleNotFoundError` en CI ya que no está en `requirements.txt`.
+- Eliminado `scipy` de `hiddenimports`: nunca se importa en el código fuente. Era un remanente de una exploración temprana.
+
+---
+
 ## Actualización de documentación IA y README — Alineación con v1.1.3
 
 | Campo | Detalle |
