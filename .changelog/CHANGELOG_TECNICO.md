@@ -1,5 +1,53 @@
 # 📋 Registro Técnico de Cambios
 
+## Actualización de documentación IA y README — Alineación con v1.1.3
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-18 10:53:00 |
+| **Autor** | David Mendez (demg@outlook.com) |
+| **Branch** | master |
+| **Tipo** | Documentation |
+
+### Archivos Modificados
+
+| Archivo | Estado | Descripción del Cambio |
+|---------|--------|----------------------|
+| `.agents/AGENTS.md` | Modificado | Reescritura completa: eliminada regla §6 obsoleta (asteval), actualizada §14 (AST+eval), agregadas 7 reglas nuevas (§16-§22), renumeración completa |
+| `.ai/architecture.md` | Modificado | Reescritura completa: documentados 33 archivos Python, esquema BD, 4 puertos de red, 12 hilos, grafos de dependencia y flujos de datos |
+| `README.md` | Modificado | Corregido conteo de líneas (~6,200 → ~8,500), agregados archivos faltantes al árbol (config.py, utils.py, provider.py, replay_player.py) |
+
+### Detalle Técnico
+
+Se realizó un análisis exhaustivo del repositorio completo (33 archivos Python, ~8,500 líneas de código fuente) para identificar discrepancias entre la documentación IA y el código real de la versión 1.1.3.
+
+**Contradicciones resueltas en AGENTS.md:**
+- **Regla §6 eliminada**: Mencionaba `asteval` como librería obligatoria para evaluación de fórmulas, pero el código real usa un sistema propio basado en `ast.NodeVisitor` (`SafeMathVisitor`) + `compile()` + `eval()` con globals restringidos.
+- **Regla §14 (ahora §13) actualizada**: El texto anterior prohibía categóricamente `eval()`, `exec()` y `compile()`, pero `core/dynamic_math.py` los usa tras validación AST completa. Se reformuló para reflejar el flujo real: validación AST → `compile()` → `eval()` en sandbox.
+- **Regla §3 clarificada**: Se especificó que "CWD" se refiere al directorio redefinido por `main.py` al arrancar (no al CWD original del proceso).
+
+**Reglas nuevas agregadas (§16-§22):**
+1. §16 — Exportación MoTeC i2 (.ld/.ldx): `MotecLdWriter`, `MotecLdxWriter`, `MotecExporter`, ejecución en `MotecExportThread`.
+2. §17 — Auto-Actualización desde GitHub Releases: `UpdateChecker` + `UpdateDownloader` (QThread).
+3. §18 — Pro Analysis Workspace: `ProfessionalWorkspace` con `QDockWidget`, `DataLoaderThread`.
+4. §19 — Replay Player: `GT7SessionPlayer` hereda `TelemetryProvider`.
+5. §20 — QSS y Estilos Globales: `daylight_theme.qss` producción, `dark_theme.qss` solo experimental.
+6. §21 — Decorador `@safe_slot` obligatorio para slots cross-thread.
+7. §22 — Gestor de Fórmulas: `FormulaManagerWidget` con dry-run validation.
+
+**Reescritura de `.ai/architecture.md`:**
+De 45 líneas parciales a ~220 líneas completas con: estructura de directorios (33 archivos), esquema SQL de la BD (`sessions` + `telemetry` con pragmas WAL), tabla de 4 puertos de red (33739-33742), modelo de 12 hilos, diagramas ASCII de flujo de datos (live y post-sesión), grafo de dependencias entre módulos, tabla de patrones de diseño, y tabla de dependencias pip.
+
+**Correcciones en README.md:**
+- `~6,200 líneas` → `~8,500 líneas, 33 archivos Python`
+- `50+ campos de telemetría` → `63+ campos`
+- `2,500+ IDs de autos` → `800+` (cifra real de `gt7_cars.json`)
+- Agregados al árbol: `core/config.py`, `core/utils.py`, `services/provider.py`
+- Reordenado `services/replay_player.py` en posición lógica
+- MoTeC `.ld` → `.ld/.ldx`
+
+---
+
 ## v1.1.3 — Semicírculos de Temperatura de Neumáticos
 
 | Campo | Detalle |

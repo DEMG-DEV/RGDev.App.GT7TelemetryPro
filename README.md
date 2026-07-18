@@ -110,27 +110,30 @@ Al terminar de correr o cargar una repetición, GT7 Telemetry Pro despliega su *
 
 ## ⚙️ Arquitectura Limpia (Clean Architecture)
 
-El código fuente (~6,200 líneas) está modularizado en cuatro componentes desacoplados:
+El código fuente (~8,500 líneas, 33 archivos Python) está modularizado en cuatro componentes desacoplados:
 
 ```
 GT7TelemetryPro/
 ├── core/               # Capa de Dominio
-│   ├── models.py       # GT7TelemetryPacket (dataclass con 50+ campos de telemetría)
+│   ├── config.py       # Versión de la app (APP_VERSION) y constantes globales
+│   ├── models.py       # GT7TelemetryPacket (dataclass con 63+ campos de telemetría)
 │   ├── database.py     # SessionDatabaseWriter (WAL, batch inserts asíncronos)
 │   ├── db_portability.py # Exportar/Importar/Sincronizar bases de datos
 │   ├── math_channels.py  # Motor de métricas F1 (consumo, WOT, laps restantes)
-│   ├── dynamic_math.py   # Evaluador seguro de fórmulas (AST sandbox, sin eval())
+│   ├── dynamic_math.py   # Evaluador seguro de fórmulas (AST sandbox)
 │   ├── lap_manager.py    # Detección de vueltas y cálculo de deltas
 │   ├── alert_engine.py   # Motor de alertas (temperaturas, RPM, combustible)
-│   └── car_database.py   # Mapeo de 2,500+ IDs de autos → nombres
+│   ├── car_database.py   # Mapeo de 800+ IDs de autos → nombres
+│   └── utils.py          # @safe_slot: decorador anti-crash para slots PyQt6
 │
 ├── services/           # Capa de Ingestión y Red
+│   ├── provider.py     # TelemetryProvider: clase base abstracta (Live/Replay)
 │   ├── crypto.py       # Desencriptación Salsa20 (PS4/PS5 compatible)
 │   ├── live_client.py  # Socket UDP con heartbeat, autodescubrimiento de consola
+│   ├── replay_player.py  # Reproductor de sesiones desde SQLite (60Hz fiel)
 │   ├── sync_service.py # Sincronización LAN (UDP discovery + TCP transfer)
 │   ├── updater.py      # Auto-actualización desde GitHub Releases
-│   ├── motec_exporter.py # Exportador al formato binario MoTeC .ld
-│   └── replay_player.py  # Reproductor de sesiones desde SQLite
+│   └── motec_exporter.py # Exportador al formato binario MoTeC .ld/.ldx
 │
 ├── ui/                 # Capa Gráfica (PyQt6 + PyQtGraph)
 │   ├── main_window.py  # Ventana principal con dashboard de instrumentación
