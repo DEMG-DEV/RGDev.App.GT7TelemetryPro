@@ -108,7 +108,8 @@ class TelemetryMainWindow(QMainWindow):
         QMessageBox.warning(self, "Error de Actualización", f"Hubo un problema al descargar la actualización:\\n{err_msg}")
 
     def load_styles(self):
-        style_path = os.path.join(os.path.dirname(__file__), 'styles', 'daylight_theme.qss')
+        from core.car_database import resource_path
+        style_path = resource_path(os.path.join('ui', 'styles', 'daylight_theme.qss'))
         if os.path.exists(style_path):
             with open(style_path, 'r') as f:
                 self.setStyleSheet(f.read())

@@ -1,5 +1,37 @@
 # 📋 Registro Técnico de Cambios
 
+## Release v1.2.4 — Fix UI macOS styles y versión bump
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-20 15:43:00 |
+| **Autor** | David Mendez (demg@outlook.com) |
+| **Branch** | master |
+| **Tipo** | Bug Fix / Config |
+
+### Archivos Modificados
+
+| Archivo | Estado | Descripción del Cambio |
+|---------|--------|----------------------|
+| `core/config.py` | Modificado | Incremento de la versión a `1.2.4`. |
+| `GT7TelemetryPro.spec` | Modificado | Inclusión de la ruta `ui/styles/*.qss` en los `datas` de PyInstaller para el bundle de producción. |
+| `ui/main_window.py` | Modificado | Implementación de `resource_path()` en la carga de los estilos globales `.qss` para soporte dentro del entorno empaquetado de producción (`sys._MEIPASS`). |
+
+### Detalle Técnico
+
+Se detectó un problema en producción (`.app` y `.exe`) donde los botones de la barra superior ignoraban los estilos `border-radius: 6px` y `padding` que marca el modo diurno. Esto ocurría porque el archivo `daylight_theme.qss` no formaba parte del listado de recolección (`datas`) de `PyInstaller`.
+Se ajustó el spec y se migró el manejador de la ruta estática a `resource_path()` (como lo dicta el punto 7 de las heurísticas de arquitectura) para que el `QApplication` asimile los estilos globales resolviendo el comportamiento cuadrado de los widgets nativos de macOS.
+
+### Fragmentos de Código Relevantes
+
+```diff
+- style_path = os.path.join(os.path.dirname(__file__), 'styles', 'daylight_theme.qss')
++ from core.car_database import resource_path
++ style_path = resource_path(os.path.join('ui', 'styles', 'daylight_theme.qss'))
+```
+
+---
+
 ## Release v1.2.3 — Estandarización de BD, Thumbnails offline y Auto-Detección UI
 
 | Campo | Detalle |

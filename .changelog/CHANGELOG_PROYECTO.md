@@ -1,5 +1,27 @@
 # 📊 Registro de Avances del Proyecto
 
+## ✅ Lanzamiento de versión 1.2.4: Correcciones de Diseño Visual en Botones
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-20 15:43:00 |
+| **Responsable** | David Mendez |
+
+### ¿Qué se realizó?
+
+Se corrigió un error que provocaba que, al descargar la aplicación final en la computadora, el diseño visual de los botones superiores se mostrara cuadrado, sin color y con aspecto descuidado. Se modificaron los archivos de empaquetado para asegurar que las reglas estéticas de diseño viajen junto con el programa principal y se aplicó la actualización a la versión `v1.2.4`.
+
+### ¿Qué significa para el proyecto?
+
+- Devuelve la sensación de "software premium" a la interfaz que se había perdido durante el empaquetado y que está marcada como una alta prioridad en los estándares de diseño.
+- Garantiza que cualquier cambio futuro en los estilos de colores se refleje correctamente tanto cuando programamos como cuando el usuario final abre el archivo instalable.
+
+### ¿Qué va a notar el usuario/cliente?
+
+- Al descargar esta nueva versión, los botones volverán a verse redondeados (estilo píldora), ordenados, y con todos sus márgenes correctamente aplicados tal cual luce en la publicidad.
+
+---
+
 ## ✅ Lanzamiento de versión 1.2.3: Visualización de Autos e Integración Offline
 
 | Campo | Detalle |

@@ -42,6 +42,15 @@ Una plataforma analítica de código abierto diseñada para extraer y transforma
 
 ## 🆕 Novedades
 
+### 📸 v1.2.3 — Visualización Fotográfica y Bases de Datos Offline
+La experiencia en el muro de boxes sube de nivel con reconocimiento visual de vehículos instantáneo y datos de máxima precisión:
+
+- 🖼️ **Thumbnail In-Game a 60 FPS:** El panel de información ahora detecta tu telemetría y renderiza una fotografía ampliada de tu vehículo en tiempo real. Su sistema de caché inteligente evita *stuttering*.
+- 🚘 **580 Autos Oficiales Offline:** Base de datos corregida con nomenclaturas oficiales (incluyendo Hypercars 2024/2025). Cuenta con 570 fotografías integradas nativamente para funcionar 100% sin conexión a internet.
+- 🛣️ **Topografía Precisa:** Depuración de circuitos "fantasma", ajustando el motor heurístico estrictamente a los 121 layouts vigentes del simulador.
+
+![Dashboard con Thumbnail Fotográfico](docs/main_window.png)
+
 ### 🌡️ v1.1.3 — Indicadores de Temperatura de Neumáticos
 Los 4 indicadores de temperatura de neumáticos ahora son **semicírculos visuales con gradiente de color** que cambian dinámicamente:
 
