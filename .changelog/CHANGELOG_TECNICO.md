@@ -1,5 +1,52 @@
 # 📋 Registro Técnico de Cambios
 
+## Release v1.2.3 — Estandarización de BD, Thumbnails offline y Auto-Detección UI
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-20 15:31:00 |
+| **Autor** | David Mendez (demg@outlook.com) |
+| **Branch** | master |
+| **Tipo** | Feature / Refactor |
+
+### Archivos Modificados
+
+| Archivo | Estado | Descripción del Cambio |
+|---------|--------|----------------------|
+| `data/tracks.json` | Modificado | Se eliminaron 2 variantes de pistas fantasma (SSR X 400 y SSR X 1000) no oficiales. |
+| `data/gt7_cars.json` | Modificado | Estandarización de 65 nombres con tildes y nomenclatura oficial. Adición de 5 autos nuevos (BMW M Hybrid V8 '25, etc). Adición de propiedad `thumbnail` para todos los autos. |
+| `data/car_thumbnails/*` | Agregado | 570 imágenes PNG descargadas para soporte 100% offline. |
+| `core/car_database.py` | Modificado | Implementación de `get_car_thumbnail()` y `get_car_maker()` con resolución segura de rutas absolutas vía `resource_path()`. |
+| `ui/main_window.py` | Modificado | Integración de `QLabel` dinámico bajo "Información de Vuelta". Implementación de rastreador `_current_car_code` para optimizar carga de imagen a 60 FPS sin stuttering. Escala visual de imagen configurada a 164px de alto. |
+| `GT7TelemetryPro.spec` | Modificado | Modificación del arreglo `datas` para incluir `data/car_thumbnails` en binarios empaquetados macOS/Windows. |
+| `core/config.py` | Modificado | Incremento de `APP_VERSION` a `1.2.3`. |
+
+### Detalle Técnico
+
+Esta iteración estabiliza los recursos de datos locales y añade capacidades visuales importantes al Dashboard Principal.
+A nivel de base de datos, se reestructuró `gt7_cars.json` para alinear sus identificadores y nombres exactamente con la lista oficial de Polyphony Digital, corrigiendo errores de codificación (acentos) y agregando propiedades de `thumbnail`.
+Para la interfaz gráfica (`ui/main_window.py`), se integró un componente visual `QLabel` que dibuja el auto en curso mediante un `QPixmap`. Para asegurar la inmutabilidad de rendimiento a 60Hz del hilo de red de telemetría, se agregó una compuerta lógica basada en el rastreo de estado previo (`_current_car_code`) que impide la re-carga de la imagen a disco a menos de que el `car_code` del paquete entrante cambie, lo cual minimiza drásticamente el costo de I/O por iteración de frame de UI.
+
+Adicionalmente, se actualizó la especificación PyInstaller (`GT7TelemetryPro.spec`) asegurando la inclusión nativa de las imágenes para distribución, logrando un peso final empaquetado ultra-optimizado de ~129MB en macOS.
+
+### Fragmentos de Código Relevantes
+
+```diff
+-        self.lbl_car_id.setText(f"Auto: {car_name}")
++        self.lbl_car_id.setText(f"Auto: {car_name}")
++        
++        if packet.car_code != self._current_car_code:
++            self._current_car_code = packet.car_code
++            thumb_path = self.car_db.get_car_thumbnail(packet.car_code)
++            if thumb_path:
++                pixmap = QPixmap(thumb_path)
++                if not pixmap.isNull():
++                    scaled = pixmap.scaledToHeight(
++                        164, Qt.TransformationMode.SmoothTransformation
++                    )
++                    self.lbl_car_thumb.setPixmap(scaled)
+```
+
 ## Wiki + GitHub Community Standards — Documentación completa del proyecto
 
 | Campo | Detalle |

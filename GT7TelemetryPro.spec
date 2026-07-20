@@ -6,6 +6,7 @@ a = Analysis(
     binaries=[],
     datas=[
         ('data/*.json', 'data'),
+        ('data/car_thumbnails', 'data/car_thumbnails'),
         ('math_channels.json', '.'),
         ('app_icon.png', '.'),
         ('app_icon.icns', '.'),

@@ -1358,34 +1358,6 @@
         "no_rain": true
     },
     {
-        "id": 1261,
-        "name": "Special Stage Route X 400",
-        "category": "original",
-        "length_m": 30283.0,
-        "longest_straight_m": 12000.0,
-        "elevation_diff_m": 65.0,
-        "altitude_m": -10.0,
-        "num_corners": 0,
-        "is_reverse": false,
-        "is_oval": true,
-        "pit_lane_delta_s": 24.0,
-        "no_rain": true
-    },
-    {
-        "id": 1262,
-        "name": "Special Stage Route X 1000",
-        "category": "original",
-        "length_m": 30283.0,
-        "longest_straight_m": 12000.0,
-        "elevation_diff_m": 65.0,
-        "altitude_m": -10.0,
-        "num_corners": 0,
-        "is_reverse": false,
-        "is_oval": true,
-        "pit_lane_delta_s": 24.0,
-        "no_rain": true
-    },
-    {
         "id": 1269,
         "name": "Spa 24h Layout",
         "category": "circuit",

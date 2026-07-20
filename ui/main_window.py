@@ -5,7 +5,7 @@ from PyQt6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
                              QGroupBox, QFileDialog, QMessageBox, QProgressDialog, QProgressBar)
 from PyQt6.QtCore import Qt, pyqtSlot, QTimer
 from core.db_portability import export_database, validate_import_file, import_database_merge, import_database_replace
-from PyQt6.QtGui import QFont
+from PyQt6.QtGui import QFont, QPixmap
 
 from core.models import GT7TelemetryPacket
 from core.car_database import CarDatabase
@@ -46,6 +46,7 @@ class TelemetryMainWindow(QMainWindow):
         
         self.latest_delta_ms = None
         self.latest_packet = None
+        self._current_car_code = -1
         self.current_lap = -1
         self.laps_measured = 0
         self.fuel_at_lap_start = -1.0
@@ -192,6 +193,14 @@ class TelemetryMainWindow(QMainWindow):
         info_l = QVBoxLayout()
         self.lbl_car_id = QLabel("Auto: ---")
         self.lbl_car_id.setStyleSheet("color: #1A1A1A; font-weight: bold;")
+        self.lbl_car_thumb = QLabel()
+        self.lbl_car_thumb.setFixedHeight(180)
+        self.lbl_car_thumb.setStyleSheet(
+            f"background-color: {Theme.BG_PANEL}; "
+            "border: 1px solid #D0D0D0; border-radius: 6px; padding: 2px;"
+        )
+        self.lbl_car_thumb.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.lbl_car_thumb.hide()
         self.lbl_lap = QLabel("Vuelta: -/-")
         self.lbl_lap.setStyleSheet(f"background-color: #E0E0E0; color: {Theme.TEXT_PRIMARY}; padding: 4px; font-weight: bold; border-radius: 4px;")
         self.lbl_time = QLabel("0:00.000")
@@ -214,6 +223,7 @@ class TelemetryMainWindow(QMainWindow):
         self.lbl_wot.setStyleSheet(f"color: {Theme.TEXT_MUTED};")
         
         info_l.addWidget(self.lbl_car_id)
+        info_l.addWidget(self.lbl_car_thumb)
         info_l.addWidget(self.lbl_lap)
         info_l.addWidget(self.lbl_time)
         info_l.addWidget(self.lbl_fuel_est)
@@ -493,6 +503,24 @@ class TelemetryMainWindow(QMainWindow):
         
         car_name = self.car_db.get_car_name(packet.car_code)
         self.lbl_car_id.setText(f"Auto: {car_name}")
+        
+        if packet.car_code != self._current_car_code:
+            self._current_car_code = packet.car_code
+            thumb_path = self.car_db.get_car_thumbnail(packet.car_code)
+            if thumb_path:
+                pixmap = QPixmap(thumb_path)
+                if not pixmap.isNull():
+                    scaled = pixmap.scaledToHeight(
+                        164, Qt.TransformationMode.SmoothTransformation
+                    )
+                    self.lbl_car_thumb.setPixmap(scaled)
+                    self.lbl_car_thumb.show()
+                else:
+                    self.lbl_car_thumb.clear()
+                    self.lbl_car_thumb.hide()
+            else:
+                self.lbl_car_thumb.clear()
+                self.lbl_car_thumb.hide()
         
         lap = packet.lap_count if packet.lap_count != -1 else 0
         tot = packet.total_laps if packet.total_laps > 0 else "-"

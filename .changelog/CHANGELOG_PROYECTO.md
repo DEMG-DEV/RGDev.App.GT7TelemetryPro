@@ -1,5 +1,29 @@
 # 📊 Registro de Avances del Proyecto
 
+## ✅ Lanzamiento de versión 1.2.3: Visualización de Autos e Integración Offline
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-20 15:31:00 |
+| **Responsable** | David Mendez |
+
+### ¿Qué se realizó?
+
+Se incluyeron de manera oficial 580 vehículos completamente documentados (incluyendo 5 modelos muy recientes) y se descargaron sus imágenes para que vivan dentro del programa de forma local. Adicionalmente, el panel del simulador fue actualizado para mostrar al instante la fotografía de cada vehículo a medida que se detecta en pista y se eliminaron pistas irrelevantes que hacían ruido en las configuraciones.
+
+### ¿Qué significa para el proyecto?
+
+- La base de datos es ahora la más precisa y fidedigna hasta el momento en alineación con los datos oficiales de Gran Turismo, lo que incrementa el rigor analítico de la plataforma.
+- Al empaquetar todas las fotografías para que funcionen sin conexión a internet (offline), aseguramos que la aplicación siga respondiendo a velocidad ultra rápida en lugares sin red (ej: pits o autódromos).
+- Estas mejoras se consolidan y distribuyen a todos bajo la nueva actualización estable `v1.2.3`.
+
+### ¿Qué va a notar el usuario/cliente?
+
+- **Reconocimiento visual inmediato**: El panel lateral "Información de Vuelta" ahora exhibirá una fotografía grande (escalada al 400%) y de alta calidad del auto real en uso; esta imagen cambiará automáticamente en fracciones de segundo si el jugador cambia de auto.
+- **Nombres Impecables**: Todos los nombres de autos ahora aparecerán correctamente escritos, con tildes y caracteres especiales correspondientes, mejorando la presentación profesional del sistema.
+
+---
+
 ## ✅ Documentación completa del proyecto: Wiki y estándares de comunidad
 
 | Campo | Detalle |

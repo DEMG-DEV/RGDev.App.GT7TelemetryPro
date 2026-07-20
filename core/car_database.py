@@ -47,3 +47,25 @@ class CarDatabase:
         if car_info:
             return car_info.get("full_name", f"Auto ID: {car_code}")
         return f"Auto ID: {car_code}"
+
+    def get_car_maker(self, car_code: int) -> str:
+        """Returns the manufacturer name, or empty string if not found."""
+        car_info = self.car_db.get(str(car_code))
+        if car_info:
+            return car_info.get("maker", "")
+        return ""
+
+    def get_car_thumbnail(self, car_code: int) -> str:
+        """Returns the absolute path to the car's thumbnail image.
+        
+        Returns empty string if the car has no thumbnail or the file
+        does not exist on disk.
+        """
+        car_info = self.car_db.get(str(car_code))
+        if car_info:
+            thumb_rel = car_info.get("thumbnail", "")
+            if thumb_rel:
+                thumb_path = resource_path(os.path.join("data", thumb_rel))
+                if os.path.exists(thumb_path):
+                    return thumb_path
+        return ""
