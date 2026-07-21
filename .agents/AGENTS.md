@@ -1,7 +1,7 @@
 # Reglas Estrictas para Agentes IA en GT7 Telemetry Pro
 
-> **Versión de referencia:** 1.1.3  
-> **Última actualización:** 2026-07-18
+> **Versión de referencia:** 1.2.4  
+> **Última actualización:** 2026-07-21
 
 ## Reglas Inquebrantables de Arquitectura
 
@@ -113,7 +113,8 @@
     - La reproducción corre en un hilo daemon separado. Emite `playback_finished` al terminar.
 
 20. **QSS y Estilos Globales**:
-    - El archivo `ui/styles/daylight_theme.qss` define los estilos base de la aplicación (QGroupBox, QLabel, scrollbars, etc.) y se carga al inicializar `TelemetryMainWindow`.
+    - El archivo `ui/styles/daylight_theme.qss` define los estilos base de la aplicación (QGroupBox, QLabel, scrollbars, etc.) y se carga al inicializar `TelemetryMainWindow` obligatoriamente mediante `core/car_database.py:resource_path('ui/styles/daylight_theme.qss')`.
+    - **Empaquetado PyInstaller:** El archivo `GT7TelemetryPro.spec` DEBE incluir `('ui/styles/*.qss', 'ui/styles')` y `('data/car_thumbnails', 'data/car_thumbnails')` en el arreglo `datas` para garantizar que los estilos y activos visuales no se pierdan en producción.
     - Existe un `ui/styles/dark_theme.qss` como **plantilla experimental solamente**. Está prohibido activarlo en producción — toda la app debe funcionar exclusivamente en Modo Diurno.
     - Los estilos QSS complementan (no reemplazan) los tokens de `Theme`. QSS maneja estilos globales de widgets; `Theme` maneja estilos específicos inyectados por código.
 
@@ -125,3 +126,7 @@
     - El diálogo `FormulaManagerWidget` en `ui/formula_manager.py` es la interfaz CRUD para crear, editar y eliminar canales matemáticos definidos por el usuario.
     - Toda validación de fórmulas **DEBE** pasar por `DynamicMathEngine.validate_expression()` (que internamente ejecuta `SafeMathVisitor`) antes de guardarse en `math_channels.json`.
     - El widget incluye un botón de "dry-run" que permite al usuario probar la fórmula contra datos reales antes de confirmar.
+
+23. **Auto-Detección y Caché de Thumbnails de Vehículos**:
+    - El panel de información detecta el código de vehículo (`car_code`) en vivo a través del paquete de telemetría y renderiza su imagen correspondiente ubicada en `data/car_thumbnails/`.
+    - Para mantener el estándar Zero-Stutter a 60 FPS, la UI DEBE almacenar el `_current_car_code` en memoria y **únicamente recargar y escalar el `QPixmap` cuando el código cambie**, evitando operaciones I/O de disco repetitivas en cada fotograma del `ui_timer`.

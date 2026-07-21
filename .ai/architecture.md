@@ -1,7 +1,7 @@
 # Archivo de Contexto de Arquitectura (IA)
-## Proyecto: GT7 Telemetry Pro — v1.1.3
+## Proyecto: GT7 Telemetry Pro — v1.2.4
 
-> **Última actualización:** 2026-07-18  
+> **Última actualización:** 2026-07-21  
 > **Total archivos Python:** 33  
 > **Total líneas de código fuente:** ~8,500
 
@@ -67,9 +67,10 @@ GT7TelemetryPro/
 │       ├── delta_widget.py              # Delta-T rolling graph (verde=faster, rojo=slower)
 │       └── gforce_widget.py             # G-force scatter (lateral vs longitudinal, ±2G)
 │
-├── data/                            # Datos estáticos
-│   ├── gt7_cars.json                # 800+ autos de GT7 (id → maker/name/full_name)
-│   └── tracks.json                  # 122+ pistas (length_m, elevation_diff_m, num_corners)
+├── data/                            # Datos estáticos y activos visuales
+│   ├── gt7_cars.json                # 580 autos estandarizados (id → maker/name/thumbnail)
+│   ├── car_thumbnails/              # 570 imágenes HD PNG para despliegue 100% offline
+│   └── tracks.json                  # 121 layouts oficiales (length_m, elevation_diff_m, num_corners)
 │
 ├── tools/                           # Testing y utilidades de desarrollo
 │   ├── test_full_ui_sim.py          # Simulación completa a 60fps con paquetes sintéticos

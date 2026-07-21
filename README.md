@@ -10,7 +10,7 @@
   <p>
     <img src="https://img.shields.io/badge/Python-3.10+-blue.svg" alt="Python Version">
     <img src="https://img.shields.io/badge/GUI-PyQt6-green.svg" alt="PyQt6">
-    <img src="https://img.shields.io/badge/Version-1.1.3-purple.svg" alt="Version">
+    <img src="https://img.shields.io/badge/Version-1.2.4-purple.svg" alt="Version">
     <img src="https://img.shields.io/badge/macOS-Native%20Support-lightgrey.svg" alt="macOS Support">
     <img src="https://img.shields.io/badge/Windows-Native%20Support-lightgrey.svg" alt="Windows Support">
     <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License">
@@ -42,12 +42,15 @@ Una plataforma analítica de código abierto diseñada para extraer y transforma
 
 ## 🆕 Novedades
 
+### 🚀 v1.2.4 — Hotfix de Interfaz Gráfica (macOS / Windows Bundles)
+- 🎨 **Estilos QSS en Producción:** Se empaquetan y cargan dinámicamente los estilos globales `daylight_theme.qss` mediante `resource_path()` en ejecutables distribuidos (`.app` y `.exe`), asegurando botones estilizados con bordes redondeados (*pill buttons*) e impidiendo que el motor nativo de macOS renderice botones planos o cuadrados.
+
 ### 📸 v1.2.3 — Visualización Fotográfica y Bases de Datos Offline
 La experiencia en el muro de boxes sube de nivel con reconocimiento visual de vehículos instantáneo y datos de máxima precisión:
 
-- 🖼️ **Thumbnail In-Game a 60 FPS:** El panel de información ahora detecta tu telemetría y renderiza una fotografía ampliada de tu vehículo en tiempo real. Su sistema de caché inteligente evita *stuttering*.
-- 🚘 **580 Autos Oficiales Offline:** Base de datos corregida con nomenclaturas oficiales (incluyendo Hypercars 2024/2025). Cuenta con 570 fotografías integradas nativamente para funcionar 100% sin conexión a internet.
-- 🛣️ **Topografía Precisa:** Depuración de circuitos "fantasma", ajustando el motor heurístico estrictamente a los 121 layouts vigentes del simulador.
+- 🖼️ **Thumbnail In-Game a 60 FPS:** El panel de información detecta la telemetría en tiempo real y renderiza la fotografía ampliada del vehículo en pista. Su sistema de caché inteligente previene *stuttering*.
+- 🚘 **580 Autos Oficiales Offline:** Base de datos estandarizada con nomenclaturas oficiales (incluyendo Hypercars 2024/2025) y 570 fotografías HD integradas nativamente para operar 100% offline.
+- 🛣️ **Topografía Precisa:** Depuración de circuitos no oficiales, ajustando el motor heurístico estrictamente a los 121 layouts vigentes de GT7.
 
 ![Dashboard con Thumbnail Fotográfico](docs/main_window.png)
 
@@ -152,9 +155,10 @@ GT7TelemetryPro/
 │   ├── theme.py        # Sistema centralizado de tokens de diseño
 │   └── widgets/        # Componentes reutilizables (gauges, mapas, gráficas)
 │
-├── data/               # Datos estáticos
-│   ├── gt7_cars.json   # Base de datos de 2,500+ autos de GT7
-│   └── tracks.json     # 122 pistas con heurísticas de distancia
+├── data/               # Datos estáticos y activos visuales
+│   ├── gt7_cars.json   # Base de datos de 580 autos estandarizados de GT7
+│   ├── car_thumbnails/ # 570 imágenes HD en formato PNG para despliegue 100% offline
+│   └── tracks.json     # 121 layouts de pistas oficiales con heurísticas de distancia
 │
 └── main.py             # Entry point con aislamiento de datos por plataforma
 ```

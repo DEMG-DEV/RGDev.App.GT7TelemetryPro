@@ -2,7 +2,7 @@
 
 > Convierte tu Gran Turismo 7 en un simulador de telemetría profesional de grado ingenieril.
 
-**Versión actual:** 1.1.3 · **Stack:** Python 3.10+ · PyQt6 · pyqtgraph · NumPy · PyCryptodome  
+**Versión actual:** 1.2.4 · **Stack:** Python 3.10+ · PyQt6 · pyqtgraph · NumPy · PyCryptodome  
 **Plataformas:** macOS 12+ · Windows 10/11 · **Consolas:** PS4 / PS5
 
 ---

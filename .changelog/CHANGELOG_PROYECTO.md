@@ -1,5 +1,27 @@
 # 📊 Registro de Avances del Proyecto
 
+## ✅ Actualización Integral de Documentación, Wiki y Recursos Gráficos
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-21 10:36:00 |
+| **Responsable** | David Mendez |
+
+### ¿Qué se realizó?
+
+Se revisó minuciosamente la totalidad de la documentación del proyecto, el archivo principal de lectura (`README.md`), los manuales internos de la Wiki y las guías de inteligencia artificial. Se generaron nuevamente todas las capturas de pantalla de la interfaz con los nuevos estilos y se sincronizó el número de versión a la versión estable 1.2.4.
+
+### ¿Qué significa para el proyecto?
+
+- Mantiene el repositorio completamente ordenado, actualizado y profesional para colaboradores, usuarios y clientes.
+- Garantiza que los agentes de desarrollo futuros conozcan las últimas reglas de arquitectura (como la gestión en caché de imágenes y empaquetado de estilos).
+
+### ¿Qué va a notar el usuario/cliente?
+
+- El sitio y el repositorio del proyecto ahora reflejan fielmente las pantallas y funciones exactas de la última versión 1.2.4.
+
+---
+
 ## ✅ Lanzamiento de versión 1.2.4: Correcciones de Diseño Visual en Botones
 
 | Campo | Detalle |

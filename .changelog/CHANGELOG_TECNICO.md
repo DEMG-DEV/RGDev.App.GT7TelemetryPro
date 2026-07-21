@@ -1,5 +1,29 @@
 # 📋 Registro Técnico de Cambios
 
+## docs: Actualización de documentación técnica, Wiki, capturas y reglas de IA
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-21 10:36:00 |
+| **Autor** | David Mendez (demg@outlook.com) |
+| **Branch** | master |
+| **Tipo** | Documentation |
+
+### Archivos Modificados
+
+| Archivo | Estado | Descripción del Cambio |
+|---------|--------|----------------------|
+| `README.md` | Modificado | Actualización de badge a v1.2.4, incorporación de detalles del hotfix QSS y auto-detección de thumbnails, regeneración de capturas y mapa de datos. |
+| `.agents/AGENTS.md` | Modificado | Actualización a versión 1.2.4, formalización de la regla de empaquetado QSS/thumbnails y adición de la Regla 23 de Caché de Vehículos. |
+| `.ai/architecture.md` | Modificado | Sincronización del grafo y árbol de arquitectura con 580 autos, 570 thumbnails PNG y 121 layouts. |
+| `docs/analysis_mode.png` | Modificado | Regeneración de captura para la documentación con datos de simulación actualizados. |
+| `docs/pro_analysis.png` | Modificado | Regeneración de captura para la vista Pro Analysis Workspace. |
+| `wiki/Home.md` | Modificado | Sincronización de versión a 1.2.4 e índice de navegación. |
+| `wiki/_Sidebar.md` | Modificado | Actualización de badge lateral a v1.2.4. |
+| `wiki/Dashboard-Principal.md` | Modificado | Actualización de métrica de líneas de código (684) y documentación del widget de Auto-Detección de vehículos con caché `_current_car_code`. |
+
+---
+
 ## Release v1.2.4 — Fix UI macOS styles y versión bump
 
 | Campo | Detalle |
