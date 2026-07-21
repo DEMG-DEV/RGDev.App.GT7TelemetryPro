@@ -4,8 +4,8 @@
 
 | Versión | Soporte |
 |---------|---------|
-| 1.1.x   | ✅ Activo |
-| 1.0.x   | ⚠️ Solo bugs críticos |
+| 1.2.x   | ✅ Activo |
+| 1.1.x   | ⚠️ Solo bugs críticos |
 | < 1.0   | ❌ Sin soporte |
 
 ## Reportar una Vulnerabilidad
