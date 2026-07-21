@@ -1,0 +1,30 @@
+name: Sync Wiki to GitHub Wiki
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'wiki/**'
+
+jobs:
+  sync-wiki:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Sync wiki directory to GitHub Wiki repo
+        env:
+          ACTION_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git clone https://x-access-token:${ACTION_TOKEN}@github.com/${{ github.repository }}.wiki.git wiki_repo
+          cp -r wiki/*.md wiki_repo/
+          cd wiki_repo
+          git add .
+          if ! git diff-index --quiet HEAD; then
+            git commit -m "docs: Auto-sync wiki from master branch"
+            git push origin master
+          fi
