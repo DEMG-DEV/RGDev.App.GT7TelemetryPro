@@ -151,11 +151,11 @@ def import_database_merge(source_path: str, target_db_path: str) -> tuple:
         
         # Leer todas las sesiones del origen
         source_sessions = source_conn.execute(
-            "SELECT id, start_time, end_time, car_id, car_name, total_laps, best_laptime, is_locked FROM sessions"
+            "SELECT id, start_time, end_time, car_id, car_name, track_name, total_laps, best_laptime, is_locked FROM sessions"
         ).fetchall()
         
         for session in source_sessions:
-            old_id, start_time, end_time, car_id, car_name, total_laps, best_laptime, is_locked = session
+            old_id, start_time, end_time, car_id, car_name, track_name, total_laps, best_laptime, is_locked = session
             
             # Verificar si ya existe (duplicado)
             if (start_time, car_id) in existing_fingerprints:
@@ -164,8 +164,8 @@ def import_database_merge(source_path: str, target_db_path: str) -> tuple:
             
             # Insertar la sesión en el destino con nuevo ID
             cursor = target_conn.execute(
-                "INSERT INTO sessions (start_time, end_time, car_id, car_name, total_laps, best_laptime, is_locked) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                (start_time, end_time, car_id, car_name, total_laps, best_laptime, is_locked)
+                "INSERT INTO sessions (start_time, end_time, car_id, car_name, track_name, total_laps, best_laptime, is_locked) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                (start_time, end_time, car_id, car_name, track_name, total_laps, best_laptime, is_locked)
             )
             new_id = cursor.lastrowid
             
@@ -370,11 +370,17 @@ def _ensure_schema(conn: sqlite3.Connection):
             end_time TEXT,
             car_id INTEGER,
             car_name TEXT,
+            track_name TEXT,
             total_laps INTEGER,
             best_laptime INTEGER,
             is_locked INTEGER DEFAULT 0
         )
     """)
+    cursor = conn.cursor()
+    cursor.execute("PRAGMA table_info(sessions)")
+    existing_cols = [c[1] for c in cursor.fetchall()]
+    if 'track_name' not in existing_cols:
+        conn.execute("ALTER TABLE sessions ADD COLUMN track_name TEXT;")
     conn.execute("""
         CREATE TABLE IF NOT EXISTS telemetry (
             id INTEGER PRIMARY KEY AUTOINCREMENT,

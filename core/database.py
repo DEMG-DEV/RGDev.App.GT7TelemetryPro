@@ -41,11 +41,19 @@ class SessionDatabaseWriter:
                     end_time TEXT,
                     car_id INTEGER,
                     car_name TEXT,
+                    track_name TEXT,
                     total_laps INTEGER,
                     best_laptime INTEGER,
                     is_locked INTEGER DEFAULT 0
                 )
             """)
+            
+            # Migration check: Ensure track_name column exists for existing DBs
+            cursor = conn.cursor()
+            cursor.execute("PRAGMA table_info(sessions)")
+            existing_cols = [c[1] for c in cursor.fetchall()]
+            if 'track_name' not in existing_cols:
+                conn.execute("ALTER TABLE sessions ADD COLUMN track_name TEXT;")
             
             conn.execute("""
                 CREATE TABLE IF NOT EXISTS telemetry (

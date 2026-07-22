@@ -1,5 +1,37 @@
 # 📋 Registro Técnico de Cambios
 
+## feat: Release v1.3.4 - Rediseño de Análisis Avanzado, Persistencia de Pistas e Instrumentación Completa
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-21 18:43:00 |
+| **Autor** | David Mendez (demg@outlook.com) |
+| **Branch** | master |
+| **Tipo** | Feature / Refactor |
+
+### Archivos Modificados
+
+| Archivo | Estado | Descripción del Cambio |
+|---------|--------|----------------------|
+| `core/config.py` | Modificado | Incremento de la versión de la aplicación a `1.3.4`. |
+| `core/database.py` | Modificado | Inclusión de la columna `track_name TEXT` en el esquema de la tabla `sessions` y adición del mecanismo de auto-migración `ALTER TABLE`. |
+| `core/db_portability.py` | Modificado | Actualización de las consultas SQL de importación/exportación/fusión de sesiones para preservar la columna `track_name`. |
+| `ui/widgets/advanced_analysis_dialog.py` | Modificado | Implementación de 4 gráficas MoTeC apiladas (Speed, RPM, Pedals, Delta-T), persistencia automática de pista detectada, selector manual `📍 Pista`, incorporación de fotografía HD del auto y reordenamiento del panel de resumen. |
+| `ui/widgets/live_telemetry_widget.py` | Modificado | Rediseño completo para incorporar el dashboard de instrumentación de 4 medidores circulares, 4 semicírculos de temperatura de neumáticos, barras de pedales e indicador de marcha. |
+| `README.md` | Modificado | Actualización de badges a v1.3.4, adición de características de análisis avanzado e historia de novedades v1.3.4. |
+| `.agents/AGENTS.md` | Modificado | Actualización de versión de referencia a 1.3.4 y documentación del esquema `sessions` con `track_name`. |
+| `.ai/architecture.md` | Modificado | Actualización de versión a `v1.3.4` y sincronización de arquitectura. |
+| `docs/analysis_mode.png` | Modificado | Regeneración de captura de pantalla demostrativa de la vista de Análisis Avanzado v1.3.4. |
+
+### Detalle Técnico
+
+- **4 Gráficas Apiladas (MoTeC Style):** Reemplazo de la gráfica única de velocidad en `AdvancedAnalysisDialog` por 4 PlotWidgets apilados (`p_speed`, `p_rpm`, `p_pedals`, `p_delta`) con enlace en el eje X de distancia (`setXLink`) y seguimiento síncrono de cursor en cruz (`vlines`).
+- **Persistencia de Pista en SQLite:** Al activarse la detección heurística de circuito o al seleccionar manualmente una pista, se actualiza automáticamente el campo `track_name` en la tabla `sessions` de la base maestra `telemetry_master.sqlite`.
+- **Asignación Manual de Pistas:** Integración del botón `📍 Pista` y función `assign_track_manually()` con `QInputDialog.getItem` que consulta la base `data/tracks.json` (100+ circuitos) y permite la entrada de nombres personalizados.
+- **Instrumentación Integrada:** Reestructuración de `LiveTelemetryWidget` con 4 medidores circulares (`CircularGaugeWidget`), 4 gauges de neumáticos (`TyreTempGauge`), pedales verticales y etiqueta de marcha.
+
+---
+
 ## docs: Actualización de documentación técnica, Wiki, capturas y reglas de IA
 
 | Campo | Detalle |

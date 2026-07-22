@@ -4,75 +4,82 @@ from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel,
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont, QColor
 from core.models import GT7TelemetryPacket
+from ui.widgets.circular_gauge import CircularGaugeWidget
+from ui.widgets.tyre_temp_gauge import TyreTempGauge
+from ui.theme import Theme
 
 class LiveTelemetryWidget(QFrame):
+    """
+    Dashboard de instrumentación en tiempo real idéntico al del panel principal.
+    Incluye 4 medidores circulares, semicírculos de neumáticos, pedales e indicador de marcha.
+    """
     def __init__(self):
         super().__init__()
-        self.setStyleSheet("""
-            QFrame {
-                background-color: #FAFAFA;
-                border: 1px solid #CCCCCC;
+        self.setStyleSheet(f"""
+            QFrame {{
+                background-color: {Theme.BG_CARD};
+                border: 1px solid {Theme.BORDER};
                 border-radius: 6px;
-            }
-            QLabel {
+            }}
+            QLabel {{
                 border: none;
                 background-color: transparent;
-                color: #1A1A1A;
-            }
+                color: {Theme.TEXT_PRIMARY};
+            }}
         """)
         self.init_ui()
         
     def init_ui(self):
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(15, 15, 15, 15)
-        layout.setSpacing(10)
+        layout.setContentsMargins(10, 10, 10, 10)
+        layout.setSpacing(8)
         
         # Titulo
-        lbl_title = QLabel("Telemetry Dashboard")
-        lbl_title.setStyleSheet("font-size: 16px; font-weight: bold; color: #1A1A1A;")
-        layout.addWidget(lbl_title, alignment=Qt.AlignmentFlag.AlignCenter)
+        lbl_title = QLabel("Instrumentación en Tiempo Real")
+        lbl_title.setStyleSheet(f"font-size: 15px; font-weight: bold; color: {Theme.TEXT_PRIMARY};")
+        layout.addWidget(lbl_title, alignment=Qt.AlignmentFlag.AlignLeft)
         
-        # Grid Principal
-        grid = QGridLayout()
-        grid.setSpacing(15)
+        # 1. GRID 2x2 DE MEDIDORES CIRCULARES
+        grid_gauges = QGridLayout()
+        grid_gauges.setSpacing(10)
         
-        # VELOCIDAD Y MARCHA
-        self.lbl_speed = QLabel("0")
-        self.lbl_speed.setStyleSheet("font-size: 36px; font-weight: bold; color: #0000FF;")
-        self.lbl_speed.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.gauge_speed = CircularGaugeWidget("Velocidad", "km/h", 0, 350, Theme.ACCENT_BLUE)
+        self.gauge_rpm = CircularGaugeWidget("RPM", "rpm", 0, 10000, Theme.ACCENT_ORANGE)
+        self.gauge_boost = CircularGaugeWidget("Turbo/Boost", "bar", 0, 2.0, Theme.ACCENT_RED)
+        self.gauge_water = CircularGaugeWidget("Temp. Agua", "°C", 50, 130, Theme.ACCENT_GREEN)
         
-        lbl_speed_title = QLabel("km/h")
-        lbl_speed_title.setStyleSheet("font-size: 14px; color: #666;")
-        lbl_speed_title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        grid_gauges.addWidget(self.gauge_speed, 0, 0)
+        grid_gauges.addWidget(self.gauge_rpm, 0, 1)
+        grid_gauges.addWidget(self.gauge_boost, 1, 0)
+        grid_gauges.addWidget(self.gauge_water, 1, 1)
         
-        speed_layout = QVBoxLayout()
-        speed_layout.addWidget(self.lbl_speed)
-        speed_layout.addWidget(lbl_speed_title)
+        layout.addLayout(grid_gauges, stretch=6)
         
-        self.lbl_gear = QLabel("-")
-        self.lbl_gear.setStyleSheet("font-size: 42px; font-weight: bold; color: #FF8C00;")
-        self.lbl_gear.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        # 2. NEUMÁTICOS Y PEDALES
+        tyre_pedal_layout = QHBoxLayout()
+        tyre_pedal_layout.setSpacing(10)
         
-        lbl_gear_title = QLabel("GEAR")
-        lbl_gear_title.setStyleSheet("font-size: 14px; color: #666;")
-        lbl_gear_title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        # Izquierda: FL + RL
+        col_left_tyres = QVBoxLayout()
+        self.tyre_fl = TyreTempGauge("FL")
+        self.tyre_rl = TyreTempGauge("RL")
+        col_left_tyres.addWidget(self.tyre_fl)
+        col_left_tyres.addWidget(self.tyre_rl)
         
-        gear_layout = QVBoxLayout()
-        gear_layout.addWidget(self.lbl_gear)
-        gear_layout.addWidget(lbl_gear_title)
-        
-        grid.addLayout(speed_layout, 0, 0)
-        grid.addLayout(gear_layout, 0, 1)
-        
-        # PEDALES (Acelerador y Freno)
-        pedal_layout = QHBoxLayout()
-        pedal_layout.setSpacing(20)
+        # Centro: Pedales (Acelerador + Freno)
+        pedals_layout = QHBoxLayout()
+        pedals_layout.setSpacing(12)
         
         # Acelerador
-        accel_container = QVBoxLayout()
+        accel_box = QVBoxLayout()
+        lbl_accel = QLabel("Acelerador\n0%")
+        lbl_accel.setStyleSheet(f"font-size: 11px; font-weight: bold; color: {Theme.ACCENT_GREEN};")
+        lbl_accel.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.lbl_accel_pct = lbl_accel
+        
         self.bar_throttle = QProgressBar()
         self.bar_throttle.setOrientation(Qt.Orientation.Vertical)
-        self.bar_throttle.setRange(0, 255)
+        self.bar_throttle.setRange(0, 100)
         self.bar_throttle.setValue(0)
         self.bar_throttle.setTextVisible(False)
         self.bar_throttle.setStyleSheet("""
@@ -80,25 +87,26 @@ class LiveTelemetryWidget(QFrame):
                 border: 1px solid #CCCCCC;
                 border-radius: 4px;
                 background-color: #E0E0E0;
-                width: 30px;
+                width: 26px;
             }
             QProgressBar::chunk {
-                background: qlineargradient(x1:0, y1:1, x2:0, y2:0, 
-                                            stop:0 #008000, stop:1 #006400);
+                background: #27AE60;
                 border-radius: 3px;
             }
         """)
-        lbl_accel = QLabel("THR")
-        lbl_accel.setStyleSheet("font-weight: bold; font-size: 12px;")
-        lbl_accel.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        accel_container.addWidget(self.bar_throttle, alignment=Qt.AlignmentFlag.AlignCenter)
-        accel_container.addWidget(lbl_accel)
+        accel_box.addWidget(self.lbl_accel_pct)
+        accel_box.addWidget(self.bar_throttle, alignment=Qt.AlignmentFlag.AlignCenter)
         
         # Freno
-        brake_container = QVBoxLayout()
+        brake_box = QVBoxLayout()
+        lbl_brake = QLabel("Freno\n0%")
+        lbl_brake.setStyleSheet(f"font-size: 11px; font-weight: bold; color: {Theme.ACCENT_RED};")
+        lbl_brake.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.lbl_brake_pct = lbl_brake
+        
         self.bar_brake = QProgressBar()
         self.bar_brake.setOrientation(Qt.Orientation.Vertical)
-        self.bar_brake.setRange(0, 255)
+        self.bar_brake.setRange(0, 100)
         self.bar_brake.setValue(0)
         self.bar_brake.setTextVisible(False)
         self.bar_brake.setStyleSheet("""
@@ -106,62 +114,64 @@ class LiveTelemetryWidget(QFrame):
                 border: 1px solid #CCCCCC;
                 border-radius: 4px;
                 background-color: #E0E0E0;
-                width: 30px;
+                width: 26px;
             }
             QProgressBar::chunk {
-                background: qlineargradient(x1:0, y1:1, x2:0, y2:0, 
-                                            stop:0 #FF0000, stop:1 #CC0000);
+                background: #E74C3C;
                 border-radius: 3px;
             }
         """)
-        lbl_brake = QLabel("BRK")
-        lbl_brake.setStyleSheet("font-weight: bold; font-size: 12px;")
-        lbl_brake.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        brake_container.addWidget(self.bar_brake, alignment=Qt.AlignmentFlag.AlignCenter)
-        brake_container.addWidget(lbl_brake)
+        brake_box.addWidget(self.lbl_brake_pct)
+        brake_box.addWidget(self.bar_brake, alignment=Qt.AlignmentFlag.AlignCenter)
         
-        pedal_layout.addLayout(accel_container)
-        pedal_layout.addLayout(brake_container)
+        pedals_layout.addLayout(accel_box)
+        pedals_layout.addLayout(brake_box)
         
-        grid.addLayout(pedal_layout, 0, 2, 2, 1)
+        # Derecha: FR + RR
+        col_right_tyres = QVBoxLayout()
+        self.tyre_fr = TyreTempGauge("FR")
+        self.tyre_rr = TyreTempGauge("RR")
+        col_right_tyres.addWidget(self.tyre_fr)
+        col_right_tyres.addWidget(self.tyre_rr)
         
-        # RPM Bar
-        self.bar_rpm = QProgressBar()
-        self.bar_rpm.setRange(0, 10000)
-        self.bar_rpm.setValue(0)
-        self.bar_rpm.setTextVisible(False)
-        self.bar_rpm.setStyleSheet("""
-            QProgressBar {
-                border: 1px solid #CCCCCC;
-                border-radius: 4px;
-                background-color: #E0E0E0;
-                height: 15px;
-            }
-            QProgressBar::chunk {
-                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
-                                            stop:0 #0000FF, stop:0.7 #FF8C00, stop:1 #FF0000);
-                border-radius: 3px;
-            }
-        """)
+        tyre_pedal_layout.addLayout(col_left_tyres, stretch=3)
+        tyre_pedal_layout.addLayout(pedals_layout, stretch=4)
+        tyre_pedal_layout.addLayout(col_right_tyres, stretch=3)
         
-        self.lbl_rpm_text = QLabel("0 RPM")
-        self.lbl_rpm_text.setStyleSheet("font-size: 14px; font-weight: bold; color: #1A1A1A;")
+        layout.addLayout(tyre_pedal_layout, stretch=4)
         
-        rpm_layout = QHBoxLayout()
-        rpm_layout.addWidget(self.lbl_rpm_text)
-        rpm_layout.addWidget(self.bar_rpm, stretch=1)
-        
-        grid.addLayout(rpm_layout, 1, 0, 1, 2)
-        
-        layout.addLayout(grid)
-        layout.addStretch()
+        # 3. INDICADOR DE MARCHA
+        self.lbl_gear = QLabel("Marcha: N")
+        self.lbl_gear.setStyleSheet(f"font-size: 22px; font-weight: bold; font-family: {Theme.FONT_MONO}; color: {Theme.TEXT_PRIMARY};")
+        self.lbl_gear.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(self.lbl_gear)
 
     def update_data(self, packet: GT7TelemetryPacket):
         if not packet:
             return
             
-        # Velocidad y Marcha
-        self.lbl_speed.setText(f"{int(packet.speed_kmh)}")
+        # Medidores circulares
+        self.gauge_speed.set_value(packet.speed_kmh)
+        self.gauge_rpm.set_value(packet.engine_rpm)
+        self.gauge_boost.set_value(packet.boost)
+        self.gauge_water.set_value(packet.water_temp)
+        
+        # Neumáticos
+        if hasattr(packet, 'tyre_temp') and len(packet.tyre_temp) >= 4:
+            self.tyre_fl.set_temp(packet.tyre_temp[0])
+            self.tyre_fr.set_temp(packet.tyre_temp[1])
+            self.tyre_rl.set_temp(packet.tyre_temp[2])
+            self.tyre_rr.set_temp(packet.tyre_temp[3])
+            
+        # Pedales
+        thr_pct = int(packet.throttle / 255.0 * 100.0) if packet.throttle is not None else 0
+        brk_pct = int(packet.brake / 255.0 * 100.0) if packet.brake is not None else 0
+        self.bar_throttle.setValue(thr_pct)
+        self.bar_brake.setValue(brk_pct)
+        self.lbl_accel_pct.setText(f"Acelerador\n{thr_pct}%")
+        self.lbl_brake_pct.setText(f"Freno\n{brk_pct}%")
+        
+        # Marcha
         gear_val = packet.current_gear
         if gear_val == 0:
             gear_str = "R" if packet.speed_kmh < -1 else "N"
@@ -169,27 +179,4 @@ class LiveTelemetryWidget(QFrame):
             gear_str = "N"
         else:
             gear_str = str(gear_val)
-        self.lbl_gear.setText(gear_str)
-        
-        # Pedales
-        self.bar_throttle.setValue(packet.throttle)
-        self.bar_brake.setValue(packet.brake)
-        
-        # RPM
-        rpm = int(packet.engine_rpm)
-        self.lbl_rpm_text.setText(f"{rpm} RPM")
-        
-        # Calcular max rpm dinamico para la barra
-        max_rpm = max(10000, packet.calc_max_speed if packet.calc_max_speed > 0 else 10000)
-        
-        # Como calc_max_speed a veces no es RPM sino Top Speed, si vemos RPM > max_rpm, autoajustamos
-        if rpm > self.bar_rpm.maximum():
-            self.bar_rpm.setMaximum(int(rpm * 1.1))
-            
-        self.bar_rpm.setValue(rpm)
-        
-        # Alerta RPM (Shift Light)
-        if packet.rev_limit_alert_active:
-            self.setStyleSheet(self.styleSheet().replace("border-radius: 6px;", "border-radius: 6px; border: 2px solid #FF0000;"))
-        else:
-            self.setStyleSheet(self.styleSheet().replace("border: 2px solid #FF0000;", "border: 1px solid #CCCCCC;"))
+        self.lbl_gear.setText(f"Marcha: {gear_str}")

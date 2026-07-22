@@ -10,7 +10,7 @@
   <p>
     <img src="https://img.shields.io/badge/Python-3.10+-blue.svg" alt="Python Version">
     <img src="https://img.shields.io/badge/GUI-PyQt6-green.svg" alt="PyQt6">
-    <img src="https://img.shields.io/badge/Version-1.2.4-purple.svg" alt="Version">
+    <img src="https://img.shields.io/badge/Version-1.3.4-purple.svg" alt="Version">
     <img src="https://img.shields.io/badge/macOS-Native%20Support-lightgrey.svg" alt="macOS Support">
     <img src="https://img.shields.io/badge/Windows-Native%20Support-lightgrey.svg" alt="Windows Support">
     <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License">
@@ -31,6 +31,8 @@ Una plataforma analítica de código abierto diseñada para extraer y transforma
 | :--- | :--- |
 | **Telemetry Dashboard** | Visualiza a 60 FPS la telemetría en tiempo real: pedales, marchas, volante y g-forces sin interrupciones (*Zero-stutter*). |
 | **Instrumentación Circular** | Cluster de 4 medidores circulares (Velocidad, RPM, Turbo/Boost, Temp. Agua) dibujados nativamente con QPainter. |
+| **Análisis Avanzado & MoTeC** | 4 gráficas apiladas en vertical (Velocidad, RPM, Pedales, Delta-T) enlazadas en eje X de distancia con sincronización de mapas. |
+| **Persistencia de Pistas** | Auto-guardado y asignación manual de circuitos (`sessions.track_name`) con selector integrado de más de 100 pistas. |
 | **Consumo por Vuelta** | Medición automática del consumo de combustible por vuelta con alertas visuales progresivas (Normal → Advertencia → Crítico). |
 | **Topografía Automática** | Un motor heurístico cruza tus datos contra **122 pistas oficiales**, detectando automáticamente si estás en *Fuji* o *Le Mans*. |
 | **Mapa Termodinámico** | Traza la pista procedimentalmente. **Rojo** = Frenadas fuertes, **Verde** = Acelerador a fondo (*WOT*). |
@@ -42,8 +44,15 @@ Una plataforma analítica de código abierto diseñada para extraer y transforma
 
 ## 🆕 Novedades
 
-### 🚀 v1.2.4 — Hotfix de Interfaz Gráfica (macOS / Windows Bundles)
-- 🎨 **Estilos QSS en Producción:** Se empaquetan y cargan dinámicamente los estilos globales `daylight_theme.qss` mediante `resource_path()` en ejecutables distribuidos (`.app` y `.exe`), asegurando botones estilizados con bordes redondeados (*pill buttons*) e impidiendo que el motor nativo de macOS renderice botones planos o cuadrados.
+### 📊 v1.3.4 — Rediseño de Análisis Avanzado, Persistencia de Pistas e Instrumentación Completa
+- 📊 **4 Gráficas Apiladas MoTeC:** En la vista de Análisis Avanzado, el centro dispone de 4 gráficas apiladas en vertical (Velocidad, RPM, Acelerador/Freno y Delta vs Mejor Vuelta) enlazadas por el eje X de distancia y con crosshair síncrono.
+- 🏁 **Persistencia de Pistas en SQLite:** Cuando el motor heurístico identifica la pista, se guarda automáticamente en la base de datos maestra (`sessions.track_name`).
+- 📍 **Asignación Manual de Circuitos:** Botón `📍 Pista` para asignar o modificar manualmente el circuito de cualquier sesión mediante un selector desplegable con más de 100 trazados oficiales o entrada de texto libre.
+- 🏎️ **Telemetry Dashboard Integrado:** El panel de instrumentación completo de tiempo real (4 medidores circulares, 4 semicírculos de temperatura de neumáticos, pedales y gear indicator) está incorporado en la vista de Análisis Avanzado.
+- 🖼️ **Fotografía HD del Vehículo:** Panel visual dedicado en el análisis de sesiones que renderiza la fotografía fotográfica en tiempo real del auto seleccionado.
+- 📐 **Layout Optimizado:** Reposicionamiento del Resumen de Vueltas (Overlay) en el panel izquierdo bajo la lista de vueltas para evitar cualquier recorte visual.
+
+![Análisis Avanzado de Sesión](docs/analysis_mode.png)
 
 ### 📸 v1.2.3 — Visualización Fotográfica y Bases de Datos Offline
 La experiencia en el muro de boxes sube de nivel con reconocimiento visual de vehículos instantáneo y datos de máxima precisión:

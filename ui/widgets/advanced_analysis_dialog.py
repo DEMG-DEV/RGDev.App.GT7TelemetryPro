@@ -6,12 +6,15 @@ import pyqtgraph as pg
 from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout, QListWidget, 
                              QTableWidget, QTableWidgetItem, QHeaderView, QLabel,
                              QSplitter, QWidget, QListWidgetItem, QPushButton,
-                             QAbstractItemView, QSlider, QApplication, QProgressDialog)
+                             QAbstractItemView, QSlider, QApplication, QProgressDialog,
+                             QGroupBox)
 from PyQt6.QtCore import Qt, QTimer
+from PyQt6.QtGui import QFont, QColor, QPixmap, QIcon
+
 from ui.widgets.map_widget import MapWidget
 from ui.widgets.live_telemetry_widget import LiveTelemetryWidget
 from core.models import parse_telemetry_packet
-from PyQt6.QtGui import QFont, QColor
+from core.car_database import CarDatabase, resource_path
 from ui.theme import Theme
 
 class LapAnalysisData:
@@ -49,9 +52,7 @@ class AdvancedAnalysisDialog(QDialog):
         self.playback_timer.timeout.connect(self.playback_tick)
         
         self.setWindowTitle("Análisis Avanzado de Sesión")
-        from PyQt6.QtGui import QIcon
-        import os
-        icon_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'app_icon.png')
+        icon_path = resource_path('app_icon.png')
         if os.path.exists(icon_path):
             self.setWindowIcon(QIcon(icon_path))
         self.setGeometry(50, 50, 1600, 900)
@@ -67,48 +68,57 @@ class AdvancedAnalysisDialog(QDialog):
         try:
             with sqlite3.connect(self.db_path) as conn:
                 cursor = conn.cursor()
-                cursor.execute("SELECT id, start_time, car_name, total_laps, best_laptime, is_locked FROM sessions ORDER BY id DESC")
-                sessions = cursor.fetchall()
+                cursor.execute("PRAGMA table_info(sessions)")
+                existing_cols = [c[1] for c in cursor.fetchall()]
+                has_track_col = 'track_name' in existing_cols
+                if not has_track_col:
+                    try:
+                        conn.execute("ALTER TABLE sessions ADD COLUMN track_name TEXT;")
+                        conn.commit()
+                        has_track_col = True
+                    except Exception:
+                        has_track_col = False
+                    
+                if has_track_col:
+                    cursor.execute("SELECT id, start_time, car_id, car_name, track_name, total_laps, best_laptime, is_locked FROM sessions ORDER BY id DESC")
+                    sessions = cursor.fetchall()
+                else:
+                    cursor.execute("SELECT id, start_time, car_id, car_name, total_laps, best_laptime, is_locked FROM sessions ORDER BY id DESC")
+                    raw = cursor.fetchall()
+                    sessions = [(r[0], r[1], r[2], r[3], None, r[4], r[5], r[6]) for r in raw]
                 
             self.table_sessions.setRowCount(0)
             for row_idx, row_data in enumerate(sessions):
                 self.table_sessions.insertRow(row_idx)
                 
-                # ID and Lock status
-                is_locked = row_data[5]
+                # Column 0: ID and Lock status
+                is_locked = row_data[7]
                 lock_str = " 🔒" if is_locked else ""
                 id_item = QTableWidgetItem(f"#{row_data[0]}{lock_str}")
                 id_item.setData(Qt.ItemDataRole.UserRole, row_data[0])
                 id_item.setData(Qt.ItemDataRole.UserRole + 1, is_locked)
+                id_item.setData(Qt.ItemDataRole.UserRole + 2, row_data[2])  # car_id
+                id_item.setData(Qt.ItemDataRole.UserRole + 3, row_data[3])  # car_name
                 id_item.setFont(QFont(Theme.FONT_SANS, 10, QFont.Weight.Bold))
                 id_item.setForeground(QColor('#0000FF') if not is_locked else QColor('#CC0000'))
                 self.table_sessions.setItem(row_idx, 0, id_item)
                 
-                # Fecha
-                dt_str = row_data[1][:16] if row_data[1] else "---"
+                # Column 1: Fecha corta (YYYY-MM-DD)
+                dt_str = row_data[1][:10] if row_data[1] else "---"
                 self.table_sessions.setItem(row_idx, 1, QTableWidgetItem(dt_str))
                 
-                # Auto
-                self.table_sessions.setItem(row_idx, 2, QTableWidgetItem(str(row_data[2])))
+                # Column 2: Auto
+                self.table_sessions.setItem(row_idx, 2, QTableWidgetItem(str(row_data[3])))
                 
-                # Vueltas
-                laps_item = QTableWidgetItem(str(row_data[3]))
+                # Column 3: Pista (Cargada desde la base de datos o fallback)
+                track_str = row_data[4] if row_data[4] else f"Pista #{row_data[0]}"
+                track_item = QTableWidgetItem(track_str)
+                self.table_sessions.setItem(row_idx, 3, track_item)
+                
+                # Column 4: Vueltas
+                laps_item = QTableWidgetItem(str(row_data[5]))
                 laps_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
-                self.table_sessions.setItem(row_idx, 3, laps_item)
-                
-                # Mejor Vuelta
-                best_lap = row_data[4]
-                if best_lap and best_lap > 0:
-                    mins = int(best_lap // 60000)
-                    secs = (best_lap % 60000) / 1000.0
-                    bl_str = f"{mins:02d}:{secs:06.3f}"
-                    bl_item = QTableWidgetItem(bl_str)
-                    bl_item.setForeground(QColor('#008080'))
-                else:
-                    bl_item = QTableWidgetItem("N/A")
-                    bl_item.setForeground(QColor('#666666'))
-                bl_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
-                self.table_sessions.setItem(row_idx, 4, bl_item)
+                self.table_sessions.setItem(row_idx, 4, laps_item)
                 
             # If we had a session_id, select it
             if self.session_id:
@@ -124,6 +134,29 @@ class AdvancedAnalysisDialog(QDialog):
             import logging
             logging.error(f"Error loading sessions: {e}")
 
+    def _update_car_thumbnail(self, car_id, car_name):
+        """Actualiza la imagen fotográfica del vehículo seleccionado."""
+        car_db = CarDatabase()
+        thumb_path = car_db.get_car_thumbnail(car_id) if car_id else ""
+        
+        if not thumb_path or not os.path.exists(thumb_path):
+            for code, info in car_db.car_db.items():
+                if info.get('full_name') == car_name or info.get('name') == car_name:
+                    rel = info.get('thumbnail', '')
+                    if rel:
+                        tp = resource_path(os.path.join('data', rel))
+                        if os.path.exists(tp):
+                            thumb_path = tp
+                            break
+                            
+        if thumb_path and os.path.exists(thumb_path):
+            pixmap = QPixmap(thumb_path).scaled(220, 110, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+            self.lbl_car_image.setPixmap(pixmap)
+            self.lbl_car_name.setText(car_name)
+        else:
+            self.lbl_car_image.clear()
+            self.lbl_car_name.setText(f"🏎️ {car_name}")
+
     def on_session_selected(self):
         items = self.table_sessions.selectedItems()
         if not items:
@@ -133,6 +166,10 @@ class AdvancedAnalysisDialog(QDialog):
         row = items[0].row()
         id_item = self.table_sessions.item(row, 0)
         session_id = id_item.data(Qt.ItemDataRole.UserRole)
+        car_id = id_item.data(Qt.ItemDataRole.UserRole + 2)
+        car_name = id_item.data(Qt.ItemDataRole.UserRole + 3)
+        
+        self._update_car_thumbnail(car_id, car_name)
         
         self.btn_play_pause.setEnabled(True)
         self.playback_slider.setEnabled(True)
@@ -151,6 +188,8 @@ class AdvancedAnalysisDialog(QDialog):
         if not items:
             self.btn_delete.setEnabled(False)
             self.btn_lock.setEnabled(False)
+            if hasattr(self, 'btn_edit_track'):
+                self.btn_edit_track.setEnabled(False)
             self.btn_lock.setText("🔒 Bloquear")
             return
             
@@ -158,15 +197,76 @@ class AdvancedAnalysisDialog(QDialog):
         id_item = self.table_sessions.item(row, 0)
         is_locked = id_item.data(Qt.ItemDataRole.UserRole + 1)
         
+        if hasattr(self, 'btn_edit_track'):
+            self.btn_edit_track.setEnabled(True)
+            
         self.btn_lock.setEnabled(True)
         if is_locked:
             self.btn_delete.setEnabled(False)
             self.btn_lock.setText("🔓 Desbloquear")
-            self.btn_lock.setStyleSheet(Theme.btn_style(bg="#f44336", text="#FFFFFF", border_color="#d32f2f", padding="10px"))
+            self.btn_lock.setStyleSheet(Theme.btn_style(bg="#f44336", text="#FFFFFF", border_color="#d32f2f", padding="8px"))
         else:
             self.btn_delete.setEnabled(True)
             self.btn_lock.setText("🔒 Bloquear")
-            self.btn_lock.setStyleSheet(Theme.btn_style(bg="#f6a623", text="#000000", border_color="#d48b1c", padding="10px"))
+            self.btn_lock.setStyleSheet(Theme.btn_style(bg="#f6a623", text="#000000", border_color="#d48b1c", padding="8px"))
+
+    def assign_track_manually(self):
+        items = self.table_sessions.selectedItems()
+        if not items:
+            return
+        row = items[0].row()
+        id_item = self.table_sessions.item(row, 0)
+        session_id = id_item.data(Qt.ItemDataRole.UserRole)
+        
+        track_names = []
+        tracks_file = resource_path(os.path.join('data', 'tracks.json'))
+        if os.path.exists(tracks_file):
+            try:
+                with open(tracks_file, 'r', encoding='utf-8') as f:
+                    tracks = json.load(f)
+                    track_names = sorted(list(set(t.get('name') for t in tracks if t.get('name'))))
+            except Exception:
+                pass
+                
+        if not track_names:
+            track_names = ["Autodromo Nazionale Monza", "Fuji International Speedway", "Nürburgring GP", "Suzuka Circuit", "Spa-Francorchamps", "Daytona Tri-Oval"]
+            
+        track_names.insert(0, "✏️ Nombre personalizado...")
+        
+        from PyQt6.QtWidgets import QInputDialog, QMessageBox
+        current_track_item = self.table_sessions.item(row, 3)
+        current_track = current_track_item.text() if current_track_item else ""
+        
+        choice, ok = QInputDialog.getItem(
+            self, "Asignar Pista Manualmente", 
+            f"Selecciona el circuito para la Sesión #{session_id}:", 
+            track_names, 0, False
+        )
+        
+        if ok and choice:
+            if choice == "✏️ Nombre personalizado...":
+                custom_name, ok_custom = QInputDialog.getText(
+                    self, "Nombre Personalizado de Pista",
+                    f"Escribe el nombre del circuito para la Sesión #{session_id}:",
+                    text=current_track if not current_track.startswith("Pista #") else ""
+                )
+                if ok_custom and custom_name.strip():
+                    new_track = custom_name.strip()
+                else:
+                    return
+            else:
+                new_track = choice
+                
+            try:
+                with sqlite3.connect(self.db_path) as conn:
+                    conn.execute("UPDATE sessions SET track_name = ? WHERE id = ?", (new_track, session_id))
+                    conn.commit()
+                    
+                self.track_name = new_track
+                self.table_sessions.setItem(row, 3, QTableWidgetItem(new_track))
+                self.setWindowTitle(f"Análisis Avanzado de Sesión - {new_track} (#{session_id})")
+            except Exception as e:
+                QMessageBox.critical(self, "Error", f"Fallo al guardar pista en la base de datos: {e}")
             
     def toggle_lock_session(self):
         items = self.table_sessions.selectedItems()
@@ -209,7 +309,6 @@ class AdvancedAnalysisDialog(QDialog):
                     cursor.execute("DELETE FROM telemetry WHERE session_id = ?", (session_id,))
                     cursor.execute("DELETE FROM sessions WHERE id = ?", (session_id,))
                 
-                # Vacuum cannot run within a transaction, so we run it separately in autocommit mode
                 with sqlite3.connect(self.db_path) as conn:
                     conn.isolation_level = None 
                     conn.execute("VACUUM")
@@ -219,6 +318,9 @@ class AdvancedAnalysisDialog(QDialog):
                 self.laps_data.clear()
                 self.list_laps.clear()
                 self.p_speed.clear()
+                self.p_rpm.clear()
+                self.p_pedals.clear()
+                self.p_delta.clear()
                 self.map_widget.clear()
             except Exception as e:
                 QMessageBox.critical(self, "Error", f"Fallo al eliminar sesión: {e}")
@@ -228,6 +330,9 @@ class AdvancedAnalysisDialog(QDialog):
         self.laps_data.clear()
         self.list_laps.clear()
         self.p_speed.clear()
+        self.p_rpm.clear()
+        self.p_pedals.clear()
+        self.p_delta.clear()
         self.table_summary.setColumnCount(1)
         self.map_widget.clear()
         self.best_lap = None
@@ -284,7 +389,6 @@ class AdvancedAnalysisDialog(QDialog):
                 data.lap_time = len(data.packets) * (1000.0 / 60.0)
                 data.is_valid = True
 
-            # Filter out Out-Laps (<=0) and In-Laps (max_lap)
             if len(self.laps_data) >= 3:
                 max_lap = max(self.laps_data.keys())
                 for lap in list(self.laps_data.keys()):
@@ -362,7 +466,7 @@ class AdvancedAnalysisDialog(QDialog):
                 elev_diff = np.median(elevs)
                 num_corners = np.median(corns)
                 
-                tracks_file = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "data", "tracks.json"))
+                tracks_file = resource_path(os.path.join('data', 'tracks.json'))
                 if os.path.exists(tracks_file):
                     with open(tracks_file, 'r') as f:
                         tracks = json.load(f)
@@ -373,15 +477,12 @@ class AdvancedAnalysisDialog(QDialog):
                     for t in tracks:
                         track_len = t.get('length_m', 0)
                         length_diff = abs(track_len - total_dist)
-                        
-                        # Filtro dinámico: 50 metros estrictos, o 1.5% de la longitud del circuito para absorber variaciones largas
                         dynamic_margin = max(50.0, track_len * 0.015)
                         
                         if length_diff > dynamic_margin:
                             continue
                         
                         score = 1000 - length_diff
-                        # Ponderación severa a la diferencia de elevación (identificador inmutable del relieve)
                         score -= abs(t.get('elevation_diff_m', 0) - elev_diff) * 10.0
                         score -= abs(t.get('num_corners', 0) - num_corners) * 5.0
                         
@@ -391,6 +492,22 @@ class AdvancedAnalysisDialog(QDialog):
                             
                     if best_match and highest_score > 0:
                         self.track_name = best_match['name']
+                        
+                        # Persistir el nombre de pista detectado en la base de datos SQLite
+                        try:
+                            with sqlite3.connect(self.db_path) as conn:
+                                conn.execute("UPDATE sessions SET track_name = ? WHERE id = ?", (self.track_name, session_id))
+                                conn.commit()
+                        except Exception as e:
+                            import logging
+                            logging.error(f"Error actualizando track_name en BD: {e}")
+                        
+                        # Actualizar la columna 'Pista' en la tabla UI para la sesión activa
+                        for i in range(self.table_sessions.rowCount()):
+                            item = self.table_sessions.item(i, 0)
+                            if item and item.data(Qt.ItemDataRole.UserRole) == session_id:
+                                self.table_sessions.setItem(i, 3, QTableWidgetItem(self.track_name))
+                                break
             
             self.setWindowTitle(f"Análisis Avanzado de Sesión - {self.track_name} (#{session_id})")
             self._populate_laps_list()
@@ -421,22 +538,24 @@ class AdvancedAnalysisDialog(QDialog):
         layout = QHBoxLayout(self)
         layout.setContentsMargins(5, 5, 5, 5)
         
+        # ── PANEL IZQUIERDO (Sesiones, Auto, Vueltas) ──────────────────────
         left_panel = QWidget()
         left_layout = QVBoxLayout(left_panel)
         left_layout.setContentsMargins(0, 0, 0, 0)
         
         lbl_sessions_title = QLabel("Historial de Sesiones")
-        lbl_sessions_title.setStyleSheet(f"font-weight: bold; font-size: 16px; color: {Theme.TEXT_PRIMARY};")
+        lbl_sessions_title.setStyleSheet(f"font-weight: bold; font-size: 15px; color: {Theme.TEXT_PRIMARY};")
         
+        # Tabla de Sesiones (Columnas minimizadas: ID, Fecha, Auto, Pista, Vueltas)
         self.table_sessions = QTableWidget()
         self.table_sessions.setColumnCount(5)
-        self.table_sessions.setHorizontalHeaderLabels(["ID", "Fecha / Hora", "Auto", "Vueltas", "Mejor Vuelta"])
+        self.table_sessions.setHorizontalHeaderLabels(["ID", "Fecha", "Auto", "Pista", "Vueltas"])
         
         header = self.table_sessions.horizontalHeader()
         header.setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)
-        header.setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
+        header.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
         header.setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)
-        header.setSectionResizeMode(3, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(3, QHeaderView.ResizeMode.Stretch)
         header.setSectionResizeMode(4, QHeaderView.ResizeMode.ResizeToContents)
         
         self.table_sessions.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
@@ -445,24 +564,46 @@ class AdvancedAnalysisDialog(QDialog):
         self.table_sessions.setStyleSheet(Theme.table_style())
         self.table_sessions.itemSelectionChanged.connect(self.on_session_selected)
         
+        # Panel Visual de Fotografía del Auto
+        car_box = QGroupBox("Vehículo Seleccionado")
+        car_box.setStyleSheet(f"QGroupBox {{ font-weight: bold; color: {Theme.TEXT_PRIMARY}; border: 1px solid {Theme.BORDER}; border-radius: 6px; margin-top: 6px; padding-top: 6px; }}")
+        car_box_layout = QVBoxLayout(car_box)
+        car_box_layout.setContentsMargins(5, 5, 5, 5)
+        
+        self.lbl_car_image = QLabel()
+        self.lbl_car_image.setFixedHeight(90)
+        self.lbl_car_image.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        
+        self.lbl_car_name = QLabel("Sin Selección")
+        self.lbl_car_name.setStyleSheet(f"font-size: 12px; font-weight: bold; color: {Theme.TEXT_PRIMARY};")
+        self.lbl_car_name.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        
+        car_box_layout.addWidget(self.lbl_car_image)
+        car_box_layout.addWidget(self.lbl_car_name)
+        
         btn_action_layout = QHBoxLayout()
+        self.btn_edit_track = QPushButton("📍 Pista")
+        self.btn_edit_track.setStyleSheet(Theme.btn_style(bg=Theme.BG_PANEL, text=Theme.TEXT_PRIMARY, padding="8px"))
+        self.btn_edit_track.setEnabled(False)
+        self.btn_edit_track.clicked.connect(self.assign_track_manually)
         
         self.btn_lock = QPushButton("🔒 Bloquear")
-        self.btn_lock.setStyleSheet(Theme.btn_style(bg="#f6a623", text="#000000", border_color="#d48b1c", padding="10px"))
+        self.btn_lock.setStyleSheet(Theme.btn_style(bg="#f6a623", text="#000000", border_color="#d48b1c", padding="8px"))
         self.btn_lock.setEnabled(False)
         self.btn_lock.clicked.connect(self.toggle_lock_session)
         
         self.btn_delete = QPushButton("🗑️ Eliminar")
-        self.btn_delete.setStyleSheet(Theme.btn_style(bg=Theme.BG_PANEL, text=Theme.TEXT_PRIMARY, padding="10px"))
+        self.btn_delete.setStyleSheet(Theme.btn_style(bg=Theme.BG_PANEL, text=Theme.TEXT_PRIMARY, padding="8px"))
         self.btn_delete.setEnabled(False)
         self.btn_delete.clicked.connect(self.delete_session)
         
+        btn_action_layout.addWidget(self.btn_edit_track)
         btn_action_layout.addWidget(self.btn_lock)
         btn_action_layout.addWidget(self.btn_delete)
         
         playback_layout = QVBoxLayout()
         self.btn_play_pause = QPushButton("▶ Reproducir Sesión")
-        self.btn_play_pause.setStyleSheet(Theme.btn_style(bg=Theme.BG_PANEL, text=Theme.TEXT_PRIMARY, padding="12px"))
+        self.btn_play_pause.setStyleSheet(Theme.btn_style(bg=Theme.BG_PANEL, text=Theme.TEXT_PRIMARY, padding="10px"))
         self.btn_play_pause.setEnabled(False)
         self.btn_play_pause.clicked.connect(self.toggle_playback)
         
@@ -486,10 +627,10 @@ class AdvancedAnalysisDialog(QDialog):
         playback_layout.addLayout(slider_layout)
         
         lbl_list_title = QLabel("Vueltas (Multiselección)")
-        lbl_list_title.setStyleSheet(f"font-weight: bold; font-size: 16px; color: {Theme.TEXT_PRIMARY}; padding-top: 15px;")
+        lbl_list_title.setStyleSheet(f"font-weight: bold; font-size: 15px; color: {Theme.TEXT_PRIMARY}; padding-top: 5px;")
         
         self.list_laps = QListWidget()
-        self.list_laps.setStyleSheet(f"background-color: {Theme.BG_CARD}; color: {Theme.TEXT_PRIMARY}; font-size: 14px; border: 1px solid {Theme.BORDER};")
+        self.list_laps.setStyleSheet(f"background-color: {Theme.BG_CARD}; color: {Theme.TEXT_PRIMARY}; font-size: 13px; border: 1px solid {Theme.BORDER}; border-radius: 4px;")
         self.list_laps.itemSelectionChanged.connect(self.on_lap_selected)
         self.list_laps.itemChanged.connect(self.refresh_plot)
         
@@ -497,38 +638,12 @@ class AdvancedAnalysisDialog(QDialog):
         
         sessions_container = QWidget()
         s_layout = QVBoxLayout(sessions_container)
-        s_layout.setContentsMargins(0,0,0,10)
+        s_layout.setContentsMargins(0, 0, 0, 5)
         s_layout.addWidget(lbl_sessions_title)
         s_layout.addWidget(self.table_sessions)
+        s_layout.addWidget(car_box)
         s_layout.addLayout(btn_action_layout)
         s_layout.addLayout(playback_layout)
-        
-        laps_container = QWidget()
-        l_layout = QVBoxLayout(laps_container)
-        l_layout.setContentsMargins(0,0,0,0)
-        l_layout.addWidget(lbl_list_title)
-        l_layout.addWidget(self.list_laps)
-        
-        left_layout.addWidget(sessions_container, stretch=6)
-        left_layout.addWidget(laps_container, stretch=4)
-        
-        self.map_widget = MapWidget("Mapa Interactivo")
-        
-        right_panel = QWidget()
-        right_layout = QVBoxLayout(right_panel)
-        right_layout.setContentsMargins(0, 0, 0, 0)
-        
-        graphs_widget = QWidget()
-        graphs_layout = QVBoxLayout(graphs_widget)
-        graphs_layout.setContentsMargins(0, 0, 0, 0)
-        
-        self.p_speed = pg.PlotWidget(title="Velocidad (km/h)")
-        self.p_speed.addLegend()
-        self.p_speed.showGrid(x=True, y=True, alpha=0.3)
-        self.p_speed.setBackground('#FAFAFA')
-        self.p_speed.setLabel('bottom', "Distancia de la vuelta (Metros)")
-        
-        self.vline = pg.InfiniteLine(angle=90, movable=False, pen=pg.mkPen('w', width=1, style=Qt.PenStyle.DashLine))
         
         self.table_summary = QTableWidget()
         self.table_summary.setColumnCount(1)
@@ -537,24 +652,79 @@ class AdvancedAnalysisDialog(QDialog):
         self.table_summary.verticalHeader().setVisible(False)
         self.table_summary.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.table_summary.setStyleSheet(Theme.table_style())
-        
-        graphs_layout.addWidget(self.p_speed, stretch=2)
+        self.table_summary.setFixedHeight(125)
         
         lbl_res = QLabel("📋 Resumen de Vueltas (Overlay)")
-        lbl_res.setStyleSheet(f"font-size: 16px; font-weight: bold; color: {Theme.TEXT_PRIMARY}; padding-top: 10px;")
-        graphs_layout.addWidget(lbl_res)
-        graphs_layout.addWidget(self.table_summary, stretch=1)
+        lbl_res.setStyleSheet(f"font-size: 14px; font-weight: bold; color: {Theme.TEXT_PRIMARY}; padding-top: 6px;")
         
+        laps_container = QWidget()
+        l_layout = QVBoxLayout(laps_container)
+        l_layout.setContentsMargins(0, 0, 0, 0)
+        l_layout.addWidget(lbl_list_title)
+        l_layout.addWidget(self.list_laps, stretch=1)
+        l_layout.addWidget(lbl_res)
+        l_layout.addWidget(self.table_summary)
+        
+        left_layout.addWidget(sessions_container, stretch=5)
+        left_layout.addWidget(laps_container, stretch=5)
+        
+        # ── PANEL CENTRO (4 Gráficas Apiladas MoTeC: Velocidad, RPM, Pedales, Delta-T) ──
+        graphs_widget = QWidget()
+        graphs_layout = QVBoxLayout(graphs_widget)
+        graphs_layout.setContentsMargins(0, 0, 0, 0)
+        graphs_layout.setSpacing(4)
+        
+        # Plot 1: Velocidad (km/h)
+        self.p_speed = pg.PlotWidget(title="Velocidad (km/h)")
+        
+        # Plot 2: RPM
+        self.p_rpm = pg.PlotWidget(title="R.P.M.")
+        
+        # Plot 3: Acelerador / Freno (%)
+        self.p_pedals = pg.PlotWidget(title="Acelerador / Freno (%)")
+        
+        # Plot 4: Delta vs Mejor Vuelta (s)
+        self.p_delta = pg.PlotWidget(title="Delta vs Mejor Vuelta (s)")
+        
+        self.plots = [self.p_speed, self.p_rpm, self.p_pedals, self.p_delta]
+        
+        for p in self.plots:
+            p.addLegend()
+            p.showGrid(x=True, y=True, alpha=0.3)
+            p.setBackground('#FAFAFA')
+            
+        self.p_delta.setLabel('bottom', "Distancia de la vuelta (Metros)")
+        
+        # Enlazar ejes X entre las 4 gráficas
+        self.p_rpm.setXLink(self.p_speed)
+        self.p_pedals.setXLink(self.p_speed)
+        self.p_delta.setXLink(self.p_speed)
+        
+        # Línea vertical sincronizada en todas las gráficas
+        self.vlines = []
+        for p in self.plots:
+            vl = pg.InfiniteLine(angle=90, movable=False, pen=pg.mkPen('w', width=1, style=Qt.PenStyle.DashLine))
+            p.addItem(vl)
+            self.vlines.append(vl)
+            
+        for p in self.plots:
+            graphs_layout.addWidget(p, stretch=1)
+            
         self.proxy = pg.SignalProxy(self.p_speed.scene().sigMouseMoved, rateLimit=60, slot=self.mouseMoved)
         
+        # ── PANEL DERECHO (Mapa Interactivo + Telemetry Dashboard Completo) ──
+        self.map_widget = MapWidget("Mapa Interactivo")
         self.telemetry_dashboard = LiveTelemetryWidget()
         
-        right_layout.addWidget(self.map_widget, stretch=6)
-        right_layout.addWidget(self.telemetry_dashboard, stretch=4)
+        right_panel = QWidget()
+        right_layout = QVBoxLayout(right_panel)
+        right_layout.setContentsMargins(0, 0, 0, 0)
+        right_layout.addWidget(self.map_widget, stretch=4)
+        right_layout.addWidget(self.telemetry_dashboard, stretch=6)
         
         layout.addWidget(left_panel, stretch=25)
-        layout.addWidget(graphs_widget, stretch=50)
-        layout.addWidget(right_panel, stretch=25)
+        layout.addWidget(graphs_widget, stretch=48)
+        layout.addWidget(right_panel, stretch=27)
         
     def _populate_laps_list(self):
         for lap in sorted(self.laps_data.keys()):
@@ -610,8 +780,6 @@ class AdvancedAnalysisDialog(QDialog):
             
         self.telemetry_dashboard.update_data(packet)
         
-        # Calculate time based on packet index assuming 60fps
-        # Or even better, if we have active_lap_data and the packet belongs to it, we can get precise time
         cur_time_ms = index * (1000.0 / 60.0)
         
         if self.active_lap_data and len(self.active_lap_data.distance) > 0:
@@ -621,7 +789,8 @@ class AdvancedAnalysisDialog(QDialog):
                     if p == packet or i == len(self.active_lap_data.packets)-1:
                         if i < len(self.active_lap_data.distance):
                             dist = self.active_lap_data.distance[i]
-                            self.vline.setPos(dist)
+                            for vl in self.vlines:
+                                vl.setPos(dist)
                         if i < len(self.active_lap_data.time_ms):
                             cur_time_ms = self.active_lap_data.time_ms[i] * 1000.0
                         break
@@ -649,19 +818,23 @@ class AdvancedAnalysisDialog(QDialog):
             event.accept()
         else:
             super().keyPressEvent(event)        
+
     def mouseMoved(self, evt):
         pos = evt[0]
-        if self.p_speed.sceneBoundingRect().contains(pos):
-            mousePoint = self.p_speed.plotItem.vb.mapSceneToView(pos)
-            x_dist = mousePoint.x()
-            
-            self.vline.setPos(x_dist)
+        for p in self.plots:
+            if p.sceneBoundingRect().contains(pos):
+                mousePoint = p.plotItem.vb.mapSceneToView(pos)
+                x_dist = mousePoint.x()
                 
-            if self.active_lap_data and len(self.active_lap_data.distance) > 0:
-                idx = (np.abs(self.active_lap_data.distance - x_dist)).argmin()
-                pos_x = self.active_lap_data.pos_x[idx]
-                pos_z = self.active_lap_data.pos_z[idx]
-                self.map_widget.set_crosshair(pos_x, pos_z)
+                for vl in self.vlines:
+                    vl.setPos(x_dist)
+                    
+                if self.active_lap_data and len(self.active_lap_data.distance) > 0:
+                    idx = (np.abs(self.active_lap_data.distance - x_dist)).argmin()
+                    pos_x = self.active_lap_data.pos_x[idx]
+                    pos_z = self.active_lap_data.pos_z[idx]
+                    self.map_widget.set_crosshair(pos_x, pos_z)
+                break
         
     def on_lap_selected(self):
         items = self.list_laps.selectedItems()
@@ -680,10 +853,15 @@ class AdvancedAnalysisDialog(QDialog):
         self.map_widget.update_plot()
         
     def refresh_plot(self, changed_item=None):
-        self.p_speed.clear()
-        self.p_speed.addItem(self.vline)
-        
+        for p in self.plots:
+            p.clear()
+            
+        for i, p in enumerate(self.plots):
+            p.addItem(self.vlines[i])
+            
         checked_data = []
+        
+        best_data = self.laps_data.get(self.best_lap) if self.best_lap in self.laps_data else None
         
         color_idx = 0
         for i in range(self.list_laps.count()):
@@ -693,20 +871,29 @@ class AdvancedAnalysisDialog(QDialog):
                 data = self.laps_data.get(lap)
                 if data and len(data.distance) > 0:
                     color = self.colors[color_idx % len(self.colors)]
-                    self.p_speed.plot(
-                        data.distance, 
-                        data.speed, 
-                        pen=pg.mkPen(color, width=2), 
-                        name=f"Vuelta {lap}"
-                    )
+                    
+                    # 1. Velocidad
+                    self.p_speed.plot(data.distance, data.speed, pen=pg.mkPen(color, width=2), name=f"Vuelta {lap}")
+                    
+                    # 2. RPM
+                    self.p_rpm.plot(data.distance, data.rpm, pen=pg.mkPen(color, width=2), name=f"Vuelta {lap}")
+                    
+                    # 3. Pedales (Acelerador sólido, Freno punteado)
+                    self.p_pedals.plot(data.distance, data.throttle, pen=pg.mkPen(color, width=2), name=f"Acel V{lap}")
+                    self.p_pedals.plot(data.distance, data.brake, pen=pg.mkPen(color, width=1.5, style=Qt.PenStyle.DashLine), name=f"Freno V{lap}")
+                    
+                    # 4. Delta vs Best Lap
+                    if best_data and len(best_data.distance) > 0:
+                        interp_best_time = np.interp(data.distance, best_data.distance, best_data.time_ms)
+                        delta_sec = data.time_ms - interp_best_time
+                        self.p_delta.plot(data.distance, delta_sec, pen=pg.mkPen(color, width=2), name=f"Delta V{lap}")
+                        
                     checked_data.append((data, color))
                     color_idx += 1
                     
         self._update_tables(checked_data)
 
     def _update_tables(self, checked_data):
-        import numpy as np
-        
         self.table_summary.setColumnCount(1 + len(checked_data))
         headers = ["Métrica"] + [f"Vuelta {d.lap_number}" for d, _ in checked_data]
         self.table_summary.setHorizontalHeaderLabels(headers)
@@ -719,7 +906,7 @@ class AdvancedAnalysisDialog(QDialog):
         for row in range(4):
             item0 = self.table_summary.item(row, 0)
             if item0:
-                item0.setFont(QFont(Theme.FONT_SANS, 12, QFont.Weight.Bold))
+                item0.setFont(QFont(Theme.FONT_SANS, 11, QFont.Weight.Bold))
         
         for col_idx, (data, color_str) in enumerate(checked_data):
             col = col_idx + 1
@@ -740,13 +927,10 @@ class AdvancedAnalysisDialog(QDialog):
             ]
             
             for row, it in enumerate(items):
-                it.setFont(QFont(Theme.FONT_SANS, 13, QFont.Weight.Bold))
+                it.setFont(QFont(Theme.FONT_SANS, 12, QFont.Weight.Bold))
                 it.setForeground(QColor(color_str))
                 it.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
                 self.table_summary.setItem(row, col, it)
-                
-        if not checked_data:
-            return
 
     def _detect_corners(self, data):
         corners = []

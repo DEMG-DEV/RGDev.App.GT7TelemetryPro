@@ -1,6 +1,6 @@
 # Reglas Estrictas para Agentes IA en GT7 Telemetry Pro
 
-> **Versión de referencia:** 1.2.4  
+> **Versión de referencia:** 1.3.4  
 > **Última actualización:** 2026-07-21
 
 ## Reglas Inquebrantables de Arquitectura
@@ -20,10 +20,10 @@
    - **Rutas de Base de Datos:** El archivo maestro `telemetry_master.sqlite` SIEMPRE debe buscarse y escribirse en el directorio de trabajo de la aplicación (CWD). Nota: `main.py` redefine el CWD al arrancar hacia la ruta de datos del sistema (`~/Library/Application Support/GT7TelemetryPro` en Mac, `%APPDATA%\GT7TelemetryPro` en Windows). **JAMÁS** crees subcarpetas adicionales como `Sessions/`.
    - **Identidad del Auto Dinámica**: El sistema de escritura de la base de datos de sesión (`SessionDatabaseWriter`) NUNCA debe confiar ciegamente en el ID del primer paquete recibido, dado que GT7 en la parrilla de salida emite telemetría de los oponentes IA. Debe monitorear las frecuencias del ID durante toda la carrera y reescribir la fila de la sesión con el ID más prevalente al detenerse.
    - Al ejecutar `VACUUM` u operaciones globales de BD, nunca lo hagas dentro de una transacción `WITH` iniciada por `sqlite3`.
-   - El esquema usa una columna `is_locked` en la tabla `sessions` para la protección anti-borrado.
+   - El esquema usa una columna `is_locked` en la tabla `sessions` para la protección anti-borrado y una columna `track_name` para la persistencia del circuito.
    - **Esquema de la BD:**
      ```sql
-     sessions (id, start_time, end_time, car_id, car_name, total_laps, best_laptime, is_locked)
+     sessions (id, start_time, end_time, car_id, car_name, track_name, total_laps, best_laptime, is_locked)
      telemetry (id, session_id FK, timestamp, lap_count, speed_kmh, engine_rpm, throttle, brake, current_gear, raw_packet BLOB)
      ```
 

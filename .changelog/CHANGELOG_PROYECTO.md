@@ -1,5 +1,31 @@
 # 📊 Registro de Avances del Proyecto
 
+## ✅ Lanzamiento de Versión 1.3.4: Rediseño de Análisis Avanzado, Persistencia de Pistas e Instrumentación Completa
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-21 18:43:00 |
+| **Responsable** | David Mendez |
+
+### ¿Qué se realizó?
+
+Se transformó por completo la pantalla de Análisis Avanzado de Sesión. Ahora cuenta con un panel central estilo profesional con 4 gráficas apiladas (Velocidad, RPM, Pedales y Delta de tiempo), persistencia automática y manual del nombre del circuito en la base de datos, un selector con más de 100 pistas de Gran Turismo 7, instrumentación circular en tiempo real integrada, fotografía HD del auto seleccionado y un diseño optimizado sin recortes de texto.
+
+### ¿Qué significa para el proyecto?
+
+- Eleva la capacidad de análisis post-carrera al estándar de herramientas de ingeniería reales de automovilismo como MoTeC i2.
+- Garantiza que los nombres de las pistas se recuerden permanentemente entre sesiones sin necesidad de volver a procesar heurísticas.
+- Proporciona control total al usuario para nombrar o corregir circuitos manualmente.
+
+### ¿Qué va a notar el usuario/cliente?
+
+- **4 Gráficas Apiladas:** Ahora puede comparar Velocidad, RPM, Acelerador/Freno y Tiempo Delta simultáneamente alineados por la distancia de la pista.
+- **Guardado y Selector de Pistas:** El nombre de la pista se guarda solo y se puede cambiar libremente haciendo clic en el nuevo botón `📍 Pista`.
+- **Panel de Instrumentos Completo:** En el análisis secundario ahora ve la misma instrumentación con relojes circulares, semicírculos de llantas y pedales que en la pantalla principal.
+- **Visualización de Auto:** La foto del auto se despliega automáticamente en el panel izquierdo al seleccionar cualquier sesión.
+
+---
+
 ## ✅ Actualización Integral de Documentación, Wiki y Recursos Gráficos
 
 | Campo | Detalle |
