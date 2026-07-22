@@ -1,9 +1,9 @@
 # Archivo de Contexto de Arquitectura (IA)
-## Proyecto: GT7 Telemetry Pro — v1.3.4
+## Proyecto: GT7 Telemetry Pro — v1.4.4
 
 > **Última actualización:** 2026-07-21  
 > **Total archivos Python:** 33  
-> **Total líneas de código fuente:** ~8,800
+> **Total líneas de código fuente:** ~8,900
 
 Este documento describe la arquitectura completa y las restricciones del proyecto para agentes de IA y desarrolladores futuros.
 

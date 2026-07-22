@@ -10,7 +10,7 @@
   <p>
     <img src="https://img.shields.io/badge/Python-3.10+-blue.svg" alt="Python Version">
     <img src="https://img.shields.io/badge/GUI-PyQt6-green.svg" alt="PyQt6">
-    <img src="https://img.shields.io/badge/Version-1.3.4-purple.svg" alt="Version">
+    <img src="https://img.shields.io/badge/Version-1.4.4-purple.svg" alt="Version">
     <img src="https://img.shields.io/badge/macOS-Native%20Support-lightgrey.svg" alt="macOS Support">
     <img src="https://img.shields.io/badge/Windows-Native%20Support-lightgrey.svg" alt="Windows Support">
     <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License">
@@ -31,6 +31,7 @@ Una plataforma analítica de código abierto diseñada para extraer y transforma
 | :--- | :--- |
 | **Telemetry Dashboard** | Visualiza a 60 FPS la telemetría en tiempo real: pedales, marchas, volante y g-forces sin interrupciones (*Zero-stutter*). |
 | **Instrumentación Circular** | Cluster de 4 medidores circulares (Velocidad, RPM, Turbo/Boost, Temp. Agua) dibujados nativamente con QPainter. |
+| **Barra de Menú Nativa** | Integración completa con el menú superior de macOS y la barra de sistema de Windows (`QMenuBar` con accesos rápidos y chequeo de versión). |
 | **Análisis Avanzado & MoTeC** | 4 gráficas apiladas en vertical (Velocidad, RPM, Pedales, Delta-T) enlazadas en eje X de distancia con sincronización de mapas. |
 | **Persistencia de Pistas** | Auto-guardado y asignación manual de circuitos (`sessions.track_name`) con selector integrado de más de 100 pistas. |
 | **Consumo por Vuelta** | Medición automática del consumo de combustible por vuelta con alertas visuales progresivas (Normal → Advertencia → Crítico). |
@@ -43,6 +44,11 @@ Una plataforma analítica de código abierto diseñada para extraer y transforma
 ---
 
 ## 🆕 Novedades
+
+### 🚀 v1.4.4 — Barra de Menú Nativa del Sistema y Forzado de Actualizaciones
+- 🖥️ **Barra de Menú Nativa (`QMenuBar`):** Se integró la barra de herramientas del sistema en el panel superior de macOS (junto a la manzana de Apple) y en la barra de menú nativa de Windows (accesible al presionar `Alt`).
+- 🔄 **Búsqueda y Forzado de Actualizaciones Manuales:** Nuevo menú `Ayuda` -> `🔄 Buscar Actualizaciones...` y `🚀 Forzar Actualización` que consulta GitHub Releases bajo demanda, indicando al usuario si su sistema está actualizado (v1.4.4) o permitiendo la descarga inmediata.
+- ⚡ **Accesos Rápidos de Teclado:** Menú `Archivo` con atajos globales (`Cmd+A` / `Ctrl+A` para Análisis Avanzado, `Cmd+P` / `Ctrl+P` para Pro Workspace, `Cmd+S` / `Ctrl+S` para Sincronización LAN, `Cmd+Q` / `Alt+F4` para Salir).
 
 ### 📊 v1.3.4 — Rediseño de Análisis Avanzado, Persistencia de Pistas e Instrumentación Completa
 - 📊 **4 Gráficas Apiladas MoTeC:** En la vista de Análisis Avanzado, el centro dispone de 4 gráficas apiladas en vertical (Velocidad, RPM, Acelerador/Freno y Delta vs Mejor Vuelta) enlazadas por el eje X de distancia y con crosshair síncrono.

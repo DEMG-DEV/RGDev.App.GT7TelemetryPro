@@ -1,6 +1,6 @@
 # Reglas Estrictas para Agentes IA en GT7 Telemetry Pro
 
-> **Versión de referencia:** 1.3.4  
+> **Versión de referencia:** 1.4.4  
 > **Última actualización:** 2026-07-21
 
 ## Reglas Inquebrantables de Arquitectura

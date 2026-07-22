@@ -5,7 +5,7 @@ from PyQt6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
                              QGroupBox, QFileDialog, QMessageBox, QProgressDialog, QProgressBar)
 from PyQt6.QtCore import Qt, pyqtSlot, QTimer
 from core.db_portability import export_database, validate_import_file, import_database_merge, import_database_replace
-from PyQt6.QtGui import QFont, QPixmap
+from PyQt6.QtGui import QFont, QPixmap, QAction
 
 from core.models import GT7TelemetryPacket
 from core.car_database import CarDatabase
@@ -29,15 +29,12 @@ import math
 class TelemetryMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle(f"GT7 Telemetry Pro - Native Interface v{APP_VERSION}")
-        from PyQt6.QtGui import QIcon
-        import os
-        icon_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'app_icon.png')
-        if os.path.exists(icon_path):
-            self.setWindowIcon(QIcon(icon_path))
-        self.setGeometry(50, 50, 1600, 900)
+        self.setWindowTitle(f"GT7 Telemetry Pro v{APP_VERSION} - F1 & Le Mans Edition")
+        
         self.load_styles()
         
+        self.recording = False
+        self.db_writer = None
         self.car_db = CarDatabase()
         
         self.math_engine = MathEngine()
@@ -64,15 +61,31 @@ class TelemetryMainWindow(QMainWindow):
         self.ui_timer.start(33) 
         
         self.init_ui()
-        self.check_for_updates()
+        self.check_for_updates(manual=False)
         
-    def check_for_updates(self):
+    def check_for_updates(self, manual=False):
+        self.is_manual_update_check = manual
+        self._update_found = False
+        
+        if manual:
+            self.update_progress = QProgressDialog("Buscando actualizaciones en GitHub...", None, 0, 0, self)
+            self.update_progress.setWindowTitle("Verificando Actualización")
+            self.update_progress.setWindowModality(Qt.WindowModality.WindowModal)
+            self.update_progress.setMinimumDuration(0)
+            self.update_progress.show()
+
         self.updater = UpdateChecker()
         self.updater.update_available.connect(self.on_update_available)
-        self.updater.error_occurred.connect(lambda e: print(f"Update Check Error: {e}"))
+        self.updater.error_occurred.connect(self.on_update_check_error)
+        self.updater.finished.connect(self.on_update_check_finished)
         self.updater.start()
 
     def on_update_available(self, version, download_url):
+        self._update_found = True
+        if hasattr(self, 'update_progress') and self.update_progress:
+            self.update_progress.close()
+            self.update_progress = None
+            
         msg = QMessageBox()
         msg.setWindowTitle("¡Actualización Disponible!")
         msg.setText(f"Una nueva versión (v{version}) de GT7 Telemetry Pro está disponible.")
@@ -82,6 +95,29 @@ class TelemetryMainWindow(QMainWindow):
         
         if msg.exec() == QMessageBox.StandardButton.Yes:
             self.start_download(download_url)
+
+    def on_update_check_error(self, err_msg):
+        if hasattr(self, 'update_progress') and self.update_progress:
+            self.update_progress.close()
+            self.update_progress = None
+            
+        if getattr(self, 'is_manual_update_check', False):
+            QMessageBox.warning(
+                self, "Verificación de Actualizaciones",
+                f"No se pudo consultar el servidor de actualizaciones:\n\n{err_msg}"
+            )
+
+    def on_update_check_finished(self):
+        if hasattr(self, 'update_progress') and self.update_progress:
+            self.update_progress.close()
+            self.update_progress = None
+            
+        if getattr(self, 'is_manual_update_check', False) and not getattr(self, '_update_found', False):
+            QMessageBox.information(
+                self, "Sistema Actualizado",
+                f"Estás utilizando la versión más reciente (v{APP_VERSION}) de GT7 Telemetry Pro.\n\nNo hay nuevas actualizaciones disponibles."
+            )
+        self.is_manual_update_check = False
 
     def start_download(self, url):
         self.progress_dialog = QProgressDialog("Descargando actualización...", "Cancelar", 0, 100, self)
@@ -114,7 +150,75 @@ class TelemetryMainWindow(QMainWindow):
             with open(style_path, 'r') as f:
                 self.setStyleSheet(f.read())
         
+    def create_menu_bar(self):
+        menubar = self.menuBar()
+        import sys
+        
+        # ── MENÚ ARCHIVO ──
+        file_menu = menubar.addMenu("&Archivo")
+        
+        act_analysis = QAction("📍 &Historial y Análisis Avanzado...", self)
+        act_analysis.setShortcut("Ctrl+A" if sys.platform != "darwin" else "Cmd+A")
+        act_analysis.triggered.connect(self.open_analysis)
+        file_menu.addAction(act_analysis)
+        
+        act_pro = QAction("🏎️ &Professional Workspace...", self)
+        act_pro.setShortcut("Ctrl+P" if sys.platform != "darwin" else "Cmd+P")
+        act_pro.triggered.connect(self.open_pro_analysis)
+        file_menu.addAction(act_pro)
+        
+        act_sync = QAction("🔄 &Sincronización LAN...", self)
+        act_sync.setShortcut("Ctrl+S" if sys.platform != "darwin" else "Cmd+S")
+        act_sync.triggered.connect(self.open_sync_dialog)
+        file_menu.addAction(act_sync)
+        
+        file_menu.addSeparator()
+        
+        act_import = QAction("📥 Importar Base de Datos...", self)
+        act_import.triggered.connect(self.import_database_action)
+        file_menu.addAction(act_import)
+        
+        act_export = QAction("📤 Exportar Base de Datos...", self)
+        act_export.triggered.connect(self.export_database_action)
+        file_menu.addAction(act_export)
+        
+        file_menu.addSeparator()
+        
+        act_exit = QAction("❌ Salir", self)
+        act_exit.setShortcut("Alt+F4" if sys.platform != "darwin" else "Cmd+Q")
+        act_exit.triggered.connect(self.close)
+        file_menu.addAction(act_exit)
+        
+        # ── MENÚ AYUDA ──
+        help_menu = menubar.addMenu("&Ayuda")
+        
+        act_update = QAction("🔄 Buscar Actualizaciones...", self)
+        act_update.triggered.connect(lambda: self.check_for_updates(manual=True))
+        help_menu.addAction(act_update)
+        
+        act_force_update = QAction("🚀 Forzar Actualización", self)
+        act_force_update.triggered.connect(lambda: self.check_for_updates(manual=True))
+        help_menu.addAction(act_force_update)
+        
+        help_menu.addSeparator()
+        
+        act_about = QAction("ℹ️ Acerca de GT7 Telemetry Pro...", self)
+        act_about.triggered.connect(self.show_about_dialog)
+        help_menu.addAction(act_about)
+
+    def show_about_dialog(self):
+        QMessageBox.about(
+            self,
+            "Acerca de GT7 Telemetry Pro",
+            f"<h3>🏁 GT7 Telemetry Pro v{APP_VERSION}</h3>"
+            f"<p>Plataforma analítica y consola de ingeniería virtual para Gran Turismo 7 (PS4/PS5).</p>"
+            f"<p><b>Desarrollado por:</b> DEMG-DEV</p>"
+            f"<p><b>Versión:</b> v{APP_VERSION}</p>"
+            f"<p>Procesamiento de datos a 60 FPS sin stuttering, mapa termodinámico, motor heurístico de circuitos y exportador MoTeC i2.</p>"
+        )
+
     def init_ui(self):
+        self.create_menu_bar()
         main_widget = QWidget()
         self.setCentralWidget(main_widget)
         

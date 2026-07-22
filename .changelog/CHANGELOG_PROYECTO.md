@@ -1,5 +1,29 @@
 # 📊 Registro de Avances del Proyecto
 
+## ✅ Lanzamiento de Versión 1.4.4: Barra de Menú Nativa del Sistema y Forzado de Actualizaciones
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-21 19:03:00 |
+| **Responsable** | David Mendez |
+
+### ¿Qué se realizó?
+
+Se integró una barra de herramientas de menú nativa del sistema (`QMenuBar`). En computadoras Mac, los menús de la aplicación se integran directamente en el panel superior de la pantalla (junto al menú de Apple), mientras que en Windows se acceden al presionar la tecla `Alt`. Se añadió la capacidad de buscar y forzar actualizaciones en cualquier momento desde el menú `Ayuda`, informando al usuario si el programa está actualizado o permitiendo la descarga inmediata.
+
+### ¿Qué significa para el proyecto?
+
+- Proporciona una experiencia de usuario estándar y profesional, idéntica a cualquier aplicación nativa de macOS o Windows.
+- Permite que el usuario verifique manualmente si hay nuevas versiones publicadas en GitHub sin tener que esperar a que el programa lo haga al iniciar.
+
+### ¿Qué va a notar el usuario/cliente?
+
+- **Menú Superior:** Ahora cuenta con los menús `Archivo` y `Ayuda` en la barra del sistema.
+- **Forzar Actualizaciones:** Puede ir a `Ayuda` -> `Buscar Actualizaciones...` o `Forzar Actualización` para recibir confirmación instantánea o descargar mejoras.
+- **Atajos de Teclado:** Atajos como `Cmd+A` (o `Ctrl+A`) para abrir Análisis Avanzado y `Cmd+Q` (o `Alt+F4`) para salir.
+
+---
+
 ## ✅ Lanzamiento de Versión 1.3.4: Rediseño de Análisis Avanzado, Persistencia de Pistas e Instrumentación Completa
 
 | Campo | Detalle |

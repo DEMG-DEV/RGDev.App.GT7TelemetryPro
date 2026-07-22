@@ -1,5 +1,33 @@
 # 📋 Registro Técnico de Cambios
 
+## feat: Release v1.4.4 - Barra de Menú Nativa QMenuBar y Forzado de Actualizaciones
+
+| Campo | Detalle |
+|-------|---------|
+| **Fecha** | 2026-07-21 19:03:00 |
+| **Autor** | David Mendez (demg@outlook.com) |
+| **Branch** | master |
+| **Tipo** | Feature / UI |
+
+### Archivos Modificados
+
+| Archivo | Estado | Descripción del Cambio |
+|---------|--------|----------------------|
+| `core/config.py` | Modificado | Incremento de versión de la aplicación a `1.4.4`. |
+| `ui/main_window.py` | Modificado | Integración de `create_menu_bar()`, menú `Archivo` con atajos globales (`Cmd+A`, `Cmd+P`, `Cmd+S`, `Cmd+Q`), menú `Ayuda` con `🔄 Buscar Actualizaciones...` y `🚀 Forzar Actualización`, diálogo `Acerca de` y modal interactivo de estado de actualización. |
+| `README.md` | Modificado | Sincronización de versión badge a 1.4.4, inclusión de la barra de menú nativa en características principales e historia de novedades v1.4.4. |
+| `.agents/AGENTS.md` | Modificado | Actualización de versión de referencia a 1.4.4 y registro de reglas. |
+| `.ai/architecture.md` | Modificado | Actualización de versión a `v1.4.4` y sincronización de arquitectura. |
+| `docs/main_window.png` | Modificado | Regeneración de captura de pantalla con la barra de menú nativa integrada. |
+
+### Detalle Técnico
+
+- **Integración de QMenuBar:** Incorporación de `self.create_menu_bar()` en `TelemetryMainWindow.init_ui()` utilizando `QAction` importado de `PyQt6.QtGui`.
+- **Menú de Sistema Multiplataforma:** En macOS, Qt conecta las acciones directamente a la barra superior del sistema (junto a la manzana de Apple). En Windows, renderiza la barra de menú con soporte para acceso mediante la tecla `Alt`.
+- **Verificación Manual de Actualizaciones:** Se añadió el parámetro `manual=True` en `check_for_updates()`, desplegando un modal emergente `QProgressDialog` que consulta GitHub Releases y notifica al usuario si el programa está actualizado o si hay nueva versión disponible.
+
+---
+
 ## feat: Release v1.3.4 - Rediseño de Análisis Avanzado, Persistencia de Pistas e Instrumentación Completa
 
 | Campo | Detalle |
